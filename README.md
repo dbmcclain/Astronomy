@@ -61,7 +61,7 @@ Trig functions redefined to work against any angular measure. ```(sin (deg 30)) 
   phase
 ```
 
-Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole position on the unit sphere.
+Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole position on the unit sphere. No Euler angle stuff needed. No singularities near poles.
 
 Astronomical angle entry:
 ```
