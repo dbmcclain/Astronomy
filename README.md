@@ -27,7 +27,7 @@ Convenient angle entry in a variety of measures:
   bipolar  - convert angle to principal values in (-180 180) deg
 ```
 
-View any angle in any measure, e.g., (to-μrad (arcsec 1)) => 4.484.
+View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.484.```
 
 Trig functions redefined to work against any angular measure.
 
