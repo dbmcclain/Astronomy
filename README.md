@@ -66,10 +66,10 @@ Angular rotation of vectors about arbitrary axis - specify vector and rotation a
 
 Astronomical angle entry:
 ```
-  RA - e.g., (RA 22 30 15.3)
-  Dec - e.g., (DEC -12 20 32)
-  to-ra - ensures RA in 0..24 hrs
-  to-dec - ensures Dec in -90..90 deg
+  RA - e.g., (todeg (RA 22 30 15.3)) => 337.56375
+  Dec - e.g., (todeg (DEC -12 20 32)) => -12.3422
+  to-ra - ensures RA in 0..24 hrs, (to-ra (deg 90)) => (RA 6 0 0.0)
+  to-dec - ensures Dec in -90..90 deg (to-dec (deg -45)) => (DEC -45 0 0.0)
 ```
 Epoch construction:
 ```
