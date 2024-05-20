@@ -12,7 +12,7 @@
 ;; an ad-hoc type system, we instead operate with a common angle
 ;; measure behind the scenes. All angle input, of various measure, are
 ;; immediately converted into the background angle measure. You can
-;; ask for a copy of that measure expressed in any of the cooperative
+;; ask for a copy of that measure expressed in any of the cooperating
 ;; units.
 ;;
 ;; This avoids having to override basic arithmetic operations like
