@@ -106,6 +106,13 @@ Accurate Precession between any two epochs - uses intermediate Ecliptic coord fr
       Defaults to current epoch as target.
 
   precessN -- for N years, can be used for quick & dirty, assuming J2000 obliquity
+              (multiple-value-bind (rap decp)
+                  (precessN (ra 12 20) (dec 05 15) 24)
+                (values (to-ra rap) (to-dec decp)))
+              =>
+              (RA 12 21 13.561)
+              (DEC 5 7 1.856)
+
 ```
 
 Az/El and Equatorial coords:
