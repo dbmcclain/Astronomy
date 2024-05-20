@@ -50,6 +50,16 @@ to-turns
 
 
 Trig functions redefined to work against any angular measure. ```(sin (deg 30)) => 0.5```
+```
+  sin
+  cos
+  tan
+  asin
+  acos
+  atan - optional 2nd arg
+  cis
+  phase
+```
 
 Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole position on the unit sphere.
 
