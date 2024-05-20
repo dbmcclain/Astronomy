@@ -11,7 +11,7 @@ Convenient angle entry in a variety of measures:
   dms
   d.ms - (remember your old HP Calculator?)
 
-  hrs
+  hrs - 1 hour = 15 deg
   mins
   secs
   hms
