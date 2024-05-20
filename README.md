@@ -91,7 +91,7 @@ Hour Angles:
 ```
   ra-to-ha - now, or for any other epoch
   ha-to-ra
-  parallactic-angle - very useful for reconstucting events from a session on AzEl telescopes.
+  parallactic-angle - very useful for reconstucting events from a session on Az/El telescopes.
 ```
 
 Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs.
