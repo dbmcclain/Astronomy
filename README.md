@@ -94,8 +94,8 @@ Hour Angles:
 
 Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs.
 ```
-precess
-precessN -- for N years, can be used for quick & dirty, assuming J2000 obliquity
+  precess
+  precessN -- for N years, can be used for quick & dirty, assuming J2000 obliquity
 ```
 
 Az/El and Equatorial coords:
