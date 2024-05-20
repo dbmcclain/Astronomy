@@ -4,8 +4,8 @@ Useful computations with angles on the unit sphere. The bread and butter stuff f
 Unified angle arithmetic based on canonical measure. User choice of :RAD, :DEG, :HRS, :TURNS
 
 Convenient angle entry in a variety of measures:
-
-  ```deg - e.g., (deg 90)
+  ```
+  deg - e.g., (deg 90)
   arcmin
   arcsec
   dms
@@ -62,6 +62,9 @@ Hour Angles:
 ```
 
 Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs.
+```
+precess
+precessN -- for N years, can be used for quick & dirty, assuming J2000 obliquity
 
 Az/El and Equatorial coords:
 ```
