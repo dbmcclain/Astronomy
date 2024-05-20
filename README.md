@@ -28,6 +28,26 @@ Convenient angle entry in a variety of measures:
 ```
 
 View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.484.```
+```
+to-rad
+to-mrad
+to-μrad
+
+to-deg
+to-arcmin
+to-arcsec
+to-dms
+to-d.ms
+
+to-hrs
+to-mins
+to-secs
+to-hms
+to-h.ms
+
+to-turns
+```
+
 
 Trig functions redefined to work against any angular measure. ```(sin (deg 30)) => 0.5```
 
@@ -35,7 +55,7 @@ Angular rotation of vectors about arbitrary axis - specify vector and rotation a
 
 Astronomical angle entry:
 ```
-  RA
+  RA - e.g., (RA 22 30 15,3)
   Dec
   to-ra
   to-dec
