@@ -29,7 +29,7 @@ Convenient angle entry in a variety of measures:
 
 View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.484.```
 
-Trig functions redefined to work against any angular measure.
+Trig functions redefined to work against any angular measure. ```(sin (deg 30)) => 0.5```
 
 Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole position on the unit sphere.
 
