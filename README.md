@@ -83,7 +83,7 @@ Epoch construction:
 
 Mean Siderial Time:
 ```
-  lmst0 - siderial time at Greenwich for given epoch. `(to-ra (lmst0 *j2000*)) => (RA 18 41 50.548)`
+  lmst0 - siderial time at Greenwich for given epoch. (to-ra (lmst0 *j2000*)) => (RA 18 41 50.548)
   lmst  - siderial time at location longitude, now, or for given epoch. (to-ra (lmst)) => (RA 7 59 36.19) 
 ```
 
