@@ -96,7 +96,15 @@ Hour Angles:
 
 Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs.
 ```
-  precess
+  precess - (multiple-value-bind (rap decp)
+                (precess (ra 12 20) (dec 05 15) *j2000* (d.t 2024_01_01)) ;; at my obs last New Year's
+              (values (to-ra rap) (to-dec decp)))
+            =>
+            (RA 12 21 13.492)
+            (DEC 5 7 2.911)
+
+      Defaults to current epoch as target.
+
   precessN -- for N years, can be used for quick & dirty, assuming J2000 obliquity
 ```
 
