@@ -14,7 +14,7 @@ Convenient angle entry in a variety of measures:
   hrs
   mins
   secs
-  hma
+  hms
   h.ms
   
   rad
