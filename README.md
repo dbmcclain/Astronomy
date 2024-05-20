@@ -22,30 +22,31 @@ Convenient angle entry in a variety of measures:
   μrad
 
   turns - 1 Turn = 360 deg
-
-  unipolar - convert angle to principal values in (0 360) deg
-  bipolar  - convert angle to principal values in (-180 180) deg
 ```
 
 View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.848.```
 ```
-to-rad
-to-mrad
-to-μrad
+  to-rad
+  to-mrad
+  to-μrad
 
-to-deg
-to-arcmin
-to-arcsec
-to-dms
-to-d.ms
+  to-deg
+  to-arcmin
+  to-arcsec
+  to-dms
+  to-d.ms
 
-to-hrs
-to-mins
-to-secs
-to-hms
-to-h.ms
+  to-hrs
+  to-mins
+  to-secs
+  to-hms
+  to-h.ms
 
-to-turns
+  to-turns
+
+  unipolar - convert angle to principal values in (0 360) deg
+  bipolar  - convert angle to principal values in (-180 180) deg
+
 ```
 
 
