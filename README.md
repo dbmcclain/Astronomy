@@ -66,7 +66,7 @@ Angular rotation of vectors about arbitrary axis - specify vector and rotation a
 Astronomical angle entry:
 ```
   RA - e.g., (RA 22 30 15.3)
-  Dec
+  Dec - e.g., (DEC -12 20 32)
   to-ra - ensures RA in 0..24 hrs
   to-dec - ensures Dec in -90..90 deg
 ```
