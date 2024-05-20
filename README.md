@@ -5,23 +5,23 @@ Unified angle arithmetic based on canonical measure. User choice of :RAD, :DEG, 
 
 Convenient angle entry in a variety of measures:
   ```
-  deg - e.g., (deg 90)
-  arcmin
-  arcsec
-  dms
-  d.ms - (remember your old HP Calculator?)
+    deg - e.g., (deg 90)
+    arcmin
+    arcsec
+    dms
+    d.ms - (remember your old HP Calculator?)
 
-  hrs - 1 hour = 15 deg
-  mins
-  secs
-  hms
-  h.ms
+    hrs - 1 hour = 15 deg
+    mins
+    secs
+    hms
+    h.ms
   
-  rad
-  mrad
-  μrad
+    rad
+    mrad
+    μrad
 
-  turns - 1 Turn = 360 deg
+    turns - 1 Turn = 360 deg
 ```
 
 View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.848.```
