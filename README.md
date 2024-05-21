@@ -102,11 +102,13 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
      1/2))
 ```
 
-At the major observatories we always used integer arithmetic representing 24-bit fractions of a Turn (no floating point), to represent all of our angles. The use of integer arithmetic preserves LSB precision, allowing for unlimited wrapping dynanic range. Floating point, on the other hand, would have gradually eroded LSB precision as numbers grow. We don't need huge dynamic range in angular measure. We need precision modular arithmetic.
+At the major observatories we always used integer arithmetic representing 24-bit fractions of a Turn (no floating point), to represent all of our angles. We did all the Ephemeris calculations using 24-bit fractional integer arithmetic. We wrote all of our trig functions to accept those kinds of arguments. The telescope's axis drive encoders were 24-bits.
 
-I remember once, in the Aerospace Industry, dealing with an Electrical Engineer who was trying to control a servo system. He insisted on using single-precision floating-point Radian angle measure for his control system. He became so confused by the crappy results he was getting. I finally convinced him to just let me take care of things. There is nothing better than integer arithmetic and integer fractions of a Turn. The ancient Greeks had it right!
+The use of integer arithmetic preserves LSB precision, allowing for unlimited wrapping dynanic range. Floating point, on the other hand, would have gradually eroded LSB precision as numbers grow. They don't wrap, they just grow the exponent while keeping a fixed number of mantissa bits. We don't need huge dynamic range in angular measure. We need precision modular arithmetic.
 
-I did carefully consider my options when I wrote this code. I finally decided that double-precision FP would be okay to use here. Single precision? Definitely not, simply becuase FP arithmetic seeks to preserve range at the cost of LSB precision. And single precision FP has barely enough bits in the range from 0.0 to 1.0. Anything larger erodes the LSB.
+I remember once, in the Aerospace Industry, dealing with an Electrical Engineer who was trying to control a servo system. He insisted on using single-precision floating-point Radian angle measure for his control system. He probably had that mindset because all the trig functions take radian measure, right? The odd thing here is that he was using a Motorola 56K DSP - all integer based arithmetic! He became so confused by the crappy results he was getting. I finally convinced him to just let me take care of things. There is nothing better than integer arithmetic and integer fractions of a Turn. The ancient Greeks had it right!
+
+I did carefully consider my options when I wrote this code. I wrote a 24-bit integer version of this code, but I finally decided that double-precision FP would be okay to use here. Single precision? Definitely not, simply becuase FP arithmetic seeks to preserve range at the cost of LSB precision. And single precision FP has barely enough bits in the range from 0.0 to 1.0. Anything larger erodes the LSB.
 
 ---
 ## Redefined Trig Functions
