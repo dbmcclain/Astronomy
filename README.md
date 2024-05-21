@@ -1,6 +1,16 @@
 # Astronomy
 Useful computations with angles on the unit sphere. The bread and butter stuff for everyday ops at the observatory.
 
+This code comes from a lifetime accumulation of stuff that I used at professional observatories. I typically had these tools on my programmable calculator for use at the telescope. (remember those?) I decided to reformulate my experience in Lisp for myself. It may be useful to others too.
+
+My experience began as a Radio Astronomer observing Carbon Monoxide emission lines in our galaxy. Then I moved on to the Infrared and the first computer-controlled telescope - WIRO on Jelm Mtn, about 25 miles South of Laramie, WY. From there I moved into the visible spectrum at the (then) world's largest telescope, which I taught how to point and track. That was known as the MMT (Multiple Mirror Telescope) atop Mt. Hopkins, about 50 miles South of Tucson, AZ. That was a long time ago...
+
+But, although I moved on to bigger things, I still kept returning to Astronomy throughout my lifetime. As today, again.
+
+Today, the advent of small, affordable, robotic telescopes has spawned fresh interest in the amateur community for Astronomy. And today, all you need to do is pull up an interactive star map, click a mouse button, or swipe and stab on your cell-phone, and the telecope slews to the spot and starts making nice pics of the sky.
+
+But I found that many of the consumer-grade programs have irritating shortcomings. Some make it difficult or impossible to type in the RA & Dec coordinates that you want - never mind the lame input formatting required by them. And for planning purposes, the tools available are stilted and (IMHO) insufficient to help you answer some basic questions while you plan your observing runs. That's why I finally sat down and wrote this collection of Observational Astronomy Tools.
+
 ---
 ## Canonical Angle Measure
 Unified angle arithmetic based on canonical measure. User choice, with **SET-ANG-MODE**. But with the input/output variety available here, you really shouldn't care. Possibly handy for debugging, and there could be differences of a few bits in the ULP of various results. (down around the 15th or 16th digit.)
