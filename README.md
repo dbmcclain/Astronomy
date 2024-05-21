@@ -11,7 +11,7 @@ Today, the advent of small, affordable, robotic telescopes has spawned fresh int
 
 But I found that many of the consumer-grade programs have irritating shortcomings. Some make it difficult or impossible to type in the RA & Dec coordinates that you want - never mind the lame input formatting required by them. And for planning purposes, the tools available are stilted and (IMHO) insufficient to help you answer some basic questions while you plan your observing runs. That's why I finally sat down and wrote this collection of Observational Astronomy Tools.
 
-These tools, at your fingertips in the Lisp REPL, augment the programs you need to use to run your telescope. The tools will help answer some basic questions you will have as you operate your telecope or plan your observing runs. Maybe together we can speed along better than the clumsy approaches either currently offers alone.
+These tools, at your fingertips in the Lisp REPL, augment the programs you need to use to run your telescope. The tools will help answer some basic questions you will have as you operate your telecope or plan your observing runs. Maybe, taken together, we can speed along better than the clumsy approaches either currently offers alone.
 
 ---
 ## Canonical Angle Measure
