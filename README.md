@@ -79,9 +79,28 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
 
 **to-turns** _ang => turns_
 
-**unipolar** _ang => ang_ -- convert angle to principal values in (0 360) deg. The result remains in canonical angle measure. We are simply renormalizing the value to be in the principle domain corresponding to an unsigned range from 0 to 1 Turn. The Riemann surface has a branch cut along the positive Real axis. `(unipolar ang)` and `(turns (mod (to-turns ang) 1.0))` give equivalent results.
+**unipolar** _ang => ang_ -- convert angle to principal values in (0 360) deg. The result remains in canonical angle measure. We are simply renormalizing the value to be in the principle domain corresponding to an unsigned range from 0 to 1 Turn. The Riemann surface has a branch cut along the positive Real axis. 
+```
+;; The following are equivalent:
 
-**bipolar**  _ang => ang_ -- convert angle to principal values in (-180 180) deg. The result remains in canonical angle measure. We are simply renormalizing the value to be in the principle domain corresponding to a signed range from -1/2 to +1/2 Turn. The Riemann surface has a branch cut along the negative Real axis. `(bipolar ang)` and `(turns (- (mod (+ (to-turns ang) 1/2) 1.0) 1/2))` give equivalent results.
+(unipolar ang)
+
+(turns
+   (mod (to-turns ang) 1.0))
+```
+
+**bipolar**  _ang => ang_ -- convert angle to principal values in (-180 180) deg. The result remains in canonical angle measure. We are simply renormalizing the value to be in the principle domain corresponding to a signed range from -1/2 to +1/2 Turn. The Riemann surface has a branch cut along the negative Real axis. 
+```
+;; The following are equivalent:
+
+(bipolar ang)
+
+(turns
+  (- (mod (+ (to-turns ang)
+             1/2)
+        1.0)
+   1/2))
+```
 
 ---
 ## Redefined Trig Functions
