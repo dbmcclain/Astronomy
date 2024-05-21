@@ -212,16 +212,18 @@ Final result is _**V'**_ = (_**P**_ • _**V**_)_**P**_ + ((_**P**_ ✕ _**V**_)
 ---
 ## Observatory Location Bindings
 Your observatory location and time zone should be set in Observatory.lisp. These values are used in several places for default values when, e.g., you haven't specified a location longitude, or a time zone offset.
-```
-*qth-lon*  -- longitude (+E, -W)
 
-*qth-lat*  -- latitude (+N, -S)
+**\*qth-lon\*** _=> ang_
+- Longitude (+E, -W)
 
-*qth-elev* -- elevation in meters. Not currently used for anything.
+**\*qth-lat\*** _=> ang_  
+- Latitude (+N, -S)
 
-*qth-tz*   -- Time zone offset, in hours, from UTC, in the sense of (Local - UTC). (+E, -W)
-```
+**\*qth-elev\*** _=> num_
+- Elevation in meters. Not currently used for anything.
 
+**\*qth-tz\*** _=> num_
+- Time zone offset, in hours, from UTC, in the sense of (Local - UTC). (+E, -W)
 ---
 ## Epoch Construction
 ```
