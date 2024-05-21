@@ -35,14 +35,14 @@ The Julian date for the current Universal Time is:
         d
         -32075.))
    -0.5
-   (/ (+ ss (* 60. (+ mm (* 60. (- hh lcl-ut))))) 86400.)
+   (/ (+ ss (* 60. (+ mm (* 60. (- hh (to-hrs lcl-ut)))))) 86400.)
    ))
 |#
 ;; ------------------------------------------------------------------------
 ;; Julian Day Numbers
 
 (defun jdn (y m d &key (hh 0) (mm 0) (ss 0) (lcl-ut *qth-tz*) &allow-other-keys)
-  (let* ((ddx (+ d (/ (+ ss (* 60. (+ mm (* 60. (- hh lcl-ut))))) 86400.))))
+  (let* ((ddx (+ d (/ (+ ss (* 60. (+ mm (* 60. (- hh (to-hrs lcl-ut)))))) 86400.))))
     (multiple-value-bind (mx yx)
         (if (> m 2.)
             (values m y)
@@ -60,7 +60,7 @@ The Julian date for the current Universal Time is:
     (declare (ignore dow))
     (when daylight-p
       (incf hh))
-    (jdn yyyy mo dd :hh hh :mm mm :ss ss :lcl-ut (- ut-lcl))))
+    (jdn yyyy mo dd :hh hh :mm mm :ss ss :lcl-ut (hrs (- ut-lcl)))))
 
 #|
 (current-epoch)
@@ -99,6 +99,6 @@ The Julian date for the current Universal Time is:
                    :lcl-ut lcl-ut)
               )))))))
 
-(defun d.t (x &optional (lcl-ut *qth-tz*))
-  (date.time x lcl-ut))
+(defun d.t (x &key (lcl-ut *qth-tz*))
+  (date.time x :lcl-ut lcl-ut))
 
