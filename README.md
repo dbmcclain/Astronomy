@@ -236,7 +236,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 
 **current-epoch** _=> epoch_
 - Get JDN for this very instant.
-`(current-epoch) => 2460451.4686574075`
+- `(current-epoch) => 2460451.4686574075`
 
 **date.time** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_ 
 - Compute JDB for Date & time entry analogous to d.ms format.
@@ -252,7 +252,6 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 **lmst0** _epoch => ang_
 - Compute siderial time at Greenwich for given epoch.
 - To get the LMST anywhere else, add your longitude to this result.
-
 - `(to-hms (unipolar (lmst0 *j2000*))) => (HMS 18 41 50.548)`
 
 **lmst** _&key lon epoch => ang_
@@ -269,6 +268,8 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - The result, shown here as _HA-ang_, is an angle in canonical representation. Same holds, in general, for anything else labeled with suffix _-ang_.
 
 **ha-to-ra** _HA-ang &key lon epoch => RA-ang_
+- Compute the RA for a given HA
+- Defaults to now, and your observatory location
 
 **parallactic-angle** _HA-ang Dec-ang &key lat => ang_
 - Compute the parallactic angle for the stated HA and Dec.
