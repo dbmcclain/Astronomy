@@ -112,7 +112,7 @@ Epoch construction:
 
   JDN - for specified date & time, Defaults to zero hours and local timezone offset.
 
-         (JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  (= *J2000*)
+         (JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*
 
   current-epoch - JDN for this very instant.
 
