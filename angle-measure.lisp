@@ -86,7 +86,7 @@
   (arcmin (/ x 60.)))
 
 (defun hrs (x)
-  (turns (/ x 24.0)))
+  (turns (/ x 24.)))
 
 (defun mins (x)
   (hrs (/ x 60.)))
