@@ -6,11 +6,11 @@ Unified angle arithmetic based on canonical measure. User choice, with SET-ANG-M
 ---
 Convenient angle entry in a variety of measures:
   ```
-    deg - 1 Turn = 360 deg, e.g., (deg 90)
-    arcmin
-    arcsec
-    dms
-    d.ms - (remember your old HP Calculator?)
+    deg _num_ - 1 Turn = 360 deg, e.g., (deg 90)
+    arcmin _num_
+    arcsec _num_
+    dms _d &optional m s_
+    d.ms _num_ - (remember your old HP Calculator?)
 
     hrs - 1 Turn = 24 hrs, or 15 deg/hr
     mins
