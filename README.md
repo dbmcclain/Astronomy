@@ -119,31 +119,28 @@ Final result is `V' = (P•V)P + ((P✕V)✕P) Cos ζ + (P✕V) Sin ζ`, for rot
 **rot** _vec-lon vec-lat axis-lon axis-lat rot-angle => lon, lat_ -- vectors are unit vectors specified as pole positions on the unit sphere,
         using longitude and latitude pairs.
 ```
-    (map-mult #'to-deg (rot (deg 20) (deg 30)  ;; the vector
-                            (deg 12) (deg 80)  ;; the axis
-                            (deg 10)) )        ;; amount to rotate
-    => 
-    28.86352390689511 ;; new lon
-    30.3734050448251  ;; new lat
+(map-mult #'to-deg (rot (deg 20) (deg 30)  ;; the vector
+                        (deg 12) (deg 80)  ;; the axis
+                        (deg 10)) )        ;; amount to rotate
+=> 
+28.86352390689511 ;; new lon
+30.3734050448251  ;; new lat
  ```
 ---
 Astronomical angle entry:
 
 **RA** _hh &optional mm ss => ang_ -- a synonym for HMS.
-
-        `(to-deg (RA 22 30 15.3)) => 337.56375`
+`(to-deg (RA 22 30 15.3)) => 337.56375`
 
 **Dec** _dd &optional hh ss => ang_ -- a synonym for DMS.
-
-        `(to-deg (DEC -12 20 32)) => -12.3422`
+`(to-deg (DEC -12 20 32)) => -12.3422`
 
 **to-ra** _ang => (RA hh mm ss.sss)_ -- ensures reported RA in 0..24 hrs,
-
-        `(to-ra (deg 270)) => (RA 18 0 0.0)`
+`(to-ra (deg 270)) => (RA 18 0 0.0)`
 
 **to-dec** _ang => (DEC ddd mm ss.sss)_ -- ensures reported Dec in -90..90 deg
+`(to-dec (deg -45)) => (DEC -45 0 0.0)`
 
-        `(to-dec (deg -45)) => (DEC -45 0 0.0)`
 ---
 
 Your observatory location and time zone should be set in Observatory.lisp. These values are used in several places for default values when, e.g., you haven't specified a location longitude, or a time zone offset.
