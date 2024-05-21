@@ -14,6 +14,7 @@ Convenient angle entry in a variety of measures:
 
 **dms** _d &optional m s => num_ - (remember your old HP Calculator?)
 
+**d.ms** _num => num_
 
 **hrs** _num => num_ - 1 Turn = 24 hrs, or 15 deg/hr
 
