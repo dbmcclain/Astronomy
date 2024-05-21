@@ -33,9 +33,9 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 
 **arcsec** _arcsecs => ang_
 
-**dms** _ddd &optional mm ss => ang_ -- (remember your old HP Calculator?)
+**dms** _ddd &optional mm ss => ang_
 
-**d.ms** _DDD.MMSSsss => ang_
+**d.ms** _DDD.MMSSsss => ang_  -- (remember your old HP Calculator?)
 
 **hrs** _hrs => ang_ -- 24 hrs = 1 turn, 1 hrs = 15 deg.
 
