@@ -170,7 +170,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 
 While Lisp is fond of using `-` as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT.
 
-**current-epoch** _=> epoch_ - JDN for this very instant.
+**current-epoch** _=> epoch_ -- JDN for this very instant.
 `(current-epoch) => 2460451.4686574075`
 
 **date.time** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_ -- date & time entry analogous to d.ms format.
