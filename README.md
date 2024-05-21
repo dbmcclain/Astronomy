@@ -243,7 +243,7 @@ While Lisp is fond of using `-` as a spacer in symbol names, we also mean that q
 ---
 ## Hour Angles
 
-**ra-to-ha** _RA-ang &key lon epoch => Ha-ang_ -- now, or for any other epoch, at your observatory location. The result, shown here as _HA-ang_, is an angle in canonical representation. Same holds, in general, for anything else labeled _-ang_.
+**ra-to-ha** _RA-ang &key lon epoch => Ha-ang_ -- Default is for now, and your observatory location. The result, shown here as _HA-ang_, is an angle in canonical representation. Same holds, in general, for anything else labeled with suffix _-ang_.
 
 **ha-to-ra** _HA-ang &key lon epoch => RA-ang_
 
