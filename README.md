@@ -3,6 +3,7 @@ Useful computations with angles on the unit sphere. The bread and butter stuff f
 
 Unified angle arithmetic based on canonical measure. User choice, with SET-ANG-MODE, of :RAD, :DEG, :HRS, :TURNS. But with the input/output variety you really shouldn't care. Possibly handy for debugging, and there could be differences of a few bits in the ULP of various results. (down around the 15th or 16th digit.)
 
+---
 Convenient angle entry in a variety of measures:
   ```
     deg - 1 Turn = 360 deg, e.g., (deg 90)
@@ -23,7 +24,7 @@ Convenient angle entry in a variety of measures:
 
     turns  - 1 Turn = 1 turn
 ```
-
+---
 View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.848.```
 ```
   to-rad
@@ -48,8 +49,7 @@ View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.848.```
   bipolar  - convert angle to principal values in (-180 180) deg
 
 ```
-
-
+---
 Trig functions redefined to work against any angular measure. ```(sin (deg 30)) => 0.5```
 ```
   sin
@@ -72,7 +72,6 @@ MAP-MULT - a convenience macro to deal with multiple return values, applying a f
   360
 ```
 ---
-
 Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole position on the unit sphere. No Euler angle stuff needed. No singularities near poles. No gimbal lock near zenith - but your telescope might not be so forgiving.
 ```
   rot - vectors are unit vectors specified as pole positions on the unit sphere,
@@ -102,6 +101,7 @@ Astronomical angle entry:
 
         (to-dec (deg -45)) => (DEC -45 0 0.0)
 ```
+---
 Epoch construction:
 ```
   *J2000* - for fast reference to the standard epoch = 2451545.0.
@@ -120,7 +120,7 @@ Epoch construction:
 
   d.t - abbrev for date.time
 ```
-
+---
 Mean Siderial Time:
 ```
   lmst0 - siderial time at Greenwich for given epoch.
@@ -131,7 +131,7 @@ Mean Siderial Time:
 
          (to-ra (lmst)) => (RA 7 59 36.19) 
 ```
-
+---
 Hour Angles:
 ```
   ra-to-ha - now, or for any other epoch
@@ -150,7 +150,7 @@ Hour Angles:
 
 
 ```
-
+---
 Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs. No Euler angle matrices needed. The quick version isn't really that much quicker, but it allows you to forego the statement of epochs. Just give it some number of years. As you can see below, the failings aren't that bad.
 
 There was another quick and dirty version we used many years ago. It did not invoke Ecliptic coordinate frames, and it simply approximated the rate of change in RA and Dec. Compared to the two routines here, that old method is distinctly inferior. It is so easy to just convert things to Ecliptic coordinates, rotate the whole frame by 50"/yr, then convert back to Equatorial. Again, no Euler angles are needed to do any of this.
@@ -175,7 +175,7 @@ There was another quick and dirty version we used many years ago. It did not inv
               (DEC 80 8 50.086)
 
 ```
-
+---
 Az/El and Equatorial coords: Azimuth measured from North toward East.
 ```
   azel-to-hadec
@@ -193,5 +193,5 @@ Az/El and Equatorial coords: Azimuth measured from North toward East.
 
   radec-to-azel
 ```
-
+---
 Eventual plans to accumulate addional featurs: Galactic coords, Nutation, Aberration, Refraction, more...
