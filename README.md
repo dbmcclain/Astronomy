@@ -31,14 +31,14 @@ You can easily define additional angle measures. All you need to provide is an i
 Convenient angle entry in a variety of measures. Here, _ang_ represents a real number in internal canonical units.
 
 **deg** _degs => ang_ 
-- 360 deg = 1 turn 
+- 360 deg = 1 turn.
 - `(to-turns (deg 90)) => 0.25`	
 
 **arcmin** _arcmins => ang_
-- 60 arcmin = 1 deg
+- 60 arcmin = 1 deg.
 
 **arcsec** _arcsecs => ang_
-- 60 arcsec = 1 arcmin
+- 60 arcsec = 1 arcmin.
 
 **dms** _ddd &optional mm ss => ang_
 - An easy way to specify an angle in deg, arcmin, arcsec.
@@ -47,13 +47,14 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 - (remember your old HP Calculator?)
 
 **hrs** _hrs => ang_ 
-- 24 hrs = 1 turn, 1 hrs = 15 deg.
+- 24 hrs = 1 turn.
+- 1 hrs = 15 deg.
 
 **mins** _mins => ang_
-- 60 mins = 1 hrs
+- 60 mins = 1 hrs.
 
 **secs** _secs => ang_
-- 60 secs = 1 mins
+- 60 secs = 1 mins.
   
 **hms** _hh &optional mm ss => ang_
 - An easy way to specify a time as hrs, mins, secs
@@ -62,16 +63,16 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 
 
 **rad** _rad => ang_ 
-- 2π rad = 1 turn
+- 2π rad = 1 turn.
 
 **mrad** _mrad => ang_
-- 1,000 mrad = 1 rad
+- 1,000 mrad = 1 rad.
   
 **μrad** _μrad => ang_
-- 1,000 μrad = 1 mrad
+- 1,000 μrad = 1 mrad.
 
 **turns** _turns => ang
-- 1 turns = a full circle
+- 1 turns = a full circle.
 
 ---
 ## Angle Conversions from Canonical Form
