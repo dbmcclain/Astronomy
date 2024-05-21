@@ -108,7 +108,8 @@ Accurate Precession between any two epochs - uses intermediate Ecliptic coord fr
 
 There was another quick and dirty version we used many years ago. It did not invoke Ecliptic coordinate frames, and it simply approximated the rate of change in RA and Dec. Compared to the two routines here, that old method is total crap. It is so easy to just convert things to Ecliptic coordinates, then rotate the whole frame by 50"/yr, then convert back to Equatorial. Again, no Euler angles are needed to do any of this.
 ```
-  precess - Accurate precession for anywhere on the sky. Needs RA, Dec, and starting epoch. Target epoch can be stated, but defaults to (current-epoch).
+  precess - Accurate precession for anywhere on the sky. Needs RA, Dec, and starting epoch.
+            Target epoch can be stated, but defaults to (current-epoch).
 
             (multiple-value-bind (rap decp)
                 (precess (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01)) ;; at my obs last New Year's
