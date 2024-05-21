@@ -5,7 +5,7 @@ Unified angle arithmetic based on canonical measure. User choice, with SET-ANG-M
 
 ---
 Convenient angle entry in a variety of measures:
-  ```
+
     deg _num_ - 1 Turn = 360 deg, e.g., (deg 90)
     arcmin _num_
     arcsec _num_
@@ -23,7 +23,7 @@ Convenient angle entry in a variety of measures:
     μrad
 
     turns  - 1 Turn = 1 turn
-```
+
 ---
 View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.848.```
 ```
