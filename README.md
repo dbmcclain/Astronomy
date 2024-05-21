@@ -82,16 +82,21 @@ Trig functions redefined to work against any angular measure. `(sin (deg 30)) =>
 
 **asin** _num => ang_
 
-**acos _num => ang_
+**acos** _num => ang_
 
-**atan _y &optional _x => ang_
+**atan** _y &optional _x => ang_
 
-**cis _ang => #C(cos sin)_
+**cis** _ang => #C(cos sin)_
 
 **phase** _#C(x y) => ang_
 
 ---
 MAP-MULT - a convenience macro to deal with multiple return values, applying a function to each on the way out. Many of the Astronomical routines return multiple values.
+
+**map-mult** _fn form_ -- applies _fn_ to each of the multiple values returned by execution of _form_, and returning them as multiple values. 
+
+**map-mult** _(fns...) form_ -- applies the first _fn_ to the first of multiple values returned from the execution of _form_, applies the second _fn_ to the second returned value, etc., returning the results as multiple values.
+
 ```
   (map-mult #'to-deg (values 0.25 0.5 0.75 1))
   =>
