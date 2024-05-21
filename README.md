@@ -1,9 +1,9 @@
 # Astronomy
 Useful computations with angles on the unit sphere. The bread and butter stuff for everyday ops at the observatory.
 
-This code comes from a lifetime accumulation of stuff that I used at professional observatories. I typically had these tools on my programmable calculator for use at the telescope. (remember those?) I decided to reformulate my experience, using Lisp, for myself. It may be useful to others too.
+This code comes from a lifetime accumulation of stuff that I used at professional observatories. I typically had these tools on my programmable calculator for use at the telescope. _(remember those?)_ I decided to reformulate my experience, using Lisp, for myself. It may be useful to others too.
 
-My experience began as a Radio Astronomer observing Carbon Monoxide emission lines at 115 GHz (2.6mm wavelength), originating from within our galaxy. The telescope was a 1m Cassegrain dish atop Pupin Hall, at Columbia University, in NYC. Then I moved blue-ward to the Infrared and the first computer-controlled telescope - the 100-inch WIRO on Jelm Mtn, about 25 miles South of Laramie, WY. From there I moved, even further blue-ward, into the Visible spectrum at the (then) world's largest telescope, which I taught how to point and track. That was the 7m MMT (Multiple Mirror Telescope), a telescope with 6x72-inch confocal primaries, atop Mt. Hopkins, about 50 miles South of Tucson, AZ. Today, that telescope has been repurposed to carry a single 8m primary mirror.
+My experience began as a Radio Astronomer observing Carbon Monoxide emission lines at 115 GHz _(2.6mm wavelength)_, originating from within our galaxy. The telescope was a 1m Cassegrain dish atop Pupin Hall, at Columbia University, in NYC. Then I moved blue-ward to the Infrared and the first computer-controlled telescope - the 100-inch WIRO on Jelm Mtn, about 25 miles South of Laramie, WY. From there I moved, even further blue-ward, into the Visible spectrum at the _[then]_ world's largest telescope, which I taught how to point and track. That was the 7m MMT (Multiple Mirror Telescope), a telescope with 6x72-inch confocal primaries, atop Mt. Hopkins, about 50 miles South of Tucson, AZ. Today, that telescope has been repurposed to carry a single 8m primary mirror.
 
 That was a long time ago... And, of course, in those days we used Forth. Lisp is what Forth always wanted to grow up to be... But, although I moved on to bigger things, I still kept returning to Astronomy throughout my lifetime. As today, again.
 
@@ -17,7 +17,7 @@ These tools, at your fingertips in the Lisp REPL, augment the programs you need 
 ## Canonical Angle Measure
 Unified angle arithmetic based on canonical measure. User choice, with **SET-ANG-MODE**. But with the input/output variety available here, you really shouldn't care. Possibly handy for debugging, and there could be differences of a few bits in the ULP of various results. (down around the 15th or 16th digit.)
 
-The code here depends on Double-Precision Floating Point arithmetic. Single-Precision will probably fail in some places. Astronomical Epochs require substantial numeric precision, on the order of 40-bits. Sky angles can be reasonably computed and maintained with only 24-bits of precision -- after all, we ran the world's largest telescope (at the time) using a 24-bit fractional integer math system. For amateur equipment you possibly only need 16 bits?
+The code here depends on Double-Precision Floating Point arithmetic. Single-Precision will probably fail in some places. Astronomical Epochs require substantial numeric precision, on the order of 40-bits. Sky angles can be reasonably computed and maintained with only 24-bits of precision -- after all, we ran the world's largest telescope _(at the time)_ using a 24-bit fractional integer math system. For amateur equipment you possibly only need 16 bits?
 
 For context, a precision of 1 arcsec requires 21-bits. For 1 arcmin, 15-bits. So the problem isn't in the angular measure. The problem occurs because the integer portion of a typical Epoch takes, currently, 22 bits. And that sits atop the fractional precision needed for good sky angle computations.
 
