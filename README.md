@@ -7,7 +7,7 @@ Unified angle arithmetic based on canonical measure. User choice, with **SET-ANG
 
 The code here depends on Double-Precision Floating Point arithmetic. Single-Precision will probably fail in some places. Astronomical Epochs require substantial numeric precision, on the order of 40-bits. Sky angles can be reasonably computed and maintained with only 24-bits of precision -- after all, we ran the world's largest telescope (at the time) using a 24-bit fractional math system. For amateur equipment you possibly only need 16 bits?
 
-For context, a precision of 1 arcsec requires 21-bits. For 1 arcmin, 15-bits. So the problem isn't in the angular measure. The problem occurs because the integer portion of a typical Epoch takes, currently, 22 bits. And that sits atop the precision needed for good sky angle computations.
+For context, a precision of 1 arcsec requires 21-bits. For 1 arcmin, 15-bits. So the problem isn't in the angular measure. The problem occurs because the integer portion of a typical Epoch takes, currently, 22 bits. And that sits atop the fractional precision needed for good sky angle computations.
 
 You can easily define additional angle measures. All you need to provide is an input function that takes user input, and which converts those units to Turns. And you should also define a **TO-_your-unit_** that converts from Turns to your chosen units. Then, regardless of the system angle mode, you should see consistent and correct results when using your new units.
 
