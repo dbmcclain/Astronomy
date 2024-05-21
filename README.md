@@ -5,7 +5,7 @@ Useful computations with angles on the unit sphere. The bread and butter stuff f
 ## Canonical Angle Measure
 Unified angle arithmetic based on canonical measure. User choice, with **SET-ANG-MODE**. But with the input/output variety available here, you really shouldn't care. Possibly handy for debugging, and there could be differences of a few bits in the ULP of various results. (down around the 15th or 16th digit.)
 
-The code here depends on Double-Precision Floating Point arithmetic. Single-Precision will probably fail in some places. Astronomical Epochs require substantial numeric precision, on the order of 40-bits. Sky angles can be reasonably computed and maintained with only 24-bits of precision -- after all, we ran the world's largest telescope (at the time) using a 24-bit fractional math system. For amateur equipment you possibly only need 16 bits?
+The code here depends on Double-Precision Floating Point arithmetic. Single-Precision will probably fail in some places. Astronomical Epochs require substantial numeric precision, on the order of 40-bits. Sky angles can be reasonably computed and maintained with only 24-bits of precision -- after all, we ran the world's largest telescope (at the time) using a 24-bit fractional integer math system. For amateur equipment you possibly only need 16 bits?
 
 For context, a precision of 1 arcsec requires 21-bits. For 1 arcmin, 15-bits. So the problem isn't in the angular measure. The problem occurs because the integer portion of a typical Epoch takes, currently, 22 bits. And that sits atop the fractional precision needed for good sky angle computations.
 
