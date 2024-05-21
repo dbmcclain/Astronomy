@@ -145,39 +145,40 @@ Astronomical angle entry:
 
 Your observatory location and time zone should be set in Observatory.lisp. These values are used in several places for default values when, e.g., you haven't specified a location longitude, or a time zone offset.
 ```
-*qth-lon* - longitude (+E, -W)
+*qth-lon*  -- longitude (+E, -W)
 
-*qth-lat* - latitude (+N, -S)
+*qth-lat*  -- latitude (+N, -S)
 
-*qth-elev* - elevation in meters. Not currently used for anything.
+*qth-elev* -- elevation in meters. Not currently used for anything.
 
-*qth-tz* - Time zone offset, in hours, from UTC, in the sense of (Local - UTC). (+E, -W)
+*qth-tz*   -- Time zone offset, in hours, from UTC, in the sense of (Local - UTC). (+E, -W)
 ```
 
 ---
 Epoch construction:
 ```
   *J2000* - for fast reference to the standard epoch = 2451545.0.
+```
+  
+**JDN** _yyyy mm dd &key hh mm ss lcl-ut &allow-other-keys => epoch_ -- for specified date & time, Defaults to zero hours and local timezone offset.
 
-  JDN - for specified date & time, Defaults to zero hours and local timezone offset.
-
-         (JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*
+         `(JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*`
 
         While Lisp is fond of using `-` as a spacer in symbol names, we also mean that
         quite literally here for keyword :LCL-UT. IOW, we mean Local minus UT.
 
-  current-epoch - JDN for this very instant.
+**current-epoch** _=> epoch_ - JDN for this very instant.
 
-         (current-epoch) => 2460451.4686574075
+         `(current-epoch) => 2460451.4686574075`
 
-  date.time - date & time entry analogous to d.ms format.
+**date.time** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_ -- date & time entry analogous to d.ms format.
 
          (date.time 2024_05_20.12_30) => 2460451.312962959
 
         [Yes... my Lisp Reader allows '_' anywhere within numbers. Very nice to have.]
 
-  d.t - abbrev for date.time
-```
+**d.t** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_ -- abbrev for date.time
+
 ---
 Mean Siderial Time:
 ```
