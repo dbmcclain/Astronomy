@@ -12,7 +12,7 @@ Convenient angle entry in a variety of measures:
 
 **arcsec** _num => num_
 
-**dms** _d &optional m s => num_ - (remember your old HP Calculator?)
+**dms** _ddd &optional mm ss[.sss] => num_ - (remember your old HP Calculator?)
 
 **d.ms** _num => num_
 
@@ -22,7 +22,7 @@ Convenient angle entry in a variety of measures:
 
 **secs** _num => num_
 
-**hms** _h &optional m s => num_
+**hms** _hh &optional mm ss[.sss] => num_
 
 **h.ms** _num => num_
 
