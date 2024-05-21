@@ -70,11 +70,11 @@ Astronomical angle entry:
 
   Dec - e.g., (to-deg (DEC -12 20 32)) => -12.3422
 
-  to-ra - ensures RA in 0..24 hrs,
+  to-ra - ensures reported RA in 0..24 hrs,
 
         (to-ra (deg 270)) => (RA 18 0 0.0)
 
-  to-dec - ensures Dec in -90..90 deg
+  to-dec - ensures reported Dec in -90..90 deg
 
         (to-dec (deg -45)) => (DEC -45 0 0.0)
 ```
