@@ -246,6 +246,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - Defaults to zero hours and local timezone offset.
 - `(JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*`
 - While Lisp is fond of using '-' as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT, usually stated in hours. So use `:LCL-UT (hrs -7)` to mean Mountain Standard Time zone.
+- Like UTC time, JDN is universally the same for all observers, regardless of their local clock time. The time zone info is needed to correct your clock time to become UTC time, before computing the JDN.
 
 **current-epoch** _=> epoch_
 - Get JDN for this very instant.
