@@ -58,7 +58,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
   
 **hms** _hh &optional mm ss => ang_
 - An easy way to specify a time as hrs, mins, secs
-- 
+  
 **h.ms** _HH.MMSSsss => ang_
 
 
