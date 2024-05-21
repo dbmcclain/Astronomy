@@ -89,8 +89,8 @@ Final result is ```V' = (P•V)P + ((P✕V)✕P) Cos ζ + (P✕V) Sin ζ```, for
                             (deg 12) (deg 80)  ;; the axis
                             (deg 10)) )        ;; amount to rotate
     => 
-    28.86352390689511
-    30.3734050448251
+    28.86352390689511 ;; new lon
+    30.3734050448251  ;; new lat
 
     
 ```
@@ -211,7 +211,7 @@ There was a different quick and dirty version that we used many years ago. It di
 
 ```
 ---
-Az/El and Equatorial coords: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
+Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
 ```
   azel-to-hadec
 
@@ -239,9 +239,11 @@ Az/El and Equatorial coords: Azimuth measured from North toward East. No singula
             ;; What have I been accepting?
             (airmass (deg 40)) => 1.5557238268604126 ;; hmm... is this too high?
 
-  hadec-airmass - airmass for stated HA, Dec. Defaults to observatory location but you can specify with third arg.
+  hadec-airmass - airmass for stated HA, Dec. Defaults to observatory location,
+                  but you can specify with third arg.
 
-  radec-airmass - airmass for stated RA, Dec. Defaults to now, and observatory location. But you can specify either.
+  radec-airmass - airmass for stated RA, Dec. Defaults to now, and observatory
+                  location. But you can specify either.
 ```
 ---
 Eventual plans to accumulate addional featurs: Galactic coords, Nutation, Aberration, Refraction, more...
