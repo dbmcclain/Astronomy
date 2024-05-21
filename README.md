@@ -38,29 +38,39 @@ Convenient angle entry in a variety of measures:
 
 ---
 View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
-```
-  to-rad
-  to-mrad
-  to-μrad
 
-  to-deg
-  to-arcmin
-  to-arcsec
-  to-dms
-  to-d.ms
+**to-deg** _num => num_
+  
+**to-arcmin** _num => num_
+  
+**to-arcsec** _num => num_
+  
+**to-dms** _num => num_
+  
+**to-d.ms** _num => num_
 
-  to-hrs
-  to-mins
-  to-secs
-  to-hms
-  to-h.ms
+**to-hrs** _num => num_
+  
+**to-mins** _num => num_
+  
+**to-secs** _num => num_
+  
+**to-hms** _num => num_
+  
+**to-h.ms** _num => num_
 
-  to-turns
+**to-rad** _num => num_
+  
+**to-mrad** _num => num_
 
-  unipolar - convert angle to principal values in (0 360) deg
-  bipolar  - convert angle to principal values in (-180 180) deg
+**to-μrad** _num => num_
 
-```
+**to-turns** _num => num_
+
+**unipolar** _num => num_ - convert angle to principal values in (0 360) deg
+
+**bipolar**  _num => num_ - convert angle to principal values in (-180 180) deg
+
 ---
 Trig functions redefined to work against any angular measure. ```(sin (deg 30)) => 0.5```
 ```
