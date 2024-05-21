@@ -34,7 +34,9 @@
 ;; in *1Turn*.
 ;;
 ;; If *1Turn* = 2*Pi then you are running Radian measure as the
-;; canonical measure.
+;; canonical measure. Else, if set to 360 then you are using Degrees
+;; as the measure. etc. etc... You just have to state how many of your
+;; chosen units represents 1 Turn.
 ;;
 ;; Similarly, on output, every item is converted to Turns before
 ;; scaling up for the display measure. And TO-TURNS uses that scale
