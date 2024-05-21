@@ -93,7 +93,7 @@ Astronomical angle entry:
 
         (to-deg (RA 22 30 15.3)) => 337.56375
 
-  Dec - a synonum for DMS.
+  Dec - a synonym for DMS.
 
         (to-deg (DEC -12 20 32)) => -12.3422
 
