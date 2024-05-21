@@ -153,11 +153,13 @@ Mean Siderial Time:
 ---
 Hour Angles:
 ```
-  ra-to-ha - now, or for any other epoch
+  ra-to-ha - now, or for any other epoch, at your observatory location.
 
   ha-to-ra
 
-  parallactic-angle - requires an HA, Dec.
+  parallactic-angle - requires an HA, Dec. Result is negative when pointing East of the Meridian,
+                      or positive when West. So if your frame is aligned with the horizon, then East pointing
+                      has celestial North tilted toward East azimuths (negative).
                       Very useful for reconstructing events from a session on Az/El telescopes.
 
       (let ((ra    (ra  12 20))
