@@ -130,6 +130,15 @@ Az/El and Equatorial coords:
 ```
   azel-to-hadec
   azel-to-radec - now, or for any stated epoch
+
+             ;; What is rising now in the East, with at least 40 deg elevation?
+             (multiple-value-bind (ra dec)
+                 (azel-to-radec (deg 90) (deg 40))
+               (values (to-ra ra) (to-dec dec)))
+             =>
+             (RA 12 35 0.417)
+             (DEC 20 4 52.791000000000004)
+
   hadec-to-azel
   radec-to-azel
 ```
