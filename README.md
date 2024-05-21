@@ -107,7 +107,7 @@ Astronomical angle entry:
 ```
 ---
 
-Your observatory location and time zone should be set in Observatory.lisp.
+Your observatory location and time zone should be set in Observatory.lisp. These values are used in several places for default values when, e.g., you haven't specified a location longitude, or a time zone offset.
 ```
 *qth-lon* - longitude (+E, -W)
 
