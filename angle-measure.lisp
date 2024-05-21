@@ -27,6 +27,32 @@
 ;;
 ;; When computing on the sky, TURNS is a natural unit, but any unit
 ;; can assume the background role.
+;;
+;; The way this works is that all angle entry are referred back to
+;; Turns. And TURNS decides what the native representation is, by
+;; multiplying the incoming Turns measures by the scale factor stored
+;; in *1Turn*.
+;;
+;; If *1Turn* = 2*Pi then you are running Radian measure as the
+;; canonical measure.
+;;
+;; Similarly, on output, every item is converted to Turns before
+;; scaling up for the display measure. And TO-TURNS uses that scale
+;; factor to convert the internal measure to true Turns.
+;;
+;; The whole system is internally consistent and only needs changing
+;; in just one place to switch to another unit of measure for the
+;; canonical representation.
+;;
+;; By doing things this way, each unit of measure only needs to know
+;; how to compute the equivalent number of Turns for itself. No
+;; measure needs to know anything about all the other measures that
+;; may be present in the system.
+;;
+;; You can literally set the value of *1Turn* to anything that you
+;; like. But whenever its value is changed, you should recompile this
+;; body of code to have all the DEFVARs and reader-macros set up
+;; correct values for internal constants in the code.
 
 (defvar *1turn*)
 
