@@ -147,7 +147,7 @@ Final result is `V' = (P•V)P + ((P✕V)✕P) Cos ζ + (P✕V) Sin ζ`, for rot
 `(to-dec (deg -45)) => (DEC -45 0 0.0)`
 
 ---
-## Observatory Location Values
+## Observatory Location Bindings
 Your observatory location and time zone should be set in Observatory.lisp. These values are used in several places for default values when, e.g., you haven't specified a location longitude, or a time zone offset.
 ```
 *qth-lon*  -- longitude (+E, -W)
