@@ -121,7 +121,9 @@ Mean Siderial Time:
 Hour Angles:
 ```
   ra-to-ha - now, or for any other epoch
+
   ha-to-ra
+
   parallactic-angle - very useful for reconstructing events from a session on Az/El telescopes.
 
       (let ((ra    (ra  12 20))
@@ -165,6 +167,7 @@ There was another quick and dirty version we used many years ago. It did not inv
 Az/El and Equatorial coords:
 ```
   azel-to-hadec
+
   azel-to-radec - now, or for any stated epoch
 
              ;; What is rising now in the East, with at least 40 deg elevation?
@@ -176,6 +179,7 @@ Az/El and Equatorial coords:
              (DEC 20 4 52.791000000000004)
 
   hadec-to-azel
+
   radec-to-azel
 ```
 
