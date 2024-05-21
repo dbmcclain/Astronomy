@@ -164,7 +164,7 @@ There was another quick and dirty version we used many years ago. It did not inv
 
 ```
 
-Az/El and Equatorial coords:
+Az/El and Equatorial coords: Azimuth measured from North toward East.
 ```
   azel-to-hadec
 
