@@ -138,7 +138,8 @@ Hour Angles:
 
   ha-to-ra
 
-  parallactic-angle - requires an HA, Dec. Very useful for reconstructing events from a session on Az/El telescopes.
+  parallactic-angle - requires an HA, Dec.
+                      Very useful for reconstructing events from a session on Az/El telescopes.
 
       (let ((ra    (ra  12 20))
             (dec   (dec 05 15))
