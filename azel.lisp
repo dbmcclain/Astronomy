@@ -56,5 +56,11 @@
   (airmass (second (multiple-value-list
                     (radec-to-azel ra dec :epoch epoch :lat lat))) ))
 
+(defun hadec-airmass (ha dec &optional (lat *qth-lat*))
+  ;; airmass for objects at that HA, Dec
+  (airmass (second (multiple-value-list
+                    (hadec-to-azel ha dec lat)))))
+
+
 
   

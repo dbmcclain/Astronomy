@@ -137,6 +137,7 @@
    #:azel-to-radec
    #:airmass
    #:radec-airmass
+   #:hadec-airmass
    
    #:map-mult
 ))
