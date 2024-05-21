@@ -135,6 +135,9 @@ Epoch construction:
 
          (JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*
 
+        While Lisp is fond of using `-` as a spacer in symbol names, we also mean that
+        quite literally here for keyword :LCL-UT. IOW, we mean Local minus UT.
+
   current-epoch - JDN for this very instant.
 
          (current-epoch) => 2460451.4686574075
