@@ -244,7 +244,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - Compute JDN for specified date & time.
 - Defaults to zero hours and local timezone offset.
 - `(JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*`
-- While Lisp is fond of using `-` as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT.
+- While Lisp is fond of using '-' as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT.
 
 **current-epoch** _=> epoch_
 - Get JDN for this very instant.
