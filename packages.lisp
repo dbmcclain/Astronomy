@@ -135,6 +135,8 @@
    #:azel-to-hadec
    #:radec-to-azel
    #:azel-to-radec
-   ))
+   
+   #:map-mult
+))
 
 

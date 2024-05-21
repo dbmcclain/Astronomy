@@ -49,3 +49,7 @@
 (defun to-dec-d.ms (x)
   (to-d.ms (bipolar x)))
 
+;; --------------------------
+
+(defmacro map-mult (fn form)
+  `(mapcar ,fn (multiple-value-list ,form)))
