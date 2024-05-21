@@ -274,7 +274,6 @@ There was a different quick and dirty version that we used many years ago. It di
 (RA 9 23 8.557)
 (DEC 80 8 42.965)
 ```
-Defaults to current epoch as target.
 
 **precessN** _RA-ang Dec-ang NYears => RA-ang, Dec-ang_ -- for N years, can be used for quick & dirty, assuming J2000 obliquity.
 ```
