@@ -16,7 +16,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 
 **d.ms** _DDD.MMSSsss => ang_
 
-**hrs** _hrs => ang_ -- 24 hrs = 1 turn, or 15 deg/hr
+**hrs** _hrs => ang_ -- 24 hrs = 1 turn, 1 hrs = 15 deg.
 
 **mins** _mins => ang_
 
@@ -72,17 +72,24 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
 **bipolar**  _ang => ang_ -- convert angle to principal values in (-180 180) deg
 
 ---
-Trig functions redefined to work against any angular measure. ```(sin (deg 30)) => 0.5```
-```
-  sin
-  cos
-  tan
-  asin
-  acos
-  atan - optional 2nd arg
-  cis
-  phase
-```
+Trig functions redefined to work against any angular measure. `(sin (deg 30)) => 0.5`
+
+**sin** _ang => num_
+
+**cos** _ang => num_
+
+**tan** _ang => num_
+
+**asin** _num => ang_
+
+**acos _num => ang_
+
+**atan _y &optional _x => ang_
+
+**cis _ang => #C(cos sin)_
+
+**phase** _#C(x y) => ang_
+
 ---
 MAP-MULT - a convenience macro to deal with multiple return values, applying a function to each on the way out. Many of the Astronomical routines return multiple values.
 ```
