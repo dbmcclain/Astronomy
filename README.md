@@ -11,7 +11,7 @@ Convenient angle entry in a variety of measures:
     dms
     d.ms - (remember your old HP Calculator?)
 
-    hrs - 1 hour = 15 deg
+    hrs - 1 Turn = 24 hrs, or 15 deg/hr
     mins
     secs
     hms
@@ -21,7 +21,7 @@ Convenient angle entry in a variety of measures:
     mrad
     μrad
 
-    turns
+    turns  - 1 Turb = 1 turn
 ```
 
 View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.848.```
