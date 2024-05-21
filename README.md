@@ -84,7 +84,7 @@ Trig functions redefined to work against any angular measure. `(sin (deg 30)) =>
 
 **acos** _num => ang_
 
-**atan** _y &optional x_ => ang_
+**atan** _y &optional x => ang_
 
 **cis** _ang => #C(cos sin)_
 
