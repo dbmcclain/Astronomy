@@ -104,7 +104,7 @@ Hour Angles:
 
 ```
 
-Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs.
+Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs. No Euler angle matrices needed.
 ```
   precess - (multiple-value-bind (rap decp)
                 (precess (ra 12 20) (dec 05 15) *j2000* (d.t 2024_01_01)) ;; at my obs last New Year's
