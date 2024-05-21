@@ -31,7 +31,9 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 
 **deg** _degs => ang_ 
 
-360 deg = 1 turn `(to-turns (deg 90)) => 0.25`	
+360 deg = 1 turn 
+
+`(to-turns (deg 90)) => 0.25`	
 
 **arcmin** _arcmins => ang_
 
