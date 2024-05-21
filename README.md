@@ -79,7 +79,7 @@ Angular rotation of vectors about arbitrary axis - specify vector and rotation a
 
     (map-mult #'to-deg (rot (deg 20) (deg 30)  ;; the vector
                             (deg 12) (deg 80)  ;; the axis
-                            (deg 10)) )       ;; amount to rotate
+                            (deg 10)) )        ;; amount to rotate
     => 
     28.86352390689511
     30.3734050448251
