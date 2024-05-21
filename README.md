@@ -143,7 +143,7 @@ Trig functions redefined to work with canonical angular measure. `(sin (deg 30))
 **phase** _#C(x y) => ang_
 
 ---
-## MAP-MULT - Mapping Over Multiple Returned Values
+## MAP-MULT - Mapping Over Multiple Return Values
 This is a convenience macro to deal with multiple return values, applying a function to each on the way out. Many of the Astronomical routines return multiple values.
 
 **map-mult** _fn form_ -- applies _fn_ to each of the multiple values returned by execution of _form_, and returning the results as multiple values. 
