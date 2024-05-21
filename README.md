@@ -233,7 +233,8 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - Not currently used for anything.
 
 **\*qth-tz\*** _=> num_
-- Time zone offset, in hours, from UTC, in the sense of (Local - UTC). (+E, -W)
+- Time zone offset, usually measured in hours, from UTC, in the sense of (Local - UTC). (+E, -W)
+- In the binding, if (Local-UTC) = -7 hours, then be sure to state `(HRS -7)`. In this code, time is treated as an angular value too!
 ---
 ## Epoch Construction
 
