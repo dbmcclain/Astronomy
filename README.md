@@ -233,6 +233,13 @@ Az/El and Equatorial coords: Azimuth measured from North toward East. No singula
             =>
             158.38675666215835  ;; az
             68.78774440308138   ;; el - Yes!
+
+  airmass - needs an elevation angle (= 1/(Sin El))
+
+            ;; What have I been accepting?
+            (airmass (deg 40)) => 1.5557238268604126 ;; hmm... is this too high?
+
+  radec-airmass - airmass for stated RA, Dec. Defaults to now, and observatory location. But you can specify either.
 ```
 ---
 Eventual plans to accumulate addional featurs: Galactic coords, Nutation, Aberration, Refraction, more...
