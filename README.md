@@ -108,7 +108,7 @@ The use of integer arithmetic preserves LSB precision, allowing for unlimited wr
 
 I remember once, in the Aerospace Industry, dealing with an Electrical Engineer who was trying to control a servo system. He insisted on using single-precision floating-point Radian angle measure for his control system. He probably had that mindset because all the trig functions take radian measure, right? :-) The odd thing here is that he was using a Motorola 56K DSP - all integer based arithmetic! He became so confused by the crappy results he was getting. I finally convinced him to just let me take care of things. There is nothing better than integer arithmetic and integer fractions of a Turn. The ancient Greeks had it right!
 
-I did carefully consider my options when I wrote this code. I wrote a 24-bit integer version of this code, but I finally decided that double-precision FP would be okay to use here. Single precision? Definitely not, simply becuase FP arithmetic seeks to preserve range at the cost of LSB precision. And single precision FP has barely enough bits in the range from 0.0 to 1.0. Anything larger erodes the LSB.
+I did carefully consider my options when I wrote this code. I wrote a 24-bit integer version of this code, but I finally decided that double-precision FP would be okay to use here. Single precision? Definitely not! Simply becuase FP arithmetic seeks to preserve range at the cost of LSB precision. And single precision FP has barely enough bits in the range from 0.0 to 1.0. Anything larger erodes the LSB.
 
 ---
 ## Redefined Trig Functions
