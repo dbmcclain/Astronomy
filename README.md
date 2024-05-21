@@ -12,7 +12,7 @@ arcmin _num_
 
 arcsec _num_
 
-dms _d &optional m s_ (remember your old HP Calculator?)
+dms _d &optional m s_ - (remember your old HP Calculator?)
 
 
 hrs _num_ - 1 Turn = 24 hrs, or 15 deg/hr
