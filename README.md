@@ -106,6 +106,19 @@ Astronomical angle entry:
         (to-dec (deg -45)) => (DEC -45 0 0.0)
 ```
 ---
+
+Your observatory location and time zone should be set in Obvservatory.lisp.
+```
+*qth-lon* - longitude (+E, -W)
+
+*qth-lat* - latitude (+N, -S)
+
+*qth-elev* - elevation in meters. Not current used for anything.
+
+*qth-tz* - Time zone offset, in hours, from UTC. (+E, -W)
+```
+
+---
 Epoch construction:
 ```
   *J2000* - for fast reference to the standard epoch = 2451545.0.
