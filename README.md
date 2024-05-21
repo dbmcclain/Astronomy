@@ -170,7 +170,7 @@ Under rotation, the parallel component remains unchanged. The parallel component
 
 Final result is _**V'**_ = (_**P**_ • _**V**_)_**P**_ + ((_**P**_ ✕ _**V**_) ✕ _**P**_) Cos ζ + (_**P**_ ✕ _**V**_) Sin ζ, for rotation angle ζ.
 
-**rot** _vec-lon-ang vec-lat-ang axis-lon-ang axis-lat-ang rot-ang => lon, lat_ -- vectors are unit vectors specified as pole positions on the unit sphere, using longitude and latitude pairs.
+**rot** _vec-lon-ang vec-lat-ang axis-lon-ang axis-lat-ang rot-ang => lon-ang, lat-ang_ -- vectors are unit vectors specified as pole positions on the unit sphere, using longitude and latitude pairs.
 ```
 (map-mult #'to-deg (rot (deg 20) (deg 30)  ;; the vector
                         (deg 12) (deg 80)  ;; the axis
@@ -243,7 +243,7 @@ While Lisp is fond of using `-` as a spacer in symbol names, we also mean that q
 ---
 ## Hour Angles
 
-**ra-to-ha** _RA-ang &key lon epoch => Ha-ang_ -- now, or for any other epoch, at your observatory location.
+**ra-to-ha** _RA-ang &key lon epoch => Ha-ang_ -- now, or for any other epoch, at your observatory location. The result, shown here as _HA-ang_, is an angle in canonical representation. Same holds, in general, for anything else labeled _-ang_.
 
 **ha-to-ra** _HA-ang &key lon epoch => RA-ang_
 
