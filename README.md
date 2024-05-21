@@ -7,7 +7,7 @@ My experience began as a Radio Astronomer observing Carbon Monoxide emission lin
 
 That was a long time ago... And, of course, in those days we used Forth. Lisp is what Forth always wanted to grow up to be... But, although I moved on to bigger things, I still kept returning to Astronomy throughout my lifetime. As today, again.
 
-Today, the advent of small, affordable, robotic telescopes has spawned fresh interest in the amateur community for Astronomy. And today, all you need to do is pull up an interactive star map, click a mouse button, or swipe and stab on your cell-phone, and the telecope slews to the spot and starts making nice pics of the sky.
+Today, the advent of small, affordable, robotic telescopes has spawned fresh interest in the amateur community for Astronomy. And today, all you need to do is pull up an interactive star map, click a mouse button, or swipe and stab on your cell-phone, and the telecope slews to the spot and starts making nice pics of the sky. Right?
 
 But I found that many of the consumer-grade programs have irritating shortcomings. Some make it difficult or impossible to type in the RA & Dec coordinates that you want - never mind the lame input formatting required by them. And for planning purposes, the tools available are stilted and (IMHO) insufficient to help you answer some basic questions while you plan your observing runs. That's why I finally sat down and wrote this collection of Observational Astronomy Tools.
 
