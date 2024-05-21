@@ -146,6 +146,8 @@ Epoch construction:
 
          (date.time 2024_05_20.12_30) => 2460451.312962959
 
+        [Yes... my Lisp Reader allows '_' anywhere within numbers. Very nice to have.]
+
   d.t - abbrev for date.time
 ```
 ---
