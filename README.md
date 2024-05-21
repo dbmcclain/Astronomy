@@ -22,7 +22,7 @@ Convenient angle entry in a variety of measures:
 
 **secs** _num => num_
 
-**hms** _h &option m s => num_
+**hms** _h &optional m s => num_
 
 **h.ms** _num => num_
 
