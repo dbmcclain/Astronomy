@@ -3,7 +3,7 @@ Useful computations with angles on the unit sphere. The bread and butter stuff f
 
 This code comes from a lifetime accumulation of stuff that I used at professional observatories. I typically had these tools on my programmable calculator for use at the telescope. (remember those?) I decided to reformulate my experience, using Lisp, for myself. It may be useful to others too.
 
-My experience began as a Radio Astronomer observing Carbon Monoxide emission lines, at 115 GHz, in our galaxy. Then I moved on to the Infrared and the first computer-controlled telescope - WIRO on Jelm Mtn, about 25 miles South of Laramie, WY. From there I moved into the visible spectrum at the (then) world's largest telescope, which I taught how to point and track. That was known as the MMT (Multiple Mirror Telescope) atop Mt. Hopkins, about 50 miles South of Tucson, AZ. That was a long time ago... And, of course, in those days we used Forth. Lisp is what Forth always wanted to grow up to be...
+My experience began as a Radio Astronomer observing Carbon Monoxide emission lines, at 115 GHz, originating from within our galaxy. Then I moved on to the Infrared and the first computer-controlled telescope - WIRO on Jelm Mtn, about 25 miles South of Laramie, WY. From there I moved into the visible spectrum at the (then) world's largest telescope, which I taught how to point and track. That was known as the MMT (Multiple Mirror Telescope) atop Mt. Hopkins, about 50 miles South of Tucson, AZ. That was a long time ago... And, of course, in those days we used Forth. Lisp is what Forth always wanted to grow up to be...
 
 But, although I moved on to bigger things, I still kept returning to Astronomy throughout my lifetime. As today, again.
 
