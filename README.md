@@ -80,7 +80,7 @@ Astronomical angle entry:
 ```
 Epoch construction:
 ```
-  *J2000* - for fast reference to the standard epoch.
+  *J2000* - for fast reference to the standard epoch = 2451545.0.
 
   JDN - for specified date & time, Defaults to zero hours and local timezone offset.
 
