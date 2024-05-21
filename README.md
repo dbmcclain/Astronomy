@@ -166,21 +166,16 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 ```
   
 **JDN** _yyyy mm dd &key hh mm ss lcl-ut &allow-other-keys => epoch_ -- for specified date & time, Defaults to zero hours and local timezone offset.
+`(JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*`
 
-         `(JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*`
-
-        While Lisp is fond of using `-` as a spacer in symbol names, we also mean that
-        quite literally here for keyword :LCL-UT. IOW, we mean Local minus UT.
+While Lisp is fond of using `-` as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT.
 
 **current-epoch** _=> epoch_ - JDN for this very instant.
-
-         `(current-epoch) => 2460451.4686574075`
+`(current-epoch) => 2460451.4686574075`
 
 **date.time** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_ -- date & time entry analogous to d.ms format.
-
-         (date.time 2024_05_20.12_30) => 2460451.312962959
-
-        [Yes... my Lisp Reader allows '_' anywhere within numbers. Very nice to have.]
+`(date.time 2024_05_20.12_30) => 2460451.312962959`
+[Yes... my Lisp Reader allows '_' anywhere within numbers. Very nice to have.]
 
 **d.t** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_ -- abbrev for date.time
 
