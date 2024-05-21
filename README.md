@@ -15,7 +15,7 @@ These tools, at your fingertips in the Lisp REPL, augment the programs you need 
 
 ---
 ## Canonical Angle Measure
-Unified angle arithmetic based on canonical measure. User choice, with **SET-ANG-MODE**. But with the input/output variety available here, you really shouldn't care. Possibly handy for debugging, and there could be differences of a few bits in the ULP of various results. (down around the 15th or 16th digit.)
+Unified angle arithmetic based on canonical measure. _[Not necessarily Radians, nor Degrees!]_ User choice, with **SET-ANG-MODE**. But with the input/output variety available here, you really shouldn't care. Possibly handy for debugging, and there could be differences of a few bits in the ULP of various results. (down around the 15th or 16th digit.)
 
 The code here depends on Double-Precision Floating Point arithmetic. Single-Precision will probably fail in some places. Astronomical Epochs require substantial numeric precision, on the order of 40-bits. Sky angles can be reasonably computed and maintained with only 24-bits of precision -- after all, we ran the world's largest telescope _(at the time)_ using a 24-bit fractional integer math system. For amateur equipment you possibly only need 16 bits?
 
