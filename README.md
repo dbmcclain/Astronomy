@@ -102,6 +102,10 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
      1/2))
 ```
 
+At the major observatories we always used integer arithmetic representing 24-bit fractions of a Turn (no floating point), to represent all of our angles. The use of integer arithmetic preserves LSB precision, allowing for unlimited wrapping dynanic range. Floating point, on the other hand, would have gradually eroded LSB precision as numbers grow. We don't need huge dynamic range in angular measure. We need precision modular arithmetic.
+
+I remember once, in the Aerospace Industry, dealing with an Electrical Engineer who was trying to control a servo system. He insisted on using floating-point Radian angle measure for angular control. He became so confused by the results he was getting. I finally convinced him to just let me take care of things.
+
 ---
 ## Redefined Trig Functions
 Trig functions redefined to work with canonical angular measure. `(sin (deg 30)) => 0.5`
