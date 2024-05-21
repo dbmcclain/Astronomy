@@ -91,19 +91,54 @@ Hour Angles:
 ```
   ra-to-ha - now, or for any other epoch
   ha-to-ra
-  parallactic-angle - very useful for reconstucting events from a session on Az/El telescopes.
+  parallactic-angle - very useful for reconstructing events from a session on Az/El telescopes.
+
+      (let ((ra    (ra  12 20))
+            (dec   (dec 05 15))
+            (epoch (d.t 2024_05_15.01_30))) ;; just the other night
+        (to-deg (parallactic-angle (ra-to-ha ra epoch) dec)))
+      =>
+      56.94430856595515 <-- tilt of Equatorial North in my frames from the Alt/Az telescope
+
+
+
 ```
 
-Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs.
+Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs. No Euler angle matrices needed.
 ```
-  precess
+  precess - (multiple-value-bind (rap decp)
+                (precess (ra 12 20) (dec 05 15) *j2000* (d.t 2024_01_01)) ;; at my obs last New Year's
+              (values (to-ra rap) (to-dec decp)))
+            =>
+            (RA 12 21 13.492)
+            (DEC 5 7 2.911)
+
+      Defaults to current epoch as target.
+
   precessN -- for N years, can be used for quick & dirty, assuming J2000 obliquity
+
+              (multiple-value-bind (rap decp)
+                  (precessN (ra 12 20) (dec 05 15) 24)
+                (values (to-ra rap) (to-dec decp)))
+              =>
+              (RA 12 21 13.561)
+              (DEC 5 7 1.856)
+
 ```
 
 Az/El and Equatorial coords:
 ```
   azel-to-hadec
   azel-to-radec - now, or for any stated epoch
+
+             ;; What is rising now in the East, with at least 40 deg elevation?
+             (multiple-value-bind (ra dec)
+                 (azel-to-radec (deg 90) (deg 40))
+               (values (to-ra ra) (to-dec dec)))
+             =>
+             (RA 12 35 0.417)
+             (DEC 20 4 52.791000000000004)
+
   hadec-to-azel
   radec-to-azel
 ```
