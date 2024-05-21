@@ -236,9 +236,9 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - Time zone offset, in hours, from UTC, in the sense of (Local - UTC). (+E, -W)
 ---
 ## Epoch Construction
-```
-*J2000* - for fast reference to the standard epoch = 2451545.0.
-```
+
+**\*J2000\*** _=> epoch_
+- For fast reference to the standard epoch = JDN 2451545.0.
   
 **JDN** _yyyy mm dd &key hh mm ss lcl-ut &allow-other-keys => epoch_
 - Compute JDN for specified date & time.
