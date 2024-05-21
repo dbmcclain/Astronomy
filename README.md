@@ -72,7 +72,7 @@ MAP-MULT - a convenience macro to deal with multiple return values, applying a f
   360
 ```
 ---
-Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole position on the unit sphere. No Euler angle stuff needed. No singularities near poles. No gimbal lock near zenith - but your telescope might not be so forgiving.
+Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole positions on the unit sphere. No Euler angle stuff needed. No singularities near poles. No gimbal lock near zenith - but your telescope might not be so forgiving.
 
 General rotations can be computed in a reference frame agnostic manner. Any vector, V, can be decomposed into a component parallel to the rotation axis, P, and a vector perpendicular to the axis. P is a unit vector pointing toward the pole of the rotation axis. 
 
