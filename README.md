@@ -239,6 +239,8 @@ Az/El and Equatorial coords: Azimuth measured from North toward East. No singula
             ;; What have I been accepting?
             (airmass (deg 40)) => 1.5557238268604126 ;; hmm... is this too high?
 
+  hadec-airmass - airmass for stated HA, Dec. Defaults to observatory location but you can specify with third arg.
+
   radec-airmass - airmass for stated RA, Dec. Defaults to now, and observatory location. But you can specify either.
 ```
 ---
