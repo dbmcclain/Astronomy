@@ -108,23 +108,25 @@ Accurate Precession between any two epochs - uses intermediate Ecliptic coord fr
 
 There was another quick and dirty version we used many years ago. It did not invoke Ecliptic coordinate frames, and it simply approximated the rate of change in RA and Dec. Compared to the two routines here, that old method is total crap. It is so easy to just convert things to Ecliptic coordinates, then rotate the whole frame by 50"/yr, then convert back to Equatorial. Again, no Euler angles are needed to do any of this.
 ```
-  precess - (multiple-value-bind (rap decp)
-                (precess (ra 12 20) (dec 80 15) *j2000* (d.t 2024_01_01)) ;; at my obs last New Year's
+  precess - 
+            (multiple-value-bind (rap decp)
+                (precess (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01)) ;; at my obs last New Year's
               (values (to-ra rap) (to-dec decp)))
             =>
-            (RA 12 20 53.016)
-            (DEC 80 7 2.87)
+            (RA 9 23 8.557)
+            (DEC 80 8 42.965)
 
       Defaults to current epoch as target.
 
   precessN -- for N years, can be used for quick & dirty, assuming J2000 obliquity
 
               (multiple-value-bind (rap decp)
-                  (precessN (ra 12 20) (dec 80 15) 24)
+                  (precessN (ra 9 20) (dec 80 15) 24)
                 (values (to-ra rap) (to-dec decp)))
               =>
-              (RA 12 20 57.316)
-              (DEC 80 7 1.831)
+              (RA 9 23 11.916)
+              (DEC 80 8 50.086)
+
 ```
 
 Az/El and Equatorial coords:
