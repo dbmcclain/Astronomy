@@ -123,7 +123,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 
 *qth-elev* - elevation in meters. Not currently used for anything.
 
-*qth-tz* - Time zone offset, in hours, from UTC. (+E, -W)
+*qth-tz* - Time zone offset, in the sense of (Local - UT), in hours, from UTC. (+E, -W)
 ```
 
 ---
