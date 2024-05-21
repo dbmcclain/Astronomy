@@ -292,7 +292,7 @@ There was a different quick and dirty version that we used many years ago. It di
 
 **precess** _RA-ang Dec-ang from-epoch &optional to-epoch => RA-ang, Dec-ang_
 - Accurate precession for anywhere on the sky.
-- Target epoch can be stated, but defaults to `(current-epoch)`.
+- Target epoch defaults to `(current-epoch)`.
 
 ```
 (map-mult (#'to-ra #'to-dec)
@@ -304,7 +304,8 @@ There was a different quick and dirty version that we used many years ago. It di
 
 **precessN** _RA-ang Dec-ang NYears => RA-ang, Dec-ang_ 
 - Precess for N years.
-- Can be used for quick & dirty, assuming J2000 obliquity.
+- Can be used for quick & dirty
+- Assumes constant obliquity = J2000 obliquity.
 ```
 (map-mult (#'to-ra #'to-dec)
   (precessN (ra 9 20) (dec 80 15) 24))
