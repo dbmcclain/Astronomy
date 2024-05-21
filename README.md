@@ -107,7 +107,7 @@ Astronomical angle entry:
 ```
 ---
 
-Your observatory location and time zone should be set in Obvservatory.lisp.
+Your observatory location and time zone should be set in Observatory.lisp.
 ```
 *qth-lon* - longitude (+E, -W)
 
