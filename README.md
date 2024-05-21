@@ -185,20 +185,21 @@ While Lisp is fond of using `-` as a spacer in symbol names, we also mean that q
 **lmst0** _epoch => ang_ -- siderial time at Greenwich for given epoch.
           To get the LMST anywhere else, add your longitude to this result.
 
-        `(to-hms (unipolar (lmst0 *j2000*))) => (HMS 18 41 50.548)`
+`(to-hms (unipolar (lmst0 *j2000*))) => (HMS 18 41 50.548)`
 
 **lmst** _&key lon epoch => ang_ -- siderial time at your observatory longitude, now, or for given epoch.
           I.e., what is on the meridian?
 
-           `(to-ra (lmst)) => (RA 7 59 36.19)` 
+`(to-ra (lmst)) => (RA 7 59 36.19)` 
+
 ---
 ## Hour Angles
 
-**ra-to-ha** _RA &key lon epoch => ang_ -- now, or for any other epoch, at your observatory location.
+**ra-to-ha** _RA-ang &key lon epoch => Ha-ang_ -- now, or for any other epoch, at your observatory location.
 
-**ha-to-ra** _HA &key lon epoch => ang_
+**ha-to-ra** _HA-ang &key lon epoch => RA-ang_
 
-**parallactic-angle** _HA Dec &key lat => ang_ -- requires an HA, Dec. Result is negative when pointing East of the Meridian,
+**parallactic-angle** _HA-ang Dec-ang &key lat => ang_ -- requires an HA, Dec. Result is negative when pointing East of the Meridian,
                       or positive when West. So if your frame is aligned with the horizon, then East pointing
                       has celestial North tilted toward East azimuths (negative).
                       Very useful for reconstructing events from a session on Az/El telescopes.
@@ -211,29 +212,29 @@ While Lisp is fond of using `-` as a spacer in symbol names, we also mean that q
 56.94430856595515 <-- tilt of Equatorial North in my frames from the Alt/Az telescope
 ```
 ---
+## Accurate Precession
 Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs. No Euler angle matrices needed. The quick version isn't really that much quicker, but it allows you to forego the statement of epochs. Just give it some number of years. As you can see below, the failings aren't that bad.
 
 There was a different quick and dirty version that we used many years ago. It did not invoke Ecliptic coordinate frames, and it simply approximated the rate of change in RA and Dec. Compared to the two routines here, that old method is distinctly inferior. It is so easy to just convert things to Ecliptic coordinates, rotate the whole frame by 50"/yr, then convert back to Equatorial. Again, no Euler angles are needed to do any of this.
+
+**precess** _RA-ang Dec-ang from-epoch &optional to-epoch => RA-ang, Dec-ang_ -- Accurate precession for anywhere on the sky. Needs RA, Dec, and starting epoch. Target epoch can be stated, but defaults to `(current-epoch)`.
+
 ```
-  precess - Accurate precession for anywhere on the sky. Needs RA, Dec, and starting epoch.
-            Target epoch can be stated, but defaults to (current-epoch).
+(map-mult (#'to-ra #'to-dec)
+  (precess (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01))) ;; at my obs last New Year's
+=>
+(RA 9 23 8.557)
+(DEC 80 8 42.965)
+```
+Defaults to current epoch as target.
 
-            (map-mult (#'to-ra #'to-dec)
-                (precess (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01))) ;; at my obs last New Year's
-            =>
-            (RA 9 23 8.557)
-            (DEC 80 8 42.965)
-
-      Defaults to current epoch as target.
-
-  precessN -- for N years, can be used for quick & dirty, assuming J2000 obliquity
-
-              (map-mult (#'to-ra #'to-dec)
-                  (precessN (ra 9 20) (dec 80 15) 24))
-              =>
-              (RA 9 23 11.916)
-              (DEC 80 8 50.086)
-
+**precessN** _RA-ang Dec-ang NYears => RA-ang, Dec-ang_ -- for N years, can be used for quick & dirty, assuming J2000 obliquity
+```
+(map-mult (#'to-ra #'to-dec)
+  (precessN (ra 9 20) (dec 80 15) 24))
+=>
+(RA 9 23 11.916)
+(DEC 80 8 50.086)
 ```
 ---
 Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
