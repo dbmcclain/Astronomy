@@ -91,7 +91,7 @@ Hour Angles:
 ```
   ra-to-ha - now, or for any other epoch
   ha-to-ra
-  parallactic-angle - very useful for reconstucting events from a session on Az/El telescopes.
+  parallactic-angle - very useful for reconstructing events from a session on Az/El telescopes.
 
       (let ((ra    (ra 12 20))
             (dec   (dec 05 15))
