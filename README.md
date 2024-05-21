@@ -104,7 +104,9 @@ Hour Angles:
 
 ```
 
-Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs. No Euler angle matrices needed.
+Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs. No Euler angle matrices needed. The quick version isn't really that much quicker, but it allows you to forego the statement of epochs. Just give it some number of years. As you can see below, the failings aren't that bad.
+
+There was another quick and dirty version we used many years ago. It did not invoke Ecliptic coordinate frames, and it simply approximated the rate of change in RA and Dec. Compared to the two routines here, that old method is total crap. It is so easy to just convert things to Ecliptic coordinates, then rotate the whole frame by 50"/yr, then convert back to Equatorial. Again, no Euler angles are needed to do any of this.
 ```
   precess - (multiple-value-bind (rap decp)
                 (precess (ra 12 20) (dec 80 15) *j2000* (d.t 2024_01_01)) ;; at my obs last New Year's
