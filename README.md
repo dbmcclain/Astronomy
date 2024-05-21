@@ -27,7 +27,7 @@ You can easily define additional angle measures. All you need to provide is an i
 - Mode must be one of _:RAD_, _:DEG_, _:HRS_, or _:TURNS_. If mode is changed then you really ought to recompile the whole body of this code to ensure that reader-macros and DEFVARs have correct canonical values. The number reported by **set-ang-mode** is the number of mode canonical angle units per Turn.
 
 ---
-## Angle Conversions To Canonical Form
+## Angle Conversions To Canonical Measure
 Convenient angle entry in a variety of measures. Here, _ang_ represents a real number in internal canonical units.
 
 **deg** _degs => ang_ 
@@ -75,7 +75,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 - 1 turns = a full circle.
 
 ---
-## Angle Conversions from Canonical Form
+## Angle Conversions from Canonical Measure
 View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
 
 **to-deg** _ang => degs_
