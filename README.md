@@ -74,10 +74,19 @@ Astronomical angle entry:
 Epoch construction:
 ```
   *J2000* - for fast reference to the standard epoch.
-  JDN - for specified date & time, (JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  (= *J2000*)
-         (defaults to zero hours, and local timezone offset)
-  current-epoch - JDN for this very instant., (current-epoch) => 2460451.4686574075
-  date.time - date & time entry analogous to d.ms format, (date.time 2024_05_20.12_30) => 2460451.312962959
+
+  JDN - for specified date & time, Defaults to zero hours and local timezone offset.
+
+         (JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  (= *J2000*)
+
+  current-epoch - JDN for this very instant.,
+
+         (current-epoch) => 2460451.4686574075
+
+  date.time - date & time entry analogous to d.ms format,
+
+         (date.time 2024_05_20.12_30) => 2460451.312962959
+
   d.t - abbrev for date.time
 ```
 
