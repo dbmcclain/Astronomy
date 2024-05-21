@@ -125,7 +125,7 @@ Mean Siderial Time:
 ```
   lmst0 - siderial time at Greenwich for given epoch.
 
-         (to-ra (lmst0 *j2000*)) => (RA 18 41 50.548)
+         (to-hms (unipolar (lmst0 *j2000*))) => (RA 18 41 50.548)
 
   lmst  - siderial time at location longitude, now, or for given epoch.
 
