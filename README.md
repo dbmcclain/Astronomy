@@ -21,7 +21,7 @@ Convenient angle entry in a variety of measures:
     mrad
     μrad
 
-    turns  - 1 Turb = 1 turn
+    turns  - 1 Turn = 1 turn
 ```
 
 View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.848.```
