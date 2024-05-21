@@ -154,9 +154,11 @@ Trig functions redefined to work with canonical angular measure. `(sin (deg 30))
 ## MAP-MULT - Mapping Over Multiple Return Values
 This is a convenience macro to deal with multiple return values, applying a function to each on the way out. Many of the Astronomical routines return multiple values.
 
-**map-mult** _fn form_ -- applies _fn_ to each of the multiple values returned by execution of _form_, and returning the results as multiple values. 
+**map-mult** _fn form_
+- Applies _fn_ to each of the multiple values returned by execution of _form_, and returning the results as multiple values. 
 
-**map-mult** _(fns...) form_ -- applies the first _fn_ to the first of multiple values returned from the execution of _form_, applies the second _fn_ to the second returned value, etc., returning the results as multiple values.
+**map-mult** _(fns...) form_ 
+- Applies the first _fn_ to the first of multiple values returned from the execution of _form_, applies the second _fn_ to the second returned value, etc., returning the results as multiple values.
 
 ```
   (map-mult #'to-deg (values 0.25 0.5 0.75 1))
@@ -178,7 +180,8 @@ Under rotation, the parallel component remains unchanged. The parallel component
 
 Final result is _**V'**_ = (_**P**_ • _**V**_)_**P**_ + ((_**P**_ ✕ _**V**_) ✕ _**P**_) Cos ζ + (_**P**_ ✕ _**V**_) Sin ζ , for rotation angle ζ.
 
-**rot** _vec-lon-ang vec-lat-ang axis-lon-ang axis-lat-ang rot-ang => lon-ang, lat-ang_ -- vectors are unit vectors specified as pole positions on the unit sphere, using longitude and latitude pairs.
+**rot** _vec-lon-ang vec-lat-ang axis-lon-ang axis-lat-ang rot-ang => lon-ang, lat-ang_ 
+- Vectors are unit vectors specified as pole positions on the unit sphere, using longitude and latitude pairs.
 ```
 (map-mult #'to-deg (rot (deg 20) (deg 30)  ;; the vector
                         (deg 12) (deg 80)  ;; the axis
@@ -190,17 +193,21 @@ Final result is _**V'**_ = (_**P**_ • _**V**_)_**P**_ + ((_**P**_ ✕ _**V**_)
 ---
 ## Astronomical Angle Conversions
 
-**RA** _hh &optional mm ss => ang_ -- a synonym for HMS.
-`(to-deg (RA 22 30 15.3)) => 337.56375`
+**RA** _hh &optional mm ss => ang_
+- A synonym for HMS.
+- `(to-deg (RA 22 30 15.3)) => 337.56375`
 
-**Dec** _dd &optional hh ss => ang_ -- a synonym for DMS.
-`(to-deg (DEC -12 20 32)) => -12.3422`
+**Dec** _dd &optional hh ss => ang_ 
+- A synonym for DMS.
+- `(to-deg (DEC -12 20 32)) => -12.3422`
 
-**to-ra** _ang => (RA hh mm ss.sss)_ -- ensures reported RA in 0..24 hrs,
-`(to-ra (deg 270)) => (RA 18 0 0.0)`
+**to-ra** _ang => (RA hh mm ss.sss)_ 
+- Ensures reported RA in 0..24 hrs,
+- `(to-ra (deg 270)) => (RA 18 0 0.0)`
 
-**to-dec** _ang => (DEC ddd mm ss.sss)_ -- ensures reported Dec in -90..90 deg
-`(to-dec (deg -45)) => (DEC -45 0 0.0)`
+**to-dec** _ang => (DEC ddd mm ss.sss)_
+- Ensures reported Dec in -90..90 deg
+- `(to-dec (deg -45)) => (DEC -45 0 0.0)`
 
 ---
 ## Observatory Location Bindings
@@ -221,44 +228,48 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 *J2000* - for fast reference to the standard epoch = 2451545.0.
 ```
   
-**JDN** _yyyy mm dd &key hh mm ss lcl-ut &allow-other-keys => epoch_ -- for specified date & time, Defaults to zero hours and local timezone offset.
-`(JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*`
+**JDN** _yyyy mm dd &key hh mm ss lcl-ut &allow-other-keys => epoch_
+- Compute JDN for specified date & time, Defaults to zero hours and local timezone offset.
+- `(JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*`
 
 While Lisp is fond of using `-` as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT.
 
-**current-epoch** _=> epoch_ -- JDN for this very instant.
+**current-epoch** _=> epoch_
+- Get JDN for this very instant.
 `(current-epoch) => 2460451.4686574075`
 
-**date.time** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_ -- date & time entry analogous to d.ms format.
-`(date.time 2024_05_20.12_30) => 2460451.312962959`
-[Yes... my Lisp Reader allows '_' anywhere within numbers. Very nice to have.]
+**date.time** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_ 
+- Compute JDB for Date & time entry analogous to d.ms format.
+- `(date.time 2024_05_20.12_30) => 2460451.312962959`
+- [Yes... my Lisp Reader allows '_' anywhere within numbers. Very nice to have.]
 
-**d.t** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_ -- abbrev for date.time
+**d.t** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_
+- Abbrev for date.time
 
 ---
 ## Mean Siderial Time
 
-**lmst0** _epoch => ang_ -- siderial time at Greenwich for given epoch.
-          To get the LMST anywhere else, add your longitude to this result.
+**lmst0** _epoch => ang_
+- Compute siderial time at Greenwich for given epoch.
+- To get the LMST anywhere else, add your longitude to this result.
 
-`(to-hms (unipolar (lmst0 *j2000*))) => (HMS 18 41 50.548)`
+- `(to-hms (unipolar (lmst0 *j2000*))) => (HMS 18 41 50.548)`
 
-**lmst** _&key lon epoch => ang_ -- siderial time at your observatory longitude, now, or for given epoch.
-          I.e., what is on the meridian?
-
-`(to-ra (lmst)) => (RA 7 59 36.19)` 
+**lmst** _&key lon epoch => ang_
+- Compute siderial time at your observatory longitude, now, or for given epoch. I.e., what is on the meridian?
+- `(to-ra (lmst)) => (RA 7 59 36.19)` 
 
 ---
 ## Hour Angles
 
-**ra-to-ha** _RA-ang &key lon epoch => Ha-ang_ -- Default is for now, and your observatory location. The result, shown here as _HA-ang_, is an angle in canonical representation. Same holds, in general, for anything else labeled with suffix _-ang_.
+**ra-to-ha** _RA-ang &key lon epoch => Ha-ang_
+- Convert RA to HA. Default is for now, and your observatory location. The result, shown here as _HA-ang_, is an angle in canonical representation. Same holds, in general, for anything else labeled with suffix _-ang_.
 
 **ha-to-ra** _HA-ang &key lon epoch => RA-ang_
 
-**parallactic-angle** _HA-ang Dec-ang &key lat => ang_ -- requires an HA, Dec. Result is negative when pointing East of the Meridian,
-                      or positive when West. So if your frame is aligned with the horizon, then East pointing
-                      has celestial North tilted toward East azimuths (negative).
-                      Very useful for reconstructing events from a session on Az/El telescopes.
+**parallactic-angle** _HA-ang Dec-ang &key lat => ang_
+- Compute the parallactic angle for the stated HA and Dec. Result is negative when pointing East of the Meridian, or positive when West. So if your frame is aligned with the horizon, then East pointing has celestial North tilted toward East azimuths (negative).
+- Very useful for reconstructing events from a session on Az/El telescopes.
 ```
 (let ((ra    (ra  12 20))
       (dec   (dec 05 15))
@@ -273,7 +284,9 @@ Accurate Precession between any two epochs - uses intermediate Ecliptic coord fr
 
 There was a different quick and dirty version that we used many years ago. It did not invoke Ecliptic coordinate frames, and it simply approximated the rate of change in RA and Dec. Compared to the two routines here, that old method is distinctly inferior. It is so easy to just convert things to Ecliptic coordinates, rotate the whole frame by 50"/yr, then convert back to Equatorial. Again, no Euler angles are needed to do any of this.
 
-**precess** _RA-ang Dec-ang from-epoch &optional to-epoch => RA-ang, Dec-ang_ -- Accurate precession for anywhere on the sky. Needs RA, Dec, and starting epoch. Target epoch can be stated, but defaults to `(current-epoch)`.
+**precess** _RA-ang Dec-ang from-epoch &optional to-epoch => RA-ang, Dec-ang_
+- Accurate precession for anywhere on the sky. Needs RA, Dec, and starting epoch.
+- Target epoch can be stated, but defaults to `(current-epoch)`.
 
 ```
 (map-mult (#'to-ra #'to-dec)
@@ -283,7 +296,9 @@ There was a different quick and dirty version that we used many years ago. It di
 (DEC 80 8 42.965)
 ```
 
-**precessN** _RA-ang Dec-ang NYears => RA-ang, Dec-ang_ -- for N years, can be used for quick & dirty, assuming J2000 obliquity.
+**precessN** _RA-ang Dec-ang NYears => RA-ang, Dec-ang_ 
+- Precess for N years
+- Can be used for quick & dirty, assuming J2000 obliquity.
 ```
 (map-mult (#'to-ra #'to-dec)
   (precessN (ra 9 20) (dec 80 15) 24))
@@ -297,7 +312,9 @@ Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward Eas
 
 **azel-to-hadec** _Az-ang El-ang &key lat = HA-ang, Dec-ang_
 
-**azel-to-radec** _Az-ang El-ang &key lon lat epoch = RA-ang, Dec-ang_ -- now, or for any stated epoch and location. Default is now and your observatory location.
+**azel-to-radec** _Az-ang El-ang &key lon lat epoch = RA-ang, Dec-ang_
+- Compute RA & Dec for stated Az & El
+- Default is now, and your observatory location.
 ```
 ;; What is rising now in the East, with at least 40 deg elevation?
 (map-mult (#'to-ra #'to-dec)
@@ -324,11 +341,13 @@ Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward Eas
 (airmass (deg 40)) => 1.5557238268604126 ;; hmm... is this too high?
 ```
 
-**hadec-airmass** _HA-ang Dec-ang &key lat => airmass_ -- airmass for stated HA, Dec. Defaults to observatory location,
-                  but you can specify with third arg.
+**hadec-airmass** _HA-ang Dec-ang &key lat => airmass_
+- Compute airmass for stated HA, Dec.
+- Defaults to observatory location.
 
-**radec-airmass** _RA-ang Dec-ang &key lon lat epoch => airmass_ -- airmass for stated RA, Dec. Defaults to now, and observatory
-                  location. But you can specify either.
+**radec-airmass** _RA-ang Dec-ang &key lon lat epoch => airmass_
+- Compute airmass for stated RA, Dec.
+- Defaults to now, and observatory location.
                   
 ---
 Eventual plans to accumulate addional featurs: Galactic coords, Nutation, Aberration, Refraction, more...
