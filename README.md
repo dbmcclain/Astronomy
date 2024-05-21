@@ -110,11 +110,11 @@ Epoch construction:
 
          (JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  (= *J2000*)
 
-  current-epoch - JDN for this very instant.,
+  current-epoch - JDN for this very instant.
 
          (current-epoch) => 2460451.4686574075
 
-  date.time - date & time entry analogous to d.ms format,
+  date.time - date & time entry analogous to d.ms format.
 
          (date.time 2024_05_20.12_30) => 2460451.312962959
 
