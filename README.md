@@ -252,13 +252,14 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 ---
 ## Mean Siderial Time
 
-**lmst0** _epoch => ang_
+**LMSt0** _epoch => ang_
 - Compute siderial time at Greenwich for given epoch.
 - To get the LMST anywhere else, add your longitude to this result.
 - `(to-hms (unipolar (lmst0 *j2000*))) => (HMS 18 41 50.548)`
 
-**lmst** _&key lon epoch => ang_
-- Compute siderial time at your observatory longitude, now, or for given epoch.
+**LMST** _&key lon epoch => ang_
+- Compute siderial time.
+- Default is at your observatory longitude, and now
 - I.e., what is on the meridian?
 - `(to-ra (lmst)) => (RA 7 59 36.19)` 
 
