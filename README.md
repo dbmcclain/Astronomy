@@ -227,6 +227,12 @@ Az/El and Equatorial coords: Azimuth measured from North toward East.
   hadec-to-azel
 
   radec-to-azel
+
+            ;; Is my object above 40 deg elevation?
+            (map-mult #'to-deg (radec-to-azel (ra 22 15) (dec 12 20)))
+            =>
+            158.38675666215835  ;; az
+            68.78774440308138   ;; el - Yes!
 ```
 ---
 Eventual plans to accumulate addional featurs: Galactic coords, Nutation, Aberration, Refraction, more...
