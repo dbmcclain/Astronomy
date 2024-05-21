@@ -8,14 +8,14 @@
 ;; -------------------------------------------------
 ;; Hour Angle (HA) +W/-E of Meridian
 
-(defun ra-to-ha (ra &optional (epoch (current-epoch)))
+(defun ra-to-ha (ra &key (lon *qth-lon*) (epoch (current-epoch)))
   ;; Hour Angle of object RA
   ;; +W,-E of meridian
-  (bipolar (- (lmst epoch) ra)))
+  (bipolar (- (lmst :epoch epoch :lon lon) ra)))
 
-(defun ha-to-ra (ha &optional (epoch (current-epoch)))
+(defun ha-to-ra (ha &key (lon *qth-lon*) (epoch (current-epoch)))
   ;; Given HA find corresponding RA
-  (unipolar (- (lmst epoch) ha)))
+  (unipolar (- (lmst :epoch epoch :lon lon) ha)))
 
 #|
 ;; What RA is on the Meridian now?
@@ -33,7 +33,7 @@
 ;; -------------------------------------------------
 ;; Parallactic Angle (E-,W+)
 
-(defun parallactic-angle (ha dec &optional (lat *qth-lat*))
+(defun parallactic-angle (ha dec &key (lat *qth-lat*))
   (atan (sin ha)
         (- (* (tan lat) (cos dec))
            (* (sin dec) (cos ha))

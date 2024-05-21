@@ -65,11 +65,10 @@
 (jdn 2000 01 01 :LCL-UT 0 :hh 12)
 |#
 
-(defun lmst (&optional (epoch (current-epoch)))
+(defun lmst (&key (lon *qth-lon*) (epoch (current-epoch)))
   ;; Local Mean Sidereal Time at longitude long, expressed in degs.
   ;; = RA on Meridian
-  (unipolar (+ (lmst0 epoch)
-               *qth-lon*)))
+  (unipolar (+ (lmst0 epoch) lon)))
    
 #|
 (jdn 2024 05 15 :hh 01 :mm 40 :ss 21)
