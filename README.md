@@ -45,7 +45,7 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
   
 **to-arcsec** _num => num_
   
-**to-dms** _num => num_
+**to-dms** _num => (DMS ddd mm ss.sss)_
   
 **to-d.ms** _num => num_
 
@@ -55,7 +55,7 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
   
 **to-secs** _num => num_
   
-**to-hms** _num => num_
+**to-hms** _num => (HMS hh mm ss.sss)_
   
 **to-h.ms** _num => num_
 
