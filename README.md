@@ -3,9 +3,9 @@ Useful computations with angles on the unit sphere. The bread and butter stuff f
 
 This code comes from a lifetime accumulation of stuff that I used at professional observatories. I typically had these tools on my programmable calculator for use at the telescope. (remember those?) I decided to reformulate my experience, using Lisp, for myself. It may be useful to others too.
 
-My experience began as a Radio Astronomer observing Carbon Monoxide emission lines, at 115 GHz, originating from within our galaxy. Then I moved on to the Infrared and the first computer-controlled telescope - WIRO on Jelm Mtn, about 25 miles South of Laramie, WY. From there I moved into the Visible spectrum at the (then) world's largest telescope, which I taught how to point and track. That was known as the MMT (Multiple Mirror Telescope) atop Mt. Hopkins, about 50 miles South of Tucson, AZ. That was a long time ago... And, of course, in those days we used Forth. Lisp is what Forth always wanted to grow up to be...
+My experience began as a Radio Astronomer observing Carbon Monoxide emission lines, at 115 GHz, originating from within our galaxy. The telescope was a 1m Cassegrain atop Pupin Hall, at Columbia University. Then I moved on to the Infrared and the first computer-controlled telescope - the 100-inch WIRO on Jelm Mtn, about 25 miles South of Laramie, WY. From there I moved into the Visible spectrum at the (then) world's largest telescope, which I taught how to point and track. That was the 7m MMT (Multiple Mirror Telescope), a telescope with 6x72-inch primaries, atop Mt. Hopkins, about 50 miles South of Tucson, AZ. 
 
-But, although I moved on to bigger things, I still kept returning to Astronomy throughout my lifetime. As today, again.
+That was a long time ago... And, of course, in those days we used Forth. Lisp is what Forth always wanted to grow up to be... But, although I moved on to bigger things, I still kept returning to Astronomy throughout my lifetime. As today, again.
 
 Today, the advent of small, affordable, robotic telescopes has spawned fresh interest in the amateur community for Astronomy. And today, all you need to do is pull up an interactive star map, click a mouse button, or swipe and stab on your cell-phone, and the telecope slews to the spot and starts making nice pics of the sky.
 
