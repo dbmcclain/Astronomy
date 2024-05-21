@@ -6,17 +6,17 @@ Unified angle arithmetic based on canonical measure. User choice, with SET-ANG-M
 ---
 Convenient angle entry in a variety of measures. Here, _ang_ represents a real number in internal canonical units.
 
-**deg** _degs => ang_ - 360 deg = 1 turn `(to-turns (deg 90)) => 0.25`	
+**deg** _degs => ang_ -- 360 deg = 1 turn `(to-turns (deg 90)) => 0.25`	
 
 **arcmin** _arcmins => ang_
 
 **arcsec** _arcsecs => ang_
 
-**dms** _ddd &optional mm ss => ang_ - (remember your old HP Calculator?)
+**dms** _ddd &optional mm ss => ang_ -- (remember your old HP Calculator?)
 
 **d.ms** _DDD.MMSSsss => ang_
 
-**hrs** _hrs => ang_ - 24 hrs = 1 turn, or 15 deg/hr
+**hrs** _hrs => ang_ -- 24 hrs = 1 turn, or 15 deg/hr
 
 **mins** _mins => ang_
 
@@ -27,7 +27,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 **h.ms** _HH.MMSSsss => ang_
 
 
-**rad** _rad => ang_ - 2π rad = 1 turn
+**rad** _rad => ang_ -- 2π rad = 1 turn
 
 **mrad** _mrad => ang_
 
@@ -67,9 +67,9 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
 
 **to-turns** _ang => turns_
 
-**unipolar** _ang => ang_ - convert angle to principal values in (0 360) deg
+**unipolar** _ang => ang_ -- convert angle to principal values in (0 360) deg
 
-**bipolar**  _ang => ang_ - convert angle to principal values in (-180 180) deg
+**bipolar**  _ang => ang_ -- convert angle to principal values in (-180 180) deg
 
 ---
 Trig functions redefined to work against any angular measure. ```(sin (deg 30)) => 0.5```
