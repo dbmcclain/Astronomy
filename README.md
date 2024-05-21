@@ -74,7 +74,7 @@ MAP-MULT - a convenience macro to deal with multiple return values, applying a f
 ---
 Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole position on the unit sphere. No Euler angle stuff needed. No singularities near poles. No gimbal lock near zenith - but your telescope might not be so forgiving.
 
-General rotations can be computed in a completely reference frame agnostic manner. Any vector, V, can be decomposed into a compoonent parallel to the rotation axis, P, and a vector perpendicular to the axis. Under rotation, the parallel component remains unchanged. The parallel component has magnitude equal to (P•V) (a vector dot-product), and the perpendicular component is ((P✕V)✕P) - using vector cross-products. Rotation of the vector diminishes that perpendicular component, and adds a component in the direction of (P✕V).
+General rotations can be computed in a reference frame agnostic manner. Any vector, V, can be decomposed into a compoonent parallel to the rotation axis, P, and a vector perpendicular to the axis. Under rotation, the parallel component remains unchanged. The parallel component has magnitude equal to (P•V) (a vector dot-product), and the perpendicular component is ((P✕V)✕P) - using vector cross-products. Rotation of the vector diminishes that perpendicular component, and adds a component in the direction of (P✕V).
 ```
   rot - vectors are unit vectors specified as pole positions on the unit sphere,
         using longitude and latitude pairs.
