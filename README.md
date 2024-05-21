@@ -6,35 +6,35 @@ Unified angle arithmetic based on canonical measure. User choice, with SET-ANG-M
 ---
 Convenient angle entry in a variety of measures:
 
-**deg** _num => num_ - 1 Turn = 360 deg `(deg 90)`	
+**deg** _degs => ang_ - 1 Turn = 360 deg `(deg 90)`	
 
-**arcmin** _num => num_
+**arcmin** _arcmins => ang_
 
-**arcsec** _num => num_
+**arcsec** _num => ang_
 
-**dms** _ddd &optional mm ss => num_ - (remember your old HP Calculator?)
+**dms** _ddd &optional mm ss => ang_ - (remember your old HP Calculator?)
 
-**d.ms** _num => num_
+**d.ms** _DDD.MMSSsss => ang_
 
-**hrs** _num => num_ - 1 Turn = 24 hrs, or 15 deg/hr
+**hrs** _num => ang_ - 1 Turn = 24 hrs, or 15 deg/hr
 
-**mins** _num => num_
+**mins** _num => ang_
 
-**secs** _num => num_
+**secs** _num => ang_
 
-**hms** _hh &optional mm ss => num_
+**hms** _hh &optional mm ss => ang_
 
-**h.ms** _num => num_
-
-
-**rad** _num => num_ - 1 Turn = 2π rad
-
-**mrad** _num => num_
-
-**μrad** _num => num_
+**h.ms** _HH.MMSSsss => ang_
 
 
-**turns** _num => num_ - 1 Turn = 1 turns
+**rad** _num => ang_ - 1 Turn = 2π rad
+
+**mrad** _num => ang_
+
+**μrad** _num => ang_
+
+
+**turns** _num => ang_ - 1 Turn = 1 turns
 
 ---
 View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
