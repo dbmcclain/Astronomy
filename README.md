@@ -89,9 +89,13 @@ Angular rotation of vectors about arbitrary axis - specify vector and rotation a
 ---
 Astronomical angle entry:
 ```
-  RA - e.g., (to-deg (RA 22 30 15.3)) => 337.56375
+  RA - a synonym for HMS.
 
-  Dec - e.g., (to-deg (DEC -12 20 32)) => -12.3422
+        (to-deg (RA 22 30 15.3)) => 337.56375
+
+  Dec - a synonum for DMS.
+
+        (to-deg (DEC -12 20 32)) => -12.3422
 
   to-ra - ensures reported RA in 0..24 hrs,
 
