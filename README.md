@@ -89,8 +89,8 @@ Final result is ```V' = (P•V)P + ((P✕V)✕P) Cos ζ + (P✕V) Sin ζ```, for
                             (deg 12) (deg 80)  ;; the axis
                             (deg 10)) )        ;; amount to rotate
     => 
-    28.86352390689511
-    30.3734050448251
+    28.86352390689511 ;; new lon
+    30.3734050448251  ;; new lat
 
     
 ```
