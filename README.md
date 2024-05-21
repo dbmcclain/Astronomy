@@ -41,7 +41,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 - 60 arcsec = 1 arcmin
 
 **dms** _ddd &optional mm ss => ang_
-- An easy way to specify an angle in deg, armin, arcsec.
+- An easy way to specify an angle in deg, arcmin, arcsec.
 
 **d.ms** _DDD.MMSSsss => ang_  
 - (remember your old HP Calculator?)
