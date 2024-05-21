@@ -251,7 +251,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - `(current-epoch) => 2460451.4686574075`
 
 **date.time** _YYYYMMDD.HHMMSS &key lcl-ut => epoch_ 
-- Compute JDN for Date & time entry analogous to **d.ms** format.
+- Compute JDN for date & time entry analogous to **d.ms** format.
 - `(date.time 2024_05_20.12_30) => 2460451.312962959`
   - [Yes... my Lisp Reader allows '_' anywhere within numbers. Very nice to have.]
 
