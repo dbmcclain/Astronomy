@@ -66,7 +66,7 @@ The Julian date for the current Universal Time is:
 (current-epoch)
 |#
 
-(defun date.time (x &optional (lcl-ut *qth-tz*))
+(defun date.time (x &key (lcl-ut *qth-tz*))
   ;; For convenient entry of date/time. Converts to JDN.
   ;; Date analog of d.ms introducer.
   ;;

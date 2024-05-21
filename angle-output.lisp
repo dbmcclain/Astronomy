@@ -8,24 +8,16 @@
 ;; -----------------------------------------------
 ;; used mainly for output prep
 
-(defun unipolar-turns (x)
-  ;; Principal values with branch cut along the X axis
-  (mod (to-turns x) 1.0))
-
-(defun bipolar-turns (x)
-  ;; Principal values with branch cut along the -X axis
-  (let ((xx (unipolar-turns x)))
-    (if (> xx 0.5)
-        (- xx 1.0)
-      xx)))
+(defun tmod (x)
+  (mod x 1.0))
 
 (defun unipolar (x)
   ;; Normalize background angle value to Principal Values, (0 360) deg
-  (turns (unipolar-turns x)))
+  (turns (tmod (to-turns x))))
 
 (defun bipolar (x)
   ;; Normalize background angle value to Principal Values, (-180 180) deg
-  (turns (bipolar-turns x)))
+  (turns (- (tmod (+ (to-turns x) 1/2)) 1/2)))
 
 ;; ----------------------------------
 
