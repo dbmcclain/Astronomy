@@ -158,9 +158,8 @@ There was another quick and dirty version we used many years ago. It did not inv
   precess - Accurate precession for anywhere on the sky. Needs RA, Dec, and starting epoch.
             Target epoch can be stated, but defaults to (current-epoch).
 
-            (multiple-value-bind (rap decp)
-                (precess (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01)) ;; at my obs last New Year's
-              (values (to-ra rap) (to-dec decp)))
+            (map-mult (#'to-ra #'to-dec)
+                (precess (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01))) ;; at my obs last New Year's
             =>
             (RA 9 23 8.557)
             (DEC 80 8 42.965)
@@ -169,9 +168,8 @@ There was another quick and dirty version we used many years ago. It did not inv
 
   precessN -- for N years, can be used for quick & dirty, assuming J2000 obliquity
 
-              (multiple-value-bind (rap decp)
-                  (precessN (ra 9 20) (dec 80 15) 24)
-                (values (to-ra rap) (to-dec decp)))
+              (map-mult (#'to-ra #'to-dec)
+                  (precessN (ra 9 20) (dec 80 15) 24))
               =>
               (RA 9 23 11.916)
               (DEC 80 8 50.086)
@@ -185,9 +183,8 @@ Az/El and Equatorial coords: Azimuth measured from North toward East.
   azel-to-radec - now, or for any stated epoch
 
              ;; What is rising now in the East, with at least 40 deg elevation?
-             (multiple-value-bind (ra dec)
-                 (azel-to-radec (deg 90) (deg 40))
-               (values (to-ra ra) (to-dec dec)))
+             (map-mult (#'to-ra #'to-dec)
+                 (azel-to-radec (deg 90) (deg 40)))
              =>
              (RA 12 35 0.417)
              (DEC 20 4 52.791000000000004)
