@@ -108,13 +108,13 @@ MAP-MULT - a convenience macro to deal with multiple return values, applying a f
 ---
 Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole positions on the unit sphere. No Euler angle stuff needed. No singularities near poles. No gimbal lock near zenith - but your telescope might not be so forgiving.
 
-General rotations can be computed in a reference frame agnostic manner. Any vector, V, can be decomposed into a component parallel to the rotation axis, P, and a vector perpendicular to the axis. P is a unit vector pointing toward the pole of the rotation axis. 
+General rotations can be computed in a reference frame agnostic manner. Any vector, _V_, can be decomposed into a component parallel to the rotation axis, _P_, and a vector perpendicular to the axis. _P_ is a unit vector pointing toward the pole of the rotation axis. 
 
 We use RHS conventions here. So point your right-hand thumb in the direction toward the pole of rotation, and your fingers curl in the direction of positive rotation angles.
 
-Under rotation, the parallel component remains unchanged. The parallel component has magnitude (P•V) (a vector dot-product), and the perpendicular component is ((P✕V)✕P) - using vector cross-products. Rotation of the vector diminishes that perpendicular component, and adds a component in the direction of (P✕V).
+Under rotation, the parallel component remains unchanged. The parallel component has magnitude _(P•V)_ (a vector dot-product), and the perpendicular component is _((P✕V)✕P)_ - using vector cross-products. Rotation of the vector diminishes that perpendicular component, and adds a component in the direction of _(P✕V)_.
 
-Final result is ```V' = (P•V)P + ((P✕V)✕P) Cos ζ + (P✕V) Sin ζ```, for rotation angle ζ.
+Final result is `V' = (P•V)P + ((P✕V)✕P) Cos ζ + (P✕V) Sin ζ`, for rotation angle ζ.
 
 **rot** _vec-lon vec-lat axis-lon axis-lat rot-angle => lon, lat_ -- vectors are unit vectors specified as pole positions on the unit sphere,
         using longitude and latitude pairs.
