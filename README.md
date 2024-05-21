@@ -229,10 +229,10 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 ```
   
 **JDN** _yyyy mm dd &key hh mm ss lcl-ut &allow-other-keys => epoch_
-- Compute JDN for specified date & time, Defaults to zero hours and local timezone offset.
+- Compute JDN for specified date & time.
+- Defaults to zero hours and local timezone offset.
 - `(JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*`
-
-While Lisp is fond of using `-` as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT.
+- While Lisp is fond of using `-` as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT.
 
 **current-epoch** _=> epoch_
 - Get JDN for this very instant.
@@ -256,19 +256,24 @@ While Lisp is fond of using `-` as a spacer in symbol names, we also mean that q
 - `(to-hms (unipolar (lmst0 *j2000*))) => (HMS 18 41 50.548)`
 
 **lmst** _&key lon epoch => ang_
-- Compute siderial time at your observatory longitude, now, or for given epoch. I.e., what is on the meridian?
+- Compute siderial time at your observatory longitude, now, or for given epoch.
+- I.e., what is on the meridian?
 - `(to-ra (lmst)) => (RA 7 59 36.19)` 
 
 ---
 ## Hour Angles
 
 **ra-to-ha** _RA-ang &key lon epoch => Ha-ang_
-- Convert RA to HA. Default is for now, and your observatory location. The result, shown here as _HA-ang_, is an angle in canonical representation. Same holds, in general, for anything else labeled with suffix _-ang_.
+- Convert RA to HA.
+- Default is for now, and your observatory location.
+- The result, shown here as _HA-ang_, is an angle in canonical representation. Same holds, in general, for anything else labeled with suffix _-ang_.
 
 **ha-to-ra** _HA-ang &key lon epoch => RA-ang_
 
 **parallactic-angle** _HA-ang Dec-ang &key lat => ang_
-- Compute the parallactic angle for the stated HA and Dec. Result is negative when pointing East of the Meridian, or positive when West. So if your frame is aligned with the horizon, then East pointing has celestial North tilted toward East azimuths (negative).
+- Compute the parallactic angle for the stated HA and Dec.
+- Result is negative when pointing East of the Meridian, or positive when West.
+- So if your frame is aligned with the horizon, then East pointing has celestial North tilted toward East azimuths (negative).
 - Very useful for reconstructing events from a session on Az/El telescopes.
 ```
 (let ((ra    (ra  12 20))
@@ -285,7 +290,7 @@ Accurate Precession between any two epochs - uses intermediate Ecliptic coord fr
 There was a different quick and dirty version that we used many years ago. It did not invoke Ecliptic coordinate frames, and it simply approximated the rate of change in RA and Dec. Compared to the two routines here, that old method is distinctly inferior. It is so easy to just convert things to Ecliptic coordinates, rotate the whole frame by 50"/yr, then convert back to Equatorial. Again, no Euler angles are needed to do any of this.
 
 **precess** _RA-ang Dec-ang from-epoch &optional to-epoch => RA-ang, Dec-ang_
-- Accurate precession for anywhere on the sky. Needs RA, Dec, and starting epoch.
+- Accurate precession for anywhere on the sky.
 - Target epoch can be stated, but defaults to `(current-epoch)`.
 
 ```
@@ -297,7 +302,7 @@ There was a different quick and dirty version that we used many years ago. It di
 ```
 
 **precessN** _RA-ang Dec-ang NYears => RA-ang, Dec-ang_ 
-- Precess for N years
+- Precess for N years.
 - Can be used for quick & dirty, assuming J2000 obliquity.
 ```
 (map-mult (#'to-ra #'to-dec)
