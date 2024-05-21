@@ -1,7 +1,7 @@
 # Astronomy
 Useful computations with angles on the unit sphere. The bread and butter stuff for everyday ops at the observatory.
 
-This code comes from a lifetime accumulation of stuff that I used at professional observatories. I typically had these tools on my programmable calculator for use at the telescope. _(remember those?)_ I decided to reformulate my experience, using Lisp, for myself. It may be useful to others too.
+This code comes from a lifetime accumulation of stuff that I used at professional observatories. I typically had these tools on my programmable calculator _(remember those?)_ for use at the telescope. I decided to reformulate my experience, using Lisp, for myself. It may be useful to others too.
 
 My experience began as a Radio Astronomer observing Carbon Monoxide emission lines at 115 GHz (2.6mm wavelength), originating from within our galaxy. The telescope was a 1m Cassegrain dish atop Pupin Hall, at Columbia University, in NYC. Then I moved blue-ward to the Infrared region (10-20 μm wavelength) and the first computer-controlled telescope - the 100-inch WIRO on Jelm Mtn, about 25 miles South of Laramie, WY. From there I moved, even further blue-ward, into the Visible spectrum (500 nm wavelength) at the _[then]_ world's largest telescope, which I taught how to point and track. That was the 7m MMT (Multiple Mirror Telescope), a telescope with 6x72-inch confocal primaries, atop Mt. Hopkins, about 60km South of Tucson, AZ. Today, that telescope has been repurposed to carry a single 8m primary mirror. Other notable telescopes that I have used include the KPNO 50-inch atop Kitt Peak, and the 90-inch U.Minn metal-mirror telescope on Mt. Lemmon. So, for much of my life, I have been around big telescopes.
 
