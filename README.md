@@ -4,72 +4,72 @@ Useful computations with angles on the unit sphere. The bread and butter stuff f
 Unified angle arithmetic based on canonical measure. User choice, with SET-ANG-MODE, of :RAD, :DEG, :HRS, :TURNS. But with the input/output variety you really shouldn't care. Possibly handy for debugging, and there could be differences of a few bits in the ULP of various results. (down around the 15th or 16th digit.)
 
 ---
-Convenient angle entry in a variety of measures:
+Convenient angle entry in a variety of measures. Here, _ang_ represents a real number in internal canonical units.
 
-**deg** _degs => ang_ - 1 Turn = 360 deg `(deg 90)`	
+**deg** _degs => ang_ - 360 deg = 1 turn `(to-turns (deg 90)) => 0.25`	
 
 **arcmin** _arcmins => ang_
 
-**arcsec** _num => ang_
+**arcsec** _arcsecs => ang_
 
 **dms** _ddd &optional mm ss => ang_ - (remember your old HP Calculator?)
 
 **d.ms** _DDD.MMSSsss => ang_
 
-**hrs** _num => ang_ - 1 Turn = 24 hrs, or 15 deg/hr
+**hrs** _hrs => ang_ - 24 hrs = 1 turn, or 15 deg/hr
 
-**mins** _num => ang_
+**mins** _mins => ang_
 
-**secs** _num => ang_
+**secs** _secs => ang_
 
 **hms** _hh &optional mm ss => ang_
 
 **h.ms** _HH.MMSSsss => ang_
 
 
-**rad** _num => ang_ - 1 Turn = 2π rad
+**rad** _rad => ang_ - 2π rad = 1 turn
 
-**mrad** _num => ang_
+**mrad** _mrad => ang_
 
-**μrad** _num => ang_
+**μrad** _μrad => ang_
 
 
-**turns** _num => ang_ - 1 Turn = 1 turns
+**turns** _turns => ang
 
 ---
 View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
 
-**to-deg** _num => num_
+**to-deg** _ang => degs_
   
-**to-arcmin** _num => num_
+**to-arcmin** _ang => arcmins_
   
-**to-arcsec** _num => num_
+**to-arcsec** _ang => arcsecs_
   
-**to-dms** _num => (DMS ddd mm ss.sss)_
+**to-dms** _ang => (DMS ddd mm ss.sss)_
   
-**to-d.ms** _num => num_
+**to-d.ms** _ang => DDD.MMSSsss_
 
-**to-hrs** _num => num_
+**to-hrs** _ang => hrs_
   
-**to-mins** _num => num_
+**to-mins** _ang => mins_
   
-**to-secs** _num => num_
+**to-secs** _ang => secs_
   
-**to-hms** _num => (HMS hh mm ss.sss)_
+**to-hms** _ang => (HMS hh mm ss.sss)_
   
-**to-h.ms** _num => num_
+**to-h.ms** _ang => HH.MMSSsss_
 
-**to-rad** _num => num_
+**to-rad** _ang => rads_
   
-**to-mrad** _num => num_
+**to-mrad** _ang => mrads_
 
-**to-μrad** _num => num_
+**to-μrad** _ang => μrads_
 
-**to-turns** _num => num_
+**to-turns** _ang => turns_
 
-**unipolar** _num => num_ - convert angle to principal values in (0 360) deg
+**unipolar** _ang => ang_ - convert angle to principal values in (0 360) deg
 
-**bipolar**  _num => num_ - convert angle to principal values in (-180 180) deg
+**bipolar**  _ang => ang_ - convert angle to principal values in (-180 180) deg
 
 ---
 Trig functions redefined to work against any angular measure. ```(sin (deg 30)) => 0.5```
