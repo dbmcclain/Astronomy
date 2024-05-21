@@ -228,7 +228,7 @@ There was a different quick and dirty version that we used many years ago. It di
 ```
 Defaults to current epoch as target.
 
-**precessN** _RA-ang Dec-ang NYears => RA-ang, Dec-ang_ -- for N years, can be used for quick & dirty, assuming J2000 obliquity
+**precessN** _RA-ang Dec-ang NYears => RA-ang, Dec-ang_ -- for N years, can be used for quick & dirty, assuming J2000 obliquity.
 ```
 (map-mult (#'to-ra #'to-dec)
   (precessN (ra 9 20) (dec 80 15) 24))
@@ -237,39 +237,43 @@ Defaults to current epoch as target.
 (DEC 80 8 50.086)
 ```
 ---
+## Az/El and Equatorial Coordinates
 Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
+
+**azel-to-hadec** _Az-ang El-ang &key lat = HA-ang, Dec-ang_
+
+**azel-to-radec** _Az-ang El-ang &key lon lat epoch = RA-ang, Dec-ang_ -- now, or for any stated epoch, at your observatory location.
 ```
-  azel-to-hadec
+;; What is rising now in the East, with at least 40 deg elevation?
+(map-mult (#'to-ra #'to-dec)
+   (azel-to-radec (deg 90) (deg 40)))
+=>
+(RA 12 35 0.417)
+(DEC 20 4 52.791000000000004)
+```
 
-  azel-to-radec - now, or for any stated epoch, at your observatory location.
+**hadec-to-azel** _HA-ang Dec-ang &key lat => Az-ang, El-ang_
 
-             ;; What is rising now in the East, with at least 40 deg elevation?
-             (map-mult (#'to-ra #'to-dec)
-                 (azel-to-radec (deg 90) (deg 40)))
-             =>
-             (RA 12 35 0.417)
-             (DEC 20 4 52.791000000000004)
+**radec-to-azel** _RA-ang Dec-ang &key lon lat epoch => Az-ang, El-ang_
+```
+;; Is my object above 40 deg elevation?
+(map-mult #'to-deg (radec-to-azel (ra 22 15) (dec 12 20)))
+=>
+158.38675666215835  ;; az
+68.78774440308138   ;; el - Yes!
+```
 
-  hadec-to-azel
+**airmass** _El-ang => airmass_ -- (= 1/(Sin El))
+```
+;; What have I been accepting?
+(airmass (deg 40)) => 1.5557238268604126 ;; hmm... is this too high?
+```
 
-  radec-to-azel
-
-            ;; Is my object above 40 deg elevation?
-            (map-mult #'to-deg (radec-to-azel (ra 22 15) (dec 12 20)))
-            =>
-            158.38675666215835  ;; az
-            68.78774440308138   ;; el - Yes!
-
-  airmass - needs an elevation angle (= 1/(Sin El))
-
-            ;; What have I been accepting?
-            (airmass (deg 40)) => 1.5557238268604126 ;; hmm... is this too high?
-
-  hadec-airmass - airmass for stated HA, Dec. Defaults to observatory location,
+**hadec-airmass** _HA-ang Dec-ang &key lat => airmass_ -- airmass for stated HA, Dec. Defaults to observatory location,
                   but you can specify with third arg.
 
-  radec-airmass - airmass for stated RA, Dec. Defaults to now, and observatory
+**radec-airmass** _RA-ang Dec-ang &key lon lat epoch => airmass_ -- airmass for stated RA, Dec. Defaults to now, and observatory
                   location. But you can specify either.
-```
+                  
 ---
 Eventual plans to accumulate addional featurs: Galactic coords, Nutation, Aberration, Refraction, more...
