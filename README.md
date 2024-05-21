@@ -80,7 +80,7 @@ We use RHS conventions here. So point your right-hand thumb in the direction tow
 
 Under rotation, the parallel component remains unchanged. The parallel component has magnitude equal to (P•V) (a vector dot-product), and the perpendicular component is ((P✕V)✕P) - using vector cross-products. Rotation of the vector diminishes that perpendicular component, and adds a component in the direction of (P✕V).
 
-Final result is ```(P•V)P + ((P✕V)✕P) Cos ζ + (P✕V) Sin ζ```, for rotation angle ζ.
+Final result is ```V' = (P•V)P + ((P✕V)✕P) Cos ζ + (P✕V) Sin ζ```, for rotation angle ζ.
 ```
   rot - vectors are unit vectors specified as pole positions on the unit sphere,
         using longitude and latitude pairs.
