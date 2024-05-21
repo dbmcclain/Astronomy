@@ -170,8 +170,7 @@ Under rotation, the parallel component remains unchanged. The parallel component
 
 Final result is _**V'**_ = (_**P**_ • _**V**_)_**P**_ + ((_**P**_ ✕ _**V**_) ✕ _**P**_) Cos ζ + (_**P**_ ✕ _**V**_) Sin ζ, for rotation angle ζ.
 
-**rot** _vec-lon vec-lat axis-lon axis-lat rot-angle => lon, lat_ -- vectors are unit vectors specified as pole positions on the unit sphere,
-        using longitude and latitude pairs.
+**rot** _vec-lon-ang vec-lat-ang axis-lon-ang axis-lat-ang rot-ang => lon, lat_ -- vectors are unit vectors specified as pole positions on the unit sphere, using longitude and latitude pairs.
 ```
 (map-mult #'to-deg (rot (deg 20) (deg 30)  ;; the vector
                         (deg 12) (deg 80)  ;; the axis
