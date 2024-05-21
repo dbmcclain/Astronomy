@@ -64,7 +64,8 @@ Trig functions redefined to work against any angular measure. ```(sin (deg 30)) 
 
 Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole position on the unit sphere. No Euler angle stuff needed. No singularities near poles. No gimbal lock near zenith - but your telescope might not be so forgiving.
 ```
-  rot - vectors are unit vectors specified as pole positions on the unit sphere, using longitude and latitude pairs.
+  rot - vectors are unit vectors specified as pole positions on the unit sphere,
+        using longitude and latitude pairs.
 
     (mapcar #'to-deg (multiple-value-list (rot  (deg 20) (deg 30)  ;; the vector
                                                 (deg 12) (deg 80)  ;; the axis
