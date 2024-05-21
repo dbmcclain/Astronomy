@@ -23,17 +23,16 @@ For context, a precision of 1 arcsec requires 21-bits. For 1 arcmin, 15-bits. So
 
 You can easily define additional angle measures. All you need to provide is an input function that takes user input, and which converts those user values to Turns. And you should also define a **TO-_your-unit_** function that converts from Turns to your chosen measure. Then, regardless of the system angle mode, you should see consistent and correct results when using your new angle measure.
 
-**set-ang-mode** _mode-kw ==> num_ -- Mode must be one of _:RAD_, _:DEG_, _:HRS_, or _:TURNS_. If mode is changed then you really ought to recompile the whole body of this code to ensure that reader-macros and DEFVARs have correct canonical values. The number reported by **set-ang-mode** is the number of mode canonical angle units per Turn.
+**set-ang-mode** _mode-kw ==> num_ 
+- Mode must be one of _:RAD_, _:DEG_, _:HRS_, or _:TURNS_. If mode is changed then you really ought to recompile the whole body of this code to ensure that reader-macros and DEFVARs have correct canonical values. The number reported by **set-ang-mode** is the number of mode canonical angle units per Turn.
 
 ---
 ## Angle Conversions To Canonical Form
 Convenient angle entry in a variety of measures. Here, _ang_ represents a real number in internal canonical units.
 
 **deg** _degs => ang_ 
-
-360 deg = 1 turn 
-
-`(to-turns (deg 90)) => 0.25`	
+- 360 deg = 1 turn 
+- `(to-turns (deg 90)) => 0.25`	
 
 **arcmin** _arcmins => ang_
 
@@ -42,12 +41,10 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 **dms** _ddd &optional mm ss => ang_
 
 **d.ms** _DDD.MMSSsss => ang_  
-
-(remember your old HP Calculator?)
+- (remember your old HP Calculator?)
 
 **hrs** _hrs => ang_ 
-
-24 hrs = 1 turn, 1 hrs = 15 deg.
+- 24 hrs = 1 turn, 1 hrs = 15 deg.
 
 **mins** _mins => ang_
 
@@ -59,8 +56,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 
 
 **rad** _rad => ang_ 
-
-2π rad = 1 turn
+- 2π rad = 1 turn
 
 **mrad** _mrad => ang_
 
@@ -102,8 +98,7 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
 **to-turns** _ang => turns_
 
 **unipolar** _ang => ang_
-
-Convert angle to principal values in (0 360) deg. The result remains in canonical angle measure. We are simply renormalizing the value to be in the principle domain corresponding to an unsigned range from 0 to 1 Turn. The Riemann surface has a branch cut along the positive Real axis, with angles measured counter-clockwise from the positive Real axis in the complex plane. 
+- Convert angle to principal values in (0 360) deg. The result remains in canonical angle measure. We are simply renormalizing the value to be in the principle domain corresponding to an unsigned range from 0 to 1 Turn. The Riemann surface has a branch cut along the positive Real axis, with angles measured counter-clockwise from the positive Real axis in the complex plane. 
 ```
 ;; The following are equivalent:
 
@@ -114,8 +109,7 @@ Convert angle to principal values in (0 360) deg. The result remains in canonica
 ```
 
 **bipolar**  _ang => ang_
-
-Convert angle to principal values in (-180 180) deg. The result remains in canonical angle measure. We are simply renormalizing the value to be in the principle domain corresponding to a signed range from -1/2 to +1/2 Turn. The Riemann surface has a branch cut along the negative Real axis, with angles measured counter-clockwise from the positive Real axis in the complex plane. 
+- Convert angle to principal values in (-180 180) deg. The result remains in canonical angle measure. We are simply renormalizing the value to be in the principle domain corresponding to a signed range from -1/2 to +1/2 Turn. The Riemann surface has a branch cut along the negative Real axis, with angles measured counter-clockwise from the positive Real axis in the complex plane. 
 ```
 ;; The following are equivalent:
 
