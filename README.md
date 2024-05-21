@@ -98,8 +98,8 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
 (turns
   (- (mod (+ (to-turns ang)
              1/2)
-        1.0)
-   1/2))
+          1.0)
+     1/2))
 ```
 
 ---
