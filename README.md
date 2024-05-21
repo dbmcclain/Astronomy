@@ -215,7 +215,7 @@ Az/El and Equatorial coords: Azimuth measured from North toward East.
 ```
   azel-to-hadec
 
-  azel-to-radec - now, or for any stated epoch
+  azel-to-radec - now, or for any stated epoch, at your observatory location.
 
              ;; What is rising now in the East, with at least 40 deg elevation?
              (map-mult (#'to-ra #'to-dec)
