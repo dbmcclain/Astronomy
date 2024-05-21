@@ -1,21 +1,21 @@
 # Astronomy
 Useful computations with angles on the unit sphere. The bread and butter stuff for everyday ops at the observatory.
 
-This code comes from a lifetime accumulation of stuff that I used at professional observatories. I typically had these tools on my programmable calculator for use at the telescope. _(remember those?)_ I decided to reformulate my experience, using Lisp, for myself. It may be useful to others too.
+This code comes from a lifetime accumulation of stuff that I used at professional observatories. I typically had these tools on my programmable calculator _(remember those?)_ for use at the telescope. I decided to reformulate my experience, using Lisp, for myself. It may be useful to others too.
 
-My experience began as a Radio Astronomer observing Carbon Monoxide emission lines at 115 GHz (2.6mm wavelength), originating from within our galaxy. The telescope was a 1m Cassegrain dish atop Pupin Hall, at Columbia University, in NYC. Then I moved blue-ward to the Infrared and the first computer-controlled telescope - the 100-inch WIRO on Jelm Mtn, about 25 miles South of Laramie, WY. From there I moved, even further blue-ward, into the Visible spectrum at the _[then]_ world's largest telescope, which I taught how to point and track. That was the 7m MMT (Multiple Mirror Telescope), a telescope with 6x72-inch confocal primaries, atop Mt. Hopkins, about 60km South of Tucson, AZ. Today, that telescope has been repurposed to carry a single 8m primary mirror.
+My experience began as a Radio Astronomer observing Carbon Monoxide emission lines at 115 GHz (2.6mm wavelength), originating from within our galaxy. The telescope was a 1m Cassegrain dish atop Pupin Hall, at Columbia University, in NYC. Then I moved blue-ward to the Infrared region (10-20 μm wavelength) and the first computer-controlled telescope - the 100-inch WIRO on Jelm Mtn, about 25 miles South of Laramie, WY. From there I moved, even further blue-ward, into the Visible spectrum (500 nm wavelength) at the _[then]_ world's largest telescope, which I taught how to point and track. That was the 7m MMT (Multiple Mirror Telescope), a telescope with 6x72-inch confocal primaries, atop Mt. Hopkins, about 60km South of Tucson, AZ. Today, that telescope has been repurposed to carry a single 8m primary mirror. Other notable telescopes that I have used include the KPNO 50-inch atop Kitt Peak, and the 90-inch U.Minn metal-mirror telescope on Mt. Lemmon. So, for much of my life, I have been around big telescopes.
 
-That was a long time ago... And, of course, in those days we used Forth. Lisp is what Forth always wanted to grow up to be... But, although I moved on to bigger things, I still kept returning to Astronomy throughout my lifetime. As today, again.
+That was now a long time ago... And, of course, in those days we used Forth. Lisp is what Forth always wanted to grow up to be... But, although I moved on to bigger things, I still kept returning to Astronomy throughout my lifetime. As today, again. But now I'm sporting a 50mm telescope (2 inches!), and having a blast with it. It is so small that it lives inside of a big flower pot to guard against the breeze shaking my camera during exposures.
 
 Today, the advent of small, affordable, robotic telescopes has spawned fresh interest in the amateur community for Astronomy. And today, all you need to do is pull up an interactive star map, click a mouse button, or swipe and stab on your cell-phone, and the telecope slews to the spot and starts making nice pics of the sky. Right?
 
-But I found that many of the consumer-grade programs have irritating shortcomings. Some make it difficult or impossible to type in the RA & Dec coordinates that you want - never mind the lame input formatting required by them. And for planning purposes, the tools available are stilted and (IMHO) insufficient to help you answer some basic questions while you plan your observing runs. That's why I finally sat down and wrote this collection of Observational Astronomy Tools.
+But I find that many of the consumer-grade programs have irritating shortcomings. Some make it difficult or impossible to type in the RA & Dec coordinates that you want - never mind the lame input formatting required by them. And for planning purposes, the tools available are stilted and (IMHO) insufficient to help you answer some basic questions while you plan your observing runs. That's why I finally sat down and wrote this collection of Observational Astronomy Tools.
 
 These tools, at your fingertips in the Lisp REPL, augment the programs you need to use to run your telescope. The tools will help answer some basic questions you will have as you operate your telecope or plan your observing runs. Maybe, taken together, we can speed along better than the clumsy approaches either currently offers alone.
 
 ---
 ## Canonical Angle Measure
-Unified angle arithmetic based on canonical measure. User choice, with **SET-ANG-MODE**. But with the input/output variety available here, you really shouldn't care. Possibly handy for debugging, and there could be differences of a few bits in the ULP of various results. (down around the 15th or 16th digit.)
+Unified angle arithmetic based on canonical measure. _[Not necessarily Radians, nor Degrees!]_ User choice, with **SET-ANG-MODE**. But with the input/output variety available here, you really shouldn't care. Possibly handy for debugging, and there could be differences of a few bits in the ULP of various results. (down around the 15th or 16th digit.)
 
 The code here depends on Double-Precision Floating Point arithmetic. Single-Precision will probably fail in some places. Astronomical Epochs require substantial numeric precision, on the order of 40-bits. Sky angles can be reasonably computed and maintained with only 24-bits of precision -- after all, we ran the world's largest telescope _(at the time)_ using a 24-bit fractional integer math system. For amateur equipment you possibly only need 16 bits?
 
@@ -203,11 +203,11 @@ Final result is _**V'**_ = (_**P**_ • _**V**_)_**P**_ + ((_**P**_ ✕ _**V**_)
 ## Astronomical Angle Conversions
 
 **RA** _hh &optional mm ss => ang_
-- A synonym for HMS.
+- A synonym for **HMS**.
 - `(to-deg (RA 22 30 15.3)) => 337.56375`
 
 **Dec** _dd &optional hh ss => ang_ 
-- A synonym for DMS.
+- A synonym for **DMS**.
 - `(to-deg (DEC -12 20 32)) => -12.3422`
 
 **to-ra** _ang => (RA hh mm ss.sss)_ 
@@ -244,7 +244,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - Compute JDN for specified date & time.
 - Defaults to zero hours and local timezone offset.
 - `(JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*`
-- While Lisp is fond of using `-` as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT.
+- While Lisp is fond of using '-' as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT, usually stated in hours. So use `:LCL-UT (hrs -7)` to mean Mountain Standard Time zone.
 
 **current-epoch** _=> epoch_
 - Get JDN for this very instant.
