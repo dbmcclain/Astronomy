@@ -242,7 +242,7 @@ Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward Eas
 
 **azel-to-hadec** _Az-ang El-ang &key lat = HA-ang, Dec-ang_
 
-**azel-to-radec** _Az-ang El-ang &key lon lat epoch = RA-ang, Dec-ang_ -- now, or for any stated epoch, at your observatory location.
+**azel-to-radec** _Az-ang El-ang &key lon lat epoch = RA-ang, Dec-ang_ -- now, or for any stated epoch and location. Default is now and your observatory location.
 ```
 ;; What is rising now in the East, with at least 40 deg elevation?
 (map-mult (#'to-ra #'to-dec)
