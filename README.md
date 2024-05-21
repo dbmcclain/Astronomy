@@ -61,16 +61,30 @@ Trig functions redefined to work against any angular measure. ```(sin (deg 30)) 
   cis
   phase
 ```
+---
+MAP-MULT - a convenience macro to deal with multiple return values, applying a function to each on the way out. Many of the Astronomical routines return multiple values.
+```
+  (map-mult #'to-deg (values 0.25 0.5 0.75 1))
+  =>
+  90.0  ;; hmm..., we must be in Turns mode
+  180.0
+  270.0
+  360
+```
+---
 
 Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole position on the unit sphere. No Euler angle stuff needed. No singularities near poles. No gimbal lock near zenith - but your telescope might not be so forgiving.
 ```
   rot - vectors are unit vectors specified as pole positions on the unit sphere,
         using longitude and latitude pairs.
 
-    (mapcar #'to-deg (multiple-value-list (rot  (deg 20) (deg 30)  ;; the vector
-                                                (deg 12) (deg 80)  ;; the axis
-                                                (deg 10)) ))       ;; amount to rotate
-    => (28.86352390689511 30.3734050448251)
+    (map-mult #'to-deg (rot (deg 20) (deg 30)  ;; the vector
+                            (deg 12) (deg 80)  ;; the axis
+                            (deg 10)) )       ;; amount to rotate
+    => 
+    28.86352390689511
+    30.3734050448251
+
     
 ```
 ---
