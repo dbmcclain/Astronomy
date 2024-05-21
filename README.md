@@ -25,7 +25,7 @@ Convenient angle entry in a variety of measures:
     turns  - 1 Turn = 1 turn
 
 ---
-View any angle in any measure, e.g., ```(to-μrad (arcsec 1)) => 4.848.```
+View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
 ```
   to-rad
   to-mrad
