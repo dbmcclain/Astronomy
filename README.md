@@ -211,7 +211,7 @@ There was a different quick and dirty version that we used many years ago. It di
 
 ```
 ---
-Az/El and Equatorial coords: Azimuth measured from North toward East.
+Az/El and Equatorial coords: Azimuth measured from North toward East. No singularities at NCP or Zenith.
 ```
   azel-to-hadec
 
