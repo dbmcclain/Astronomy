@@ -46,3 +46,15 @@
               `(:pa (deg ,(to-deg ang))))
       )))
 |#
+
+(defun airmass (el)
+  ;; airmass for stated elevation
+  (/ (sin el)))
+
+(defun radec-airmass (ra dec &key (lat *qth-lat*) (epoch (current-epoch)))
+  ;; airmass for object now, or at specified epoch and/or location.
+  (airmass (second (multiple-value-list
+                    (radec-to-azel ra dec :epoch epoch :lat lat))) ))
+
+
+  
