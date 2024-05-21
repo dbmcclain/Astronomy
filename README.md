@@ -323,6 +323,8 @@ There was a different quick and dirty version that we used many years ago. It di
 Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
 
 **azel-to-hadec** _Az-ang El-ang &key lat = HA-ang, Dec-ang_
+- Compute HA & Dec from Az/El.
+- Default is your observatory latitude.
 
 **azel-to-radec** _Az-ang El-ang &key lon lat epoch = RA-ang, Dec-ang_
 - Compute RA & Dec for stated Az & El
@@ -337,7 +339,9 @@ Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward Eas
 ```
 
 **hadec-to-azel** _HA-ang Dec-ang &key lat => Az-ang, El-ang_
-
+- Compute Az/El from HA & Dec.
+- Default is your observatory latitude.
+  
 **radec-to-azel** _RA-ang Dec-ang &key lon lat epoch => Az-ang, El-ang_
 ```
 ;; Is my object above 40 deg elevation?
