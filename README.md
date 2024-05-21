@@ -1,7 +1,11 @@
 # Astronomy
 Useful computations with angles on the unit sphere. The bread and butter stuff for everyday ops at the observatory.
 
+---
+## Canonical Angle Measure
 Unified angle arithmetic based on canonical measure. User choice, with **SET-ANG-MODE**. But with the input/output variety available here, you really shouldn't care. Possibly handy for debugging, and there could be differences of a few bits in the ULP of various results. (down around the 15th or 16th digit.)
+
+You can easily define additional angle measures. All you need to provide is an input function that takes user input, and which converts those units to Turns. And you should also define a **TO-_your-unit_** that converts from Turns to your chosen units. Then, regardless of the system angle mode, you should see consistent and correct results when using your new units.
 
 **set-ang-mode** _mode-kw ==>_ -- mode must be one of _:RAD_, _:DEG_, _:HRS_, or _:TURNS_. If mode is changed then you really ought to recompile the whole body of this code to ensure that reader-macros and DEFVARs have correct canonical values.
 
