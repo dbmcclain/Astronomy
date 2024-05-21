@@ -93,7 +93,7 @@ Hour Angles:
   ha-to-ra
   parallactic-angle - very useful for reconstructing events from a session on Az/El telescopes.
 
-      (let ((ra    (ra 12 20))
+      (let ((ra    (ra  12 20))
             (dec   (dec 05 15))
             (epoch (d.t 2024_05_15.01_30))) ;; just the other night
         (to-deg (parallactic-angle (ra-to-ha ra epoch) dec)))
