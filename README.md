@@ -287,6 +287,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 
 **parallactic-angle** _HA-ang Dec-ang &key lat => ang_
 - Compute the parallactic angle for the stated HA and Dec.
+- Default is your observatory latitude.
 - Result is negative when pointing East of the Meridian, or positive when West.
   - So if your frame is aligned with the horizon, then East pointing has celestial North tilted toward East azimuths (negative).
 - Very useful for reconstructing events from a session on Az/El telescopes.
