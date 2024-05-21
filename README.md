@@ -168,7 +168,7 @@ We use RHS conventions here. So point your right-hand thumb in the direction tow
 
 Under rotation, the parallel component remains unchanged. The parallel component has magnitude _(**P** • **V**)_ (a vector dot-product), and the perpendicular component is _((**P** ✕ **V**) ✕ **P**)_ - using vector cross-products. Rotation of the vector diminishes that perpendicular component, and adds a component in the direction of _(**P** ✕ **V**)_.
 
-Final result is `**V**' = (P • V)P + ((P ✕ V) ✕ P) Cos ζ + (P ✕ V) Sin ζ`, for rotation angle ζ.
+Final result is `V' = (P • V)P + ((P ✕ V) ✕ P) Cos ζ + (P ✕ V) Sin ζ`, for rotation angle ζ.
 
 **rot** _vec-lon vec-lat axis-lon axis-lat rot-angle => lon, lat_ -- vectors are unit vectors specified as pole positions on the unit sphere,
         using longitude and latitude pairs.
