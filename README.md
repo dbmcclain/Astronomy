@@ -203,11 +203,11 @@ Final result is _**V'**_ = (_**P**_ • _**V**_)_**P**_ + ((_**P**_ ✕ _**V**_)
 ## Astronomical Angle Conversions
 
 **RA** _hh &optional mm ss => ang_
-- A synonym for HMS.
+- A synonym for **HMS**.
 - `(to-deg (RA 22 30 15.3)) => 337.56375`
 
 **Dec** _dd &optional hh ss => ang_ 
-- A synonym for DMS.
+- A synonym for **DMS**.
 - `(to-deg (DEC -12 20 32)) => -12.3422`
 
 **to-ra** _ang => (RA hh mm ss.sss)_ 
