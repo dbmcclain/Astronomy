@@ -92,6 +92,16 @@ Hour Angles:
   ra-to-ha - now, or for any other epoch
   ha-to-ra
   parallactic-angle - very useful for reconstucting events from a session on Az/El telescopes.
+
+      (let ((ra    (ra 12 20))
+            (dec   (dec 05 15))
+            (epoch (d.t 2024_05_15.01_30))) ;; just the other night
+        (to-deg (parallactic-angle (ra-to-ha ra epoch) dec)))
+      =>
+      56.94430856595515 <-- tilt of Equatorial North in my frames from the Alt/Az telescope
+
+
+
 ```
 
 Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs.
