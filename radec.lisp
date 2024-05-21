@@ -52,6 +52,7 @@
 ;; --------------------------
 
 (defmacro map-mult (fn form)
-  (if (consp fn)
+  (if (and (consp fn)
+           (not (eql (car fn) 'function)))
       `(values-list (mapcar #'funcall (list ,@fn) (multiple-value-list ,form)))
     `(values-list (mapcar ,fn (multiple-value-list ,form)))))
