@@ -131,13 +131,17 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
      1/2))
 ```
 
-At the major observatories we always used integer arithmetic representing 24-bit fractions of a Turn (no floating point), to represent all of our angles. We did all the Ephemeris calculations using 24-bit fractional integer arithmetic. We wrote all of our trig functions to accept those kinds of arguments. The telescope's axis drive encoders were 24-bits. Heck, in the early days, FP Arithmetic was either simulated (slow!), or took expensive coprocessor boards that weren't easily available.
+At the major observatories we always used integer arithmetic representing 24-bit fractions of a Turn (no floating point!), to represent all of our angles. We did all the Ephemeris calculations using 24-bit fractional integer arithmetic. We wrote all of our trig functions to accept those kinds of arguments. The telescope's axis drive encoders were 24-bits. Heck, in the early days, FP Arithmetic was either simulated (slow!), or took expensive coprocessor boards that weren't easily available. [But, of course, for data entry and visual readouts, we always presented our angles in human readable form. Just like nobody ever writes or reads their computer programs in binary.]
 
 The use of integer arithmetic preserves LSB precision while allowing for unlimited wrapping dynanic range. Floating point, on the other hand, would have gradually eroded LSB precision as numbers grow. They don't wrap, they just grow the exponent while keeping a fixed number of mantissa bits. We don't need huge dynamic range in angular measure. We need precision modular arithmetic.
 
-I remember once, in the Aerospace Industry, dealing with an Electrical Engineer who was trying to control a servo system. He insisted on using single-precision floating-point Radian angle measure for his control system. He probably had that mindset because all the trig functions take radian measure, right? :-) The odd thing here is that he was using a Motorola 56K DSP - all integer based arithmetic! He became so confused by the crappy results he was getting. I finally convinced him to just let me take care of things. There is nothing better than integer arithmetic and integer fractions of a Turn. The ancient Greeks had it right!
+I remember once, in the Aerospace Industry, dealing with an Electrical Engineer who was trying to control a servo system. He insisted on using single-precision floating-point Radian angle measure for his control system. He probably had that mindset because all the trig functions take radian measure, right? 😁 The crazy thing here is that he was using a Motorola 56K DSP - all 24-bit integer based arithmetic! So obviously, the DSP had to simulate single-precision floating point, and their _"single-precision"_ had to be offering fewer than 24-bits for mantissa. He became so confused by the crappy results he was getting. I finally convinced him to just let me take care of things. 
+
+There is nothing better than integer arithmetic and integer fractions of a Turn. The ancient Greeks had it right! But the once common knowledge of Ancient Greece has now become endangered rare knowledge among today's practicioners. There are many useful tricks to using integers and integer fractions. These have become all but totally forgotten, except among the few of us remaining grey-beard Astronomers.
 
 I did carefully consider my options when I wrote this code. I wrote a 24-bit integer version of this code, but I finally decided that double-precision FP would be okay to use here. Single precision? Definitely not! Simply becuase FP arithmetic seeks to preserve range at the cost of LSB precision. And single precision FP has barely enough bits in the range from 0.0 to 1.0. Anything larger erodes the LSB.
+
+_[To think about it... are there any practical uses for radian measure? Since π is irrational, you can never get to a full circle angular sweep without overshooting. And what do you use to directly measure radians? So why not stop at the intermediate measure you do use to determine them? 😁]_
 
 ---
 ## Redefined Trig Functions
@@ -181,13 +185,15 @@ This is a convenience macro to deal with multiple return values, applying a func
 ## Generalized Vector Rotation
 Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole positions on the unit sphere. No Euler angle stuff needed. No singularities near poles. No gimbal lock near zenith - but your telescope might not be so forgiving.
 
-General rotations can be computed in a reference frame agnostic manner. Any vector, _**V**_, can be decomposed into a component parallel to the rotation axis, _**P**_, and a vector perpendicular to the axis. _**P**_ is a unit vector pointing toward the pole of the rotation axis. 
+General rotations can be computed in a reference frame agnostic manner. Any vector, _**V**_, can be decomposed into a component, _**X**_, parallel to the rotation axis, _**A**_, and a vector, _**Y**_, perpendicular to the axis. Axis vector, _**A**_, is a unit vector pointing toward the pole of the rotation axis. 
 
 We use RHS conventions here. So point your right-hand thumb in the direction toward the pole of rotation, and your fingers curl in the direction of positive rotation angles.
 
-Under rotation, the parallel component remains unchanged. The parallel component has magnitude _(**P** • **V**)_ (a vector dot-product), and the perpendicular component is _((**P** ✕ **V**) ✕ **P**)_ - using vector cross-products. Rotation of the vector diminishes that perpendicular component, and adds a component in the direction of _(**P** ✕ **V**)_.
+Under rotation, the parallel component, _**X**_, remains unchanged. That parallel component vector _**X** = (**A** • **V**)**A**_, using a vector dot-product. And the perpendicular component vector _**Y** = ((**A** ✕ **V**) ✕ **A**)_ - using vector cross-products. Rotation of vector _**V**_ diminishes _**Y**_, and adds a component vector in the direction of _**Z** = (**A** ✕ **V**)_.
 
-Final result is _**V'**_ = (_**P**_ • _**V**_)_**P**_ + ((_**P**_ ✕ _**V**_) ✕ _**P**_) Cos ζ + (_**P**_ ✕ _**V**_) Sin ζ , for rotation angle ζ.
+But now notice that _**Y**_ must also simply be what is left after subtracting off its parallel component: _**Y** = **V** - **X**_. The length of _**Y**_ is also equal to the length of _**Z**_ since the axis vector, _**A**_, is a unit vector. So we don't need to waste time computing a second vector cross-product. But we do need the first one giving us _**Z**_.
+
+Final result is _**V'** = **X** + **Y** Cos ζ + **Z** Sin ζ_ , for rotation angle ζ.
 
 **rot** _vec-lon-ang vec-lat-ang axis-lon-ang axis-lat-ang rot-ang => lon-ang, lat-ang_ 
 - Vectors are unit vectors specified as pole positions on the unit sphere, using longitude and latitude pairs.
