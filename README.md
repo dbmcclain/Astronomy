@@ -185,15 +185,15 @@ This is a convenience macro to deal with multiple return values, applying a func
 ## Generalized Vector Rotation
 Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole positions on the unit sphere. No Euler angle stuff needed. No singularities near poles. No gimbal lock near zenith - but your telescope might not be so forgiving.
 
-General rotations can be computed in a reference frame agnostic manner. Any vector, _**V**_, can be decomposed into a component, _**P**_, parallel to the rotation axis, _**A**_, and a vector, _**O**_, perpendicular (orthogonal) to the axis. Axis vector, _**A**_, is a unit vector pointing toward the pole of the rotation axis. 
+General rotations can be computed in a reference frame agnostic manner. Any vector, _**V**_, can be decomposed into a component, _**X**_, parallel to the rotation axis, _**A**_, and a vector, _**Y**_, perpendicular to the axis. Axis vector, _**A**_, is a unit vector pointing toward the pole of the rotation axis. 
 
 We use RHS conventions here. So point your right-hand thumb in the direction toward the pole of rotation, and your fingers curl in the direction of positive rotation angles.
 
-Under rotation, the parallel component, _**P**_, remains unchanged. That parallel component vector _**P** = (**A** • **V**)**A**_, using a vector dot-product. And the perpendicular component vector _**O** = ((**A** ✕ **V**) ✕ **A**)_ - using vector cross-products. Rotation of vector _**V**_ diminishes _**O**_, and adds a component vector in the direction of _**Z** = (**A** ✕ **V**)_.
+Under rotation, the parallel component, _**X**_, remains unchanged. That parallel component vector _**X** = (**A** • **V**)**A**_, using a vector dot-product. And the perpendicular component vector _**Y** = ((**A** ✕ **V**) ✕ **A**)_ - using vector cross-products. Rotation of vector _**V**_ diminishes _**Y**_, and adds a component vector in the direction of _**Z** = (**A** ✕ **V**)_.
 
-But now notice that _**O**_ must also simply be what is left after subtracting off its parallel component: _**O** = **V** - **P**_. The length of _**O**_ is also equal to the length of _**Z**_ since the axis vector, _**A**_, is a unit vector. So we don't need to waste time computing a second vector cross-product. But we do need the first one giving us _**Z**_.
+But now notice that _**Y**_ must also simply be what is left after subtracting off its parallel component: _**Y** = **V** - **X**_. The length of _**Y**_ is also equal to the length of _**Z**_ since the axis vector, _**A**_, is a unit vector. So we don't need to waste time computing a second vector cross-product. But we do need the first one giving us _**Z**_.
 
-Final result is _**V'** = **P** + **O** Cos ζ + **Z** Sin ζ_ , for rotation angle ζ.
+Final result is _**V'** = **X** + **Y** Cos ζ + **Z** Sin ζ_ , for rotation angle ζ.
 
 **rot** _vec-lon-ang vec-lat-ang axis-lon-ang axis-lat-ang rot-ang => lon-ang, lat-ang_ 
 - Vectors are unit vectors specified as pole positions on the unit sphere, using longitude and latitude pairs.
