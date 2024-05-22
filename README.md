@@ -78,11 +78,11 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 ## Angle Conversions from Canonical Measure
 View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
 
-**to-deg** _ang => degs_
+**to-deg** _ang => deg_
   
-**to-arcmin** _ang => arcmins_
+**to-arcmin** _ang => arcmin_
   
-**to-arcsec** _ang => arcsecs_
+**to-arcsec** _ang => arcsec_
   
 **to-dms** _ang => (DMS ddd mm ss.sss)_
   
@@ -98,11 +98,11 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
   
 **to-h.ms** _ang => HH.MMSSsss_
 
-**to-rad** _ang => rads_
+**to-rad** _ang => rad_
   
-**to-mrad** _ang => mrads_
+**to-mrad** _ang => mrad_
 
-**to-μrad** _ang => μrads_
+**to-μrad** _ang => μrad_
 
 **to-turns** _ang => turns_
 
