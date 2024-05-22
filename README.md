@@ -141,6 +141,8 @@ There is nothing better than integer arithmetic and integer fractions of a Turn.
 
 I did carefully consider my options when I wrote this code. I wrote a 24-bit integer version of this code, but I finally decided that double-precision FP would be okay to use here. Single precision? Definitely not! Simply becuase FP arithmetic seeks to preserve range at the cost of LSB precision. And single precision FP has barely enough bits in the range from 0.0 to 1.0. Anything larger erodes the LSB.
 
+[To think about it... are there any practical uses for radian measure? Since π ia irrational, you can never get to a full circle angular sweep without overshooting. And what do you use to directly measure radians? So why not stop at the intermediate measure you are using to determine them?]
+
 ---
 ## Redefined Trig Functions
 Trig functions redefined to work with canonical angular measure. `(sin (deg 30)) => 0.5`
