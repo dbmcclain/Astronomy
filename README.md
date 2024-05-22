@@ -71,7 +71,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 **μrad** _μrad => ang_
 - 1,000 μrad = 1 mrad.
 
-**turns** _turns => ang
+**turns** _turns => ang_
 - 1 turns = a full circle.
 
 ---
