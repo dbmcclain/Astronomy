@@ -211,19 +211,23 @@
   ;; form vector from summed corresponding components
   (apply #'mapcar #'+ v args))
 
+(defun vsub (a b)
+  ;; vector subtraction. We'll only need two terms.
+  (mapcar #'- a b))
+
 (defun vscale (sf v)
   ;; form vector as scaled components
   (mapcar (um:curry #'* sf) v))
 
 ;; ---------------------------------------
 
-(defun rot (θ_v φ_v  θ_p φ_p  dζ)
-  ;; Rotate unit vector (θ_v,φ_v) around axis with pole at (θ_p,φ_p) by angle dζ.
+(defun rot (θ_v φ_v  θ_a φ_a  dζ)
+  ;; Rotate unit vector (θ_v,φ_v) around axis with pole at (θ_a,φ_a) by angle dζ.
   (let* ((v    (to-xyz θ_v φ_v))             ;; unit vector to be rotated
-         (p    (to-xyz θ_p φ_p))             ;; unit vector along axis toward pole
-         (xv   (vscale (vdot p v) p))        ;; parallel component unchanged by rotation
-         (zv   (vcross p v))                 ;; = (P ✕ V), perpendicular components
-         (yv   (vcross zv p))                ;; = ((P ✕ V) ✕ P), initial V = Xv + Yv
+         (a    (to-xyz θ_a φ_a))             ;; unit vector along axis toward pole
+         (xv   (vscale (vdot a v) a))        ;; parallel component unchanged by rotation
+         (yv   (vsub v xv))                  ;; what's left after subtracting the parallel component
+         (zv   (vcross a v))                 ;; = (A ✕ V), perpendicular components
          (cζ   (cis dζ)))
     (to-thphi (vadd xv                       ;; a kind of a hyper-dot-product
                     (vscale (realpart cζ) yv)
