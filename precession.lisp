@@ -16,32 +16,10 @@
 (defvar *days-per-century* 36525)
 (defvar *mean-obliquity*
   ;; J2000 from 2023 Almanac
-  `(,(arcsec 84381.406)
+  `(,(arcsec 84381.406)       ;; ≈ 23.4 deg
     ,(arcsec   -46.836_769))) ;; change in obliquity per century
   
 (defvar *precession*       (arcsec    50.28796_195))   ;; annual general precession - 2023 Almanac
-
-;; ------------------------------------------------------
-
-(defvar *start-obliquity*  *mean-obliquity*)
-(defvar *end-obliquity*    *mean-obliquity*)
-
-(defun to-ecliptic (ra dec)
-  (rotx-ang ra dec (- *start-obliquity*)))
-
-(defun from-ecliptic (long lat)
-  (rotx-ang long lat *end-obliquity*))
-
-;; ------------------------------------------------------
-
-(defun precessn (ra dec nyr)
-  ;; Precess nyr using mean obliquity for J2000.
-  ;; It would be more accurate to specify starting and ending epochs using PRECESS below.
-  ;; Using Ecliptic coords prevents problems near NCP.
-  (multiple-value-bind (lon lat)
-      (to-ecliptic ra dec)
-    (from-ecliptic (+ lon (* nyr *precession*)) lat)
-    ))
 
 ;; ------------------------------------------------------
 
@@ -78,6 +56,30 @@
 (defun obliquity-for-epoch (epoch)
   ;; Mean obliquity is declining at rate of -47 arcsec/century.
   (horner (c2k epoch) *mean-obliquity*))
+
+;; ------------------------------------------------------
+
+(defvar *start-obliquity*  (obliquity-for-epoch *J2000*))
+(defvar *end-obliquity*    (obliquity-for-epoch *J2000*))
+
+(defun to-ecliptic (ra dec)
+  (rotx-ang ra dec (- *start-obliquity*)))
+
+(defun from-ecliptic (long lat)
+  (rotx-ang long lat *end-obliquity*))
+
+;; ------------------------------------------------------
+
+(defun precessn (ra dec nyr)
+  ;; Precess nyr using mean obliquity for J2000.
+  ;; It would be more accurate to specify starting and ending epochs using PRECESS below.
+  ;; Using Ecliptic coords prevents problems near NCP.
+  (multiple-value-bind (lon lat)
+      (to-ecliptic ra dec)
+    (from-ecliptic (+ lon (* nyr *precession*)) lat)
+    ))
+
+;; ------------------------------------------------------
 
 (defun precess (ra dec from-epoch &optional (to-epoch (current-epoch)))
   ;; for RA, Dec expressed in deg, epochs as JDN
