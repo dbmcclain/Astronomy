@@ -185,13 +185,15 @@ This is a convenience macro to deal with multiple return values, applying a func
 ## Generalized Vector Rotation
 Angular rotation of vectors about arbitrary axis - specify vector and rotation axis with angular pole positions on the unit sphere. No Euler angle stuff needed. No singularities near poles. No gimbal lock near zenith - but your telescope might not be so forgiving.
 
-General rotations can be computed in a reference frame agnostic manner. Any vector, _**V**_, can be decomposed into a component, _**X**_, parallel to the rotation axis, _**A**_, and a vector, _**Y**_, perpendicular to the axis. Axis vector, _**A**_, is a unit vector pointing toward the pole of the rotation axis. 
+General rotations can be computed in a reference frame agnostic manner. Any vector, _**V**_, can be decomposed into a component, _**X**_, parallel to the unit vector, _**a**_, representing the rotation axis, and a vector, _**Y**_, perpendicular to the axis. Axis unit vector, _**a**_, points toward the pole of the rotation axis. 
 
 We use RHS conventions here. So point your right-hand thumb in the direction toward the pole of rotation, and your fingers curl in the direction of positive rotation angles.
 
-Under rotation, the parallel component, _**X**_, remains unchanged. That parallel component vector _**X** = (**A** • **V**)**A**_, using a vector dot-product. And the perpendicular component vector _**Y** = ((**A** ✕ **V**) ✕ **A**)_ - using vector cross-products. Rotation of vector _**V**_ diminishes _**Y**_, and adds a component vector in the direction of _**Z** = (**A** ✕ **V**)_.
+Under rotation, the parallel component, _**X**_, remains unchanged. That parallel component vector _**X** = (**a** • **V**)**a**_, using a vector dot-product. 
 
-But now notice that _**Y**_ must also simply be what is left after subtracting off its parallel component: _**Y** = **V** - **X**_. The length of _**Y**_ is also equal to the length of _**Z**_ since the axis vector, _**A**_, is a unit vector. So we don't need to waste time computing a second vector cross-product. But we do need the first one giving us _**Z**_.
+Using a vector cross-product, we can define a vector, _**Z** = (**a**  ✕ **V**)_ that is orthogonal to both the rotation axis and the initial vector. And the perpendicular component vector _**Y** = (**Z** ✕ **a**)_, orthogonal to both the axis and the _**Z**_ vector must be equal to the perpendicular component of vector _**V**_. Rotation of the vector diminishes its _**Y**_ component and adds a component in the _**Z**_ direction.
+
+But now notice that _**Y**_ must also simply be what is left after subtracting off its parallel component: _**Y** = **V** - **X**_. The length of _**Y**_ is also equal to the length of _**Z**_ since the axis vector, _**a**_, is a unit vector. So we don't need to waste time computing a second vector cross-product. But we do need the first one giving us _**Z**_.
 
 Final result is _**V'** = **X** + **Y** Cos ζ + **Z** Sin ζ_ , for rotation angle ζ.
 
