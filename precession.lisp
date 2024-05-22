@@ -14,16 +14,18 @@
 (defvar *j2000*            (jdn 2000 01 01 :hh 12 :lcl-ut 0))
 (defvar *days-per-year*    365.25)
 (defvar *days-per-century* 36525)
-(defvar *mean-obliquity*   (arcsec 84381.412)) ;; J2000 from JPL
-(defvar *start-obliquity*  *mean-obliquity*)
-(defvar *end-obliquity*    *mean-obliquity*)
-(defvar *precession*       (arcsec 50.2883))   ;; 1 turn after 25,800 yrs
+(defvar *mean-obliquity*   (arcsec 84381.406)) ;; J2000 from 2023 Almanac
+(defvar *precession*       (arcsec  50.28796_195))   ;; annual general precession - 2023 Almanac
+(defvar *eps-dot*          (arcsec -46.836_769))     ;; change in obliquity per century - 2023 Almanac
 
 (defun to-ecliptic (ra dec)
   (rotx-ang ra dec (- *start-obliquity*)))
 
 (defun from-ecliptic (long lat)
   (rotx-ang long lat *end-obliquity*))
+
+(defvar *start-obliquity*  *mean-obliquity*)
+(defvar *end-obliquity*    *mean-obliquity*)
 
 (defun precessn (ra dec nyr)
   ;; Precess nyr using mean obliquity for J2000.
@@ -36,7 +38,7 @@
 
 (defun obliquity-for-epoch (epoch)
   ;; Mean obliquity is declining at rate of -47 arcsec/century.
-  (+ *mean-obliquity* (* #.(arcsec -47/36525) (- epoch *j2000*))))
+  (+ *mean-obliquity* (* *eps-dot* (/ (- epoch *j2000*) *days-per-century*))))
 
 (defun precess (ra dec from-epoch &optional (to-epoch (current-epoch)))
   ;; for RA, Dec expressed in deg, epochs as JDN
