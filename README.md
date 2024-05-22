@@ -191,7 +191,7 @@ We use RHS conventions here. So point your right-hand thumb in the direction tow
 
 Under rotation, the parallel component, _**X**_, remains unchanged. That parallel component vector _**X** = (**a** • **V**)**a**_, using a vector dot-product. 
 
-Using a vector cross-product, we can define a vector, _**Z** = (**a**  ✕ **V**)_, that is orthogonal to both the rotation axis and the initial vector. And the perpendicular component vector, _**Y** = (**Z** ✕ **a**)_, orthogonal to both the axis and the _**Z**_ vector, must now be the perpendicular component of vector _**V**_. Rotation of the vector diminishes its _**Y**_ component and adds a component in the _**Z**_ direction.
+Using a vector cross-product, we can define a vector, _**Z** = (**a**  ✕ **V**)_, that is orthogonal to both the rotation axis and the initial vector. And the perpendicular component vector, _**Y** = (**Z** ✕ **a**)_, orthogonal to both the axis and the _**Z**_ vector, must now be the perpendicular component of vector _**V**_. Together, based on the way we defined them, the vectors _**X**_, _**Y**_, and _**Z**_, form a RHS coordinate frame. Rotation of the vector diminishes its _**Y**_ component and adds a component in the _**Z**_ direction. 
 
 But now notice that _**Y**_ must also simply be what is left after subtracting off its parallel component: _**Y** = **V** - **X**_. The length of _**Y**_ is also equal to the length of _**Z**_ since the axis vector, _**a**_, is a unit vector. So we don't need to waste time computing a second vector cross-product. But we do need the first one giving us _**Z**_.
 
