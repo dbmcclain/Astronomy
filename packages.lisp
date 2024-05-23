@@ -112,8 +112,9 @@
    #:date.time
    #:d.t
 
-   #:precessn
-   #:precess
+   #:prec
+   ;; #:precessn
+   ;; #:precess
 
    #:lmst0
    #:lmst

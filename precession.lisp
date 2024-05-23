@@ -52,7 +52,7 @@
     ))
 
 ;; ------------------------------------------------------
-
+#|
 (defun obliquity-for-epoch (epoch)
   ;; Mean obliquity is declining at rate of -47 arcsec/century.
   (horner (c2k epoch) *mean-obliquity*))
@@ -87,7 +87,8 @@
         (*end-obliquity*   (obliquity-for-epoch to-epoch)))
     (precessn ra dec (jyrs (- to-epoch from-epoch)))
     ))
-                      
+|#
+
 ;; ------------------------------------------------------
 ;; From IAU SOFA, J.Vrondak,et al, "New precession expressions, valid for long time intervals", AA, 2011
 ;; Computed for J2000.0
