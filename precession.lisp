@@ -195,11 +195,11 @@
   ;; Produces a precession matrix that will transform from J2000.0 to Epoch.
   ;; To be applied against an XYZ vector arising from RA, Dec at J2000.0.
   (let* ((epj  (epj epoch))
-         (z    (pequ epj)) ;; pole of Equator
+         (zv   (pequ epj)) ;; pole of Equator
          (eclp (pecl epj)) ;; pole of Ecliptic
-         (x    (vnormalize (vcross z eclp)))
-         (y    (vcross z x)))
-    (list x y z)))
+         (xv   (vnormalize (vcross zv eclp)))
+         (yv   (vcross zv xv)))
+    (list xv yv zv)))
 
 ;; --------------------------------------------
 
