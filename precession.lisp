@@ -98,7 +98,7 @@
 
 (defun epj (epoch)
   ;; Compute the Julian Epoch for a given JDN
-  (+ 2000.0 (/ (- epch *j2000*) *days-per-year*)))
+  (+ 2000.0 (/ (- epoch *j2000*) *days-per-year*)))
 
 (defun pecl (epj)
   ;; Precession of the Ecliptic
@@ -211,21 +211,15 @@
     (cons (mapcar #'car m)
           (trn (mapcar #'cdr m)))))
 
-(defun mat-mul (m v)
+(defun mat-mulv (m v)
   (mapcar (um:curry #'vdot v) m))
 
 (defun prec (ra dec from-epoch &optional (to-epoch (current-epoch)))
   ;; Precess using IAU long-term models for Ecliptic and Equatorial precession.
   (let* ((xyz1  (to-xyz ra dec))
-         (xyz2k (if (= from-epoch *j2000*)
-                    xyz1
-                  (let ((pmati (trn (pmat from-epoch))))
-                    (mat-mul pmati xyz1))))
-         (xyz2  (if (= to-epoch *J2000*)
-                    xyz2k
-                  (let ((pmat (pmat to-epoch)))
-                    (mat-mul pmat xyz2k)))))
-    (to-thphi xyz2)))
+         (xyz2k (mat-mulv (trn (pmat from-epoch)) xyz1))
+         (xyz2  (mat-mulv (pmat to-epoch) xyz2k)))
+     (to-thphi xyz2)))
 
 ;; ------------------------------------------------
 #|
