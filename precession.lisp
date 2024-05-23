@@ -36,12 +36,25 @@
   (/ (y2k epoch) 100))
 
 (defun horner (x coffs)
-  ;; Polynomial eval
-  (if (endp coffs)
-      0
-    (+ (car coffs)
-       (* x (horner x (cdr coffs))))
-    ))
+  (second
+   (reduce (lambda (coff state)
+             (destructuring-bind (xx accum) state
+               (list (* x xx) (+ coff (* xx accum)))
+               ))
+           coffs
+           :from-end t
+           :initial-value (list 1 0))))
+
+(defun poly-eval (x coffs)
+  (car
+   (reduce (lambda (state coff)
+             (destructuring-bind (accum xx) state
+               (list (+ accum (* xx coff)) (* x xx))
+               ))
+           coffs
+           :from-end nil
+           :initial-value '(0 1))
+   ))
 
 ;; ------------------------------------------------------
 #|
@@ -93,12 +106,47 @@
 
 ;; ------------------------------------------------------
 ;; From IAU/SOFA 2023 C Library
-;; See also, J.Vrondak,et al, "New precession expressions, valid for long time intervals", AA, 2011
+;; See also, J.Vrondak,et al, "New precession expressions, valid for long time intervals", 2011 AA
 ;; Computed for Mean Ecliptic and Equator of J2000.0
 
 (defun epj (epoch)
   ;; Compute the Julian Epoch for a given JDN
   (+ 2000.0 (y2k epoch)))
+
+(defun per-sum (w coffs)
+  ;; perform a pair of periodic component sums
+  (let ((s1 0)
+        (s2 0))
+    (dotimes (ix (array-dimension coffs 0))
+      (let* ((a  (/ w (aref coffs ix 0)))
+             (z  (cis a))
+             (c  (realpart z))
+             (s  (imagpart z)))
+        (incf s1 (+ (* c (aref coffs ix 1))
+                    (* s (aref coffs ix 3))))
+        (incf s2 (+ (* c (aref coffs ix 2))
+                    (* s (aref coffs ix 4))))
+        ))
+    (values s1 s2)
+    ))
+  
+(defun pol-sum (x coffs)
+  ;; perform a pair of polynomial component sums
+  (values
+   (poly-eval x (aref coffs 0))
+   (poly-eval x (aref coffs 1))
+   ))
+
+(defun pol-per-sum (x pol-coffs per-coffs)
+  (multiple-value-bind (s1-per s2-per)
+      (per-sum (turns x) per-coffs)
+    (multiple-value-bind (s1-pol s2-pol)
+        (pol-sum x pol-coffs)
+      (values (+ s1-pol s1-per)
+              (+ s2-pol s2-per))
+      )))
+                       
+;; --------------------------------------------------
 
 (defun pecl (epj)
   ;; Precession of the Ecliptic
@@ -106,8 +154,8 @@
   ;; EPJ is a Julian Epoch
   (let* ((dt    (/ (- epj 2000) 100))
          (eps0  #.(arcsec 84381.406))
-         (pqpol #.#2A(( 5851.607687  -0.1189000  -0.00028913   0.000000101)
-                      (-1600.886300   1.1689818  -0.00000020  -0.000000437)))
+         (pqpol #.#(( 5851.607687  -0.1189000  -0.00028913   0.000000101)
+                    (-1600.886300   1.1689818  -0.00000020  -0.000000437)))
          (pqper #.#2A(( 708.15 -5486.751211 -684.661560   667.666730 -5523.863691)
                       (2309.00   -17.127623 2446.283880 -2354.886252  -549.747450)
                       (1620.00  -617.517403  399.671049  -428.152441  -310.998056)
@@ -115,37 +163,19 @@
                       (1183.00    78.614193 -186.387003   184.778874   -36.776172)
                       ( 622.00  -180.732815 -316.800070   335.321713  -145.278396)
                       ( 882.00   -87.676083  198.296701  -185.138669   -34.744450)
-                      ( 547.00    46.140315  101.135679  -120.972830    22.885731)))
-         (p    0)
-         (q    0))
-    (let ((w  (turns dt)))
-      (dotimes (ix (array-dimension pqper 0))
-        (let* ((a  (/ w (aref pqper ix 0)))
-               (z  (cis a))
-               (c  (realpart z))
-               (s  (imagpart z)))
-          (incf p (+ (* c (aref pqper ix 1))
-                     (* s (aref pqper ix 3))))
-          (incf q (+ (* c (aref pqper ix 2))
-                     (* s (aref pqper ix 4))))
-          )))
-    (let ((w 1))
-      ;; stop glaring at me about Horner's method. SOFA does it this way too...
-      (dotimes (ix (array-dimension pqpol 1))
-        (incf p (* w (aref pqpol 0 ix)))
-        (incf q (* w (aref pqpol 1 ix)))
-        (setf w (* w dt))))
-
-    (let* ((p  (to-rad (arcsec p)))
-           (q  (to-rad (arcsec q)))
-           (r  (sqrt (max 0 (- 1 (* p p) (* q q)))))
-           (cs (cis eps0))
-           (c  (realpart cs))
-           (s  (imagpart cs)))
-      (list p
-            (- (+ (* c q) (* s r)))
-            (- (* c r) (* s q)))
-      )))
+                      ( 547.00    46.140315  101.135679  -120.972830    22.885731))))
+    (multiple-value-bind (psum qsum)
+        (pol-per-sum dt pqpol pqper)
+      (let* ((p  (to-rad (arcsec psum)))
+             (q  (to-rad (arcsec qsum)))
+             (r  (sqrt (max 0 (- 1 (* p p) (* q q)))))
+             (cs (cis eps0))
+             (c  (realpart cs))
+             (s  (imagpart cs)))
+        (list p
+              (- (+ (* c q) (* s r)))
+              (- (* c r) (* s q)))
+        ))))
 
 #|
 (pecl (epj 1219339.078000))
@@ -154,14 +184,14 @@ Check from Vondrak:
 For JDN = 1219339.078000
 pecl = ( +0.00041724785764001342 −0.40495491104576162693 +0.91433656053126552350 )
  |#
-           
+
 (defun pequ (epj)
   ;; Precession of the Equator
   ;; Compute unit vector to Equatorial pole at epoch.
   ;; EPJ is a Julian Epoch
-  (let* ((dt    (/ (- epj 2000) 100))
-         (xypol #.#2A((  5453.282155   0.4252841   -0.00037173   -0.000000152)
-                      (-73750.930350  -0.7675452   -0.00018725    0.000000231)))
+  (let* ((dt    (/ (- epj 2000) 100))         
+         (xypol #.#((  5453.282155   0.4252841   -0.00037173   -0.000000152)
+                    (-73750.930350  -0.7675452   -0.00018725    0.000000231)))
          (xyper #.#2A(( 256.75  -819.940624 75004.344875 81491.287984  1558.515853)
                       ( 708.15 -8444.676815   624.033993   787.163481  7774.939698)
                       ( 274.20  2600.009459  1251.136893  1251.296102 -2219.534038)
@@ -175,29 +205,14 @@ pecl = ( +0.00041724785764001342 −0.40495491104576162693 +0.914336560531265523
                       ( 620.00  -189.793622   558.116553   524.429630   235.934465)
                       ( 157.87  -402.922932   -23.923029   -13.549067   374.049623)
                       ( 220.30   179.516345  -165.405086  -210.157124  -171.330180)
-                      (1200.00    -9.814756     9.344131   -44.919798   -22.899655)))
-         (x     0)
-         (y     0))
-    (let ((w  (turns dt)))
-      (dotimes (ix (array-dimension xyper 0))
-        (let* ((a  (/ w (aref xyper ix 0)))
-               (z  (cis a))
-               (c  (realpart z))
-               (s  (imagpart z)))
-          (incf x (+ (* c (aref xyper ix 1)) (* s (aref xyper ix 3))))
-          (incf y (+ (* c (aref xyper ix 2)) (* s (aref xyper ix 4))))
-          )))
-    (let ((w  1))
-      (dotimes (ix (array-dimension xypol 1))
-        (incf x (* w (aref xypol 0 ix)))
-        (incf y (* w (aref xypol 1 ix)))
-        (setf w (* w dt))
-        ))
-    (let* ((x  (to-rad (arcsec x)))
-           (y  (to-rad (arcsec y)))
-           (z  (sqrt (max 0 (- 1 (* x x) (* y y))))))
-      (list x y z)
-      )))
+                      (1200.00    -9.814756     9.344131   -44.919798   -22.899655))))
+    (multiple-value-bind (xsum ysum)
+        (pol-per-sum dt xypol xyper)
+      (let* ((x  (to-rad (arcsec xsum)))
+             (y  (to-rad (arcsec ysum)))
+             (z  (sqrt (max 0 (- 1 (* x x) (* y y))))))
+        (list x y z)
+        ))))
 
 #|
 (pequ (epj 1219339.078000))
