@@ -8,18 +8,10 @@
 ;; ----------------------------------
 ;; Precession
 ;;
-;; Mean obliquity not really constant, but varies by
-;; about -47" per century.
 
 (defvar *j2000*            (jdn 2000 01 01 :hh 12 :lcl-ut 0))
 (defvar *days-per-year*    365.25)
 (defvar *days-per-century* 36525)
-(defvar *mean-obliquity*
-  ;; J2000 from 2023 Almanac
-  `(,(arcsec 84381.406)       ;; ≈ 23.4 deg
-    ,(arcsec   -46.836_769))) ;; change in obliquity per century
-  
-(defvar *precession*       (arcsec    50.28796_195))   ;; annual general precession - 2023 Almanac
 
 ;; ------------------------------------------------------
 
@@ -53,6 +45,16 @@
 
 ;; ------------------------------------------------------
 #|
+ 
+;; Mean obliquity not really constant, but varies by
+;; about -47" per century.
+(defvar *mean-obliquity*
+  ;; J2000 from 2023 Almanac
+  `(,(arcsec 84381.406)       ;; ≈ 23.4 deg
+    ,(arcsec   -46.836_769))) ;; change in obliquity per century
+  
+(defvar *precession*       (arcsec    50.28796_195))   ;; annual general precession - 2023 Almanac
+
 (defun obliquity-for-epoch (epoch)
   ;; Mean obliquity is declining at rate of -47 arcsec/century.
   (horner (c2k epoch) *mean-obliquity*))
@@ -191,16 +193,15 @@
          (y    (vcross z x)))
     (list x y z)))
 
+;; --------------------------------------------
 
 (defun trn (m)
+  ;; Compute matrix transpose.
+  ;; Matrix is a list of 3 element lists representing row vectors.
+  ;; For a unitory transform matrix, the transpose is its inverse.
   (when (car m)
     (cons (mapcar #'car m)
           (trn (mapcar #'cdr m)))))
-
-#|                     
-(let* ((m  '((1 2 3) (4 5 6))))
-  (trn m))
-|#       
 
 (defun mat-mul (m v)
   (mapcar (um:curry #'vdot v) m))
@@ -218,7 +219,7 @@
                     (mat-mul pmat xyz2k)))))
     (to-thphi xyz2)))
 
-
+;; ------------------------------------------------
 #|
 ;; Grubby routine from years ago...
 (defun qd-precess (ra dec nyr)
