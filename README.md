@@ -328,10 +328,10 @@ Accurate Precession between any two epochs - uses IAU Long-Term Ecliptic and Equ
 
 Okay, in the past, we used a grubby little routine on our calculators to precess our targets for the night's observing. It goes like this:
 ```
-Δα = 3.07496 + 1.33621 tan(δ) sin(α)   secs/yr
-Δδ = 20.0431 cos(α)                    αrcsec/yr
+Δα = 3.07496 + 1.33621 Tan(δ)Sin(α)   secs/yr
+Δδ = 20.0431 Cos(α)                    αrcsec/yr
 ```
-You see the _tan(δ)_ in there? It means you shouldn't try to use this near the North/South poles. And that tangent can make a huge change in RA. But so what? You are near the pole. How bad on the sky is this really? 
+You see the _Tan(δ)_ in there? It means you shouldn't try to use this near the North/South poles. And that tangent can make a huge change in RA. But so what? You are near the pole. How bad on the sky is this really? 
 
 Well, a quick and dirty analysis over the whole sky, precessing for 50 years, either side from J2000, shows at most 2.8 arcmin error on the sky, even if you operate as close as 1 deg from the poles. The camera in my little 2-inch telescope has 1080 pixels spanning 43 arcmin across. So your star will still end up pretty darn close to the image center, even with these errors.
 
