@@ -130,6 +130,7 @@
                      (* s (aref pqper ix 4))))
           )))
     (let ((w 1))
+      ;; stop glaring at me about Horner's method. SOFA does it this way too...
       (dotimes (ix (array-dimension pqpol 1))
         (incf p (* w (aref pqpol 0 ix)))
         (incf q (* w (aref pqpol 1 ix)))
@@ -143,8 +144,16 @@
            (s  (imagpart z)))
       (list p
             (- (+ (* c q) (* s w)))
-            (- (* c 2) (* s q)))
+            (- (* c w) (* s q)))
       )))
+
+#|
+(pecl (epj 1219339.078000))
+=> (4.172478576400136E-4 -0.4049549137582655 0.9143365593299115)
+Check from Vondrak:
+For JDN = 1219339.078000
+pecl = ( +0.00041724785764001342 −0.40495491104576162693 +0.91433656053126552350 )
+ |#
            
 (defun pequ (epj)
   ;; Precession of the Equator
@@ -189,6 +198,14 @@
            (z  (sqrt (max 0 (- 1 (* x x) (* y y))))))
       (list x y z)
       )))
+
+#|
+(pequ (epj 1219339.078000))
+=> (-0.2943764379736904 -0.11719098023370263 0.9484770882408209)
+Check from Vondrak:
+For JDN = 1219339.078000
+pequ = ( −0.29437643797369031532 −0.11719098023370257855 +0.94847708824082091796 )
+ |#
 
 (defun pmat (epoch)
   ;; Compute long term precession matrix.
