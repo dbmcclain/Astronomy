@@ -315,6 +315,7 @@ Accurate Precession between any two epochs - uses IAU Long-Term Ecliptic and Equ
 
 **prec** _RA-ang Dec-ang from-epoch &optional to-epoch => RA_ang, Dec_ang_
 - Implements the IAU Long-Term Precession models for Ecliptic and Equatorial polar precession.
+- to-epoch defaults to now.
 - As good as it gets, sans Nutation and Aberration.
 - Claims to be within 100 arcsec for 200,000 years on either side of J2000.0. (Who would know? if it isn't.)
 ```
