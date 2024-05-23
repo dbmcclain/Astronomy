@@ -207,17 +207,13 @@
   ;; Compute matrix transpose.
   ;; Matrix is a list of 3 element lists representing row vectors.
   ;; For a unitory transform matrix, the transpose is its inverse.
-  (when (car m)
-    (cons (mapcar #'car m)
-          (trn (mapcar #'cdr m)))))
+  (apply #'mapcar #'list m))
 
 (defun mat-mulv (m v)
   (mapcar (um:curry #'vdot v) m))
 
 (defun mat-mulm (m1 m2)
-  (mapcar (lambda (row)
-            (mat-mulv m1 row))
-          (trn m2)))
+  (mapcar (um:curry #'mat-mulv m1) (trn m2)))
 
 (defun prec (ra dec from-epoch &optional (to-epoch (current-epoch)))
   ;; Precess using IAU long-term models for Ecliptic and Equatorial precession.
