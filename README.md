@@ -340,8 +340,9 @@ There was a different quick and dirty version that we used many years ago. It di
 ```
 
 **prec** _RA-ang Dec-ang from-epoch &optional to-epoch => RA_ang, Dec_ang_
-- Implements the IAU long-term Precession models for Ecliptic and Equatorial polar precession.
-- As good as it gets, sans Nutation and Aberration
+- Implements the IAU Long-Term Precession models for Ecliptic and Equatorial polar precession.
+- As good as it gets, sans Nutation and Aberration.
+- Claims to be within 100 arcsec for 200,000 years on either side of J2000.0. (Who would know? if it isn't.)
 ```
 (map-mult (#'to-ra #'to-dec)
   (prec (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01)))
