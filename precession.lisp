@@ -119,9 +119,9 @@
         (s2 0))
     (dotimes (ix (array-dimension coffs 0))
       (let* ((a  (/ w (aref coffs ix 0)))
-             (z  (cis a))
-             (c  (realpart z))
-             (s  (imagpart z)))
+             (cs (cis a))
+             (c  (realpart cs))
+             (s  (imagpart cs)))
         (incf s1 (+ (* c (aref coffs ix 1))
                     (* s (aref coffs ix 3))))
         (incf s2 (+ (* c (aref coffs ix 2))
@@ -258,6 +258,8 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 (defun mat-mulm (m1 m2)
   (mapcar (um:curry #'mat-mulv m1) (trn m2)))
+
+;; --------------------------------------------
 
 (defun prec (ra dec from-epoch &optional (to-epoch (current-epoch)))
   ;; Precess using IAU long-term models for Ecliptic and Equatorial precession.
