@@ -311,32 +311,18 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 ```
 ---
 ## Accurate Precession
-Accurate Precession between any two epochs - uses intermediate Ecliptic coord frame and obliquity at start/end epochs. No Euler angle matrices needed. The quick version isn't really that much quicker, but it allows you to forego the statement of epochs. Just give it some number of years. As you can see below, the failings aren't that bad.
+Accurate Precession between any two epochs - uses IAU Long-Term Ecliptic and Equatorial polar precession models. Adopted from the IAU/SOFA C routines in the 2023 release.
 
-There was a different quick and dirty version that we used many years ago. It did not invoke Ecliptic coordinate frames, and it simply approximated the rate of change in RA and Dec. Compared to the two routines here, that old method is distinctly inferior. It is so easy to just convert things to Ecliptic coordinates, rotate the whole frame by 50"/yr, then convert back to Equatorial. Again, no Euler angles are needed to do any of this.
-
-**precess** _RA-ang Dec-ang from-epoch &optional to-epoch => RA-ang, Dec-ang_
-- Accurate precession for anywhere on the sky.
-- Target epoch defaults to `(current-epoch)`.
-
+**prec** _RA-ang Dec-ang from-epoch &optional to-epoch => RA_ang, Dec_ang_
+- Implements the IAU Long-Term Precession models for Ecliptic and Equatorial polar precession.
+- As good as it gets, sans Nutation and Aberration.
+- Claims to be within 100 arcsec for 200,000 years on either side of J2000.0. (Who would know? if it isn't.)
 ```
 (map-mult (#'to-ra #'to-dec)
-  (precess (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01))) ;; at my obs last New Year's
+  (prec (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01)))
 =>
-(RA 9 23 8.557)
-(DEC 80 8 42.965)
-```
-
-**precessN** _RA-ang Dec-ang NYears => RA-ang, Dec-ang_ 
-- Precess for N years.
-- Can be used for quick & dirty
-- Assumes constant obliquity = J2000 obliquity.
-```
-(map-mult (#'to-ra #'to-dec)
-  (precessN (ra 9 20) (dec 80 15) 24))
-=>
-(RA 9 23 11.916)
-(DEC 80 8 50.086)
+(RA 9 24 26.071)
+(DEC 80 8 49.398)
 ```
 ---
 ## Az/El and Equatorial Coordinates
