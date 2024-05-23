@@ -92,9 +92,9 @@
 |#
 
 ;; ------------------------------------------------------
-;; From IAU SOFA, J.Vrondak,et al, "New precession expressions, valid for long time intervals", AA, 2011
-;; Computed for J2000.0
-;; Adapted from IAU/SOFA 2023 C Library
+;; From IAU/SOFA 2023 C Library
+;; See also, J.Vrondak,et al, "New precession expressions, valid for long time intervals", AA, 2011
+;; Computed for Mean Ecliptic and Equator of J2000.0
 
 (defun epj (epoch)
   ;; Compute the Julian Epoch for a given JDN
@@ -138,13 +138,13 @@
 
     (let* ((p  (to-rad (arcsec p)))
            (q  (to-rad (arcsec q)))
-           (w  (sqrt (max 0 (- 1 (* p p) (* q q)))))
-           (z  (cis eps0))
-           (c  (realpart z))
-           (s  (imagpart z)))
+           (r  (sqrt (max 0 (- 1 (* p p) (* q q)))))
+           (cs (cis eps0))
+           (c  (realpart cs))
+           (s  (imagpart cs)))
       (list p
-            (- (+ (* c q) (* s w)))
-            (- (* c w) (* s q)))
+            (- (+ (* c q) (* s r)))
+            (- (* c r) (* s q)))
       )))
 
 #|
@@ -218,6 +218,18 @@ pequ = ( −0.29437643797369031532 −0.11719098023370257855 +0.9484770882408209
          (yv   (vcross zv xv)))
     (list xv yv zv)))
 
+#|
+(pmat 1219339.078000)
+=>
+((0.6847339092712664 0.6664779364917481 0.2948671457856752)
+ (-0.6666948224337814 0.7362563645372211 -0.11595076290574136)
+ (-0.2943764379736904 -0.11719098023370263 0.9484770882408209))
+Check from Vondrak:
+For JDN = 1219339.078000
+Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
+      (−0.66669482609418419936 +0.73625636097440967969 −0.11595076448202158534)
+      (−0.29437643797369031532 −0.11719098023370257855 +0.94847708824082091796))
+ |#
 ;; --------------------------------------------
 
 (defun trn (m)
@@ -249,11 +261,12 @@ pequ = ( −0.29437643797369031532 −0.11719098023370257855 +0.9484770882408209
 
 (let* ((epoch (jdn 2024 01 01 :lcl-ut 0))
        (m     (pmat epoch)))
+  (print m)
   (mat-mulm m (trn m)))
 
 (let* ((to-epoch   (jdn 2024 01 01 :lcl-ut 0))
        (from-epoch (- to-epoch (* 10 *days-per-year*)))
-       (ra         (ra  06 59 30.1))
+       (ra         (ra  16 59 30.1))
        (dec        (dec 85 55 13  ))
        (m1         (trn (pmat from-epoch)))
        (m2         (pmat to-epoch)))
@@ -313,6 +326,3 @@ pequ = ( −0.29437643797369031532 −0.11719098023370257855 +0.9484770882408209
     (values)
     ))
 |#
-
-
-  
