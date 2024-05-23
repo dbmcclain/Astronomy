@@ -72,6 +72,7 @@
    #:cmttr
    #:vcross
    #:vnorm
+   #:vnormalize
    #:vadd
    #:vscale
    #:rot

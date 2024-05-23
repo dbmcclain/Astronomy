@@ -207,6 +207,10 @@
   ;; length of vector
   (sqrt (vdot v v)))
 
+(defun vnormalize (v)
+  ;; Convert vector v to unit vector
+  (vscale (/ (vnorm v)) v))
+
 (defun vadd (v &rest args)
   ;; form vector from summed corresponding components
   (apply #'mapcar #'+ v args))
