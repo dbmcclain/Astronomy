@@ -270,6 +270,17 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
          (xyz2  (mat-mulv (pmat to-epoch) xyz2k)))
      (to-thphi xyz2)))
 
+;; --------------------------------------------------
+;; Grubby routine from years ago...
+
+(defun precN (ra dec nyr)
+  (let* ((m  #.(secs 3.07496))
+         (n  #.(arcsec 20.0431))
+         (cs (* nyr n (cis ra))))
+    (values (+ ra (* nyr m) (* (imagpart cs) (tan dec)))
+            (+ dec (realpart cs))
+            )))
+
 ;; ------------------------------------------------
 #|
 (let ((to-epoch   (jdn 2024 01 01 :lcl-ut 0))
@@ -291,17 +302,57 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
        (m2         (pmat to-epoch)))
   (mat-mulm m2 m1))
 
+;; --------------------------------------------------
 ;; Grubby routine from years ago...
 (defun qd-precess (ra dec nyr)
-  (values (+ ra (* nyr (+ #.(secs 3.07496)
-                          (* #.(secs 1.336219)
-                             (sin ra)
-                             (tan dec)))
-                   ))
-          (+ dec (* nyr #.(arcsec 20.0431)
-                    (cos ra)))
-          ))
+  (let* ((m  #.(secs 3.07496))
+         (n  #.(arcsec 20.0431))
+         (cs (* nyr n (cis ra))))
+    (values (+ ra (* nyr m) (* (imagpart cs) (tan dec)))
+            (+ dec (realpart cs))
+            )))
 
+(let ((to-epoch   (jdn 2050 01 01 :lcl-ut 0))
+      (ra         (ra  00 00 00))
+      (dec        (dec 87 00 00  )))
+  (print (multiple-value-list
+          (map-mult (#'to-ra #'to-dec)
+                    (prec ra dec *j2000* to-epoch))))
+  (print (multiple-value-list
+          (map-mult (#'to-ra #'to-dec)
+                    (qd-precess ra dec 24))))
+  (values))
+
+(let* ((to-epoch   (jdn 2050 01 01 :lcl-ut 0))
+       (img        (make-array '(181 360)
+                               :element-type 'single-float
+                               :initial-element 0.0f0))
+       (maxa   0)
+       (mina   most-positive-single-float))
+  (loop for ix from 0 below 360 do
+        (let ((ra (deg ix)))
+          (loop for jx from 1 below 178 do
+                  (let ((dec (deg (- jx 90))))
+                    (multiple-value-bind (rap decp)
+                        (prec ra dec *j2000* to-epoch)
+                      (multiple-value-bind (rag decg)
+                          (qd-precess ra dec (round (y2k to-epoch)))
+                        (let* ((vp (to-xyz rap decp))
+                               (vg (to-xyz rag decg))
+                               (vx (vcross vp vg))
+                               (ang (to-arcsec (asin (vnorm vx)))))
+                          (unless (zerop ang)
+                            (setf mina (min mina ang)
+                                  maxa (max maxa ang)))
+                          (setf (aref img jx ix) (float ang 1f0))
+                          )))))))
+  (plt:plot-image 'plt-ra '(0 24) '(-90 90) img :clear t)
+  (print (list mina maxa))
+  )
+                     
+       
+
+;; --------------------------------------------------
 ;; Test out the various precession methods
 (let ((to-epoch (jdn 2024 01 01 :lcl-ut 0))
       (ra       (ra  06 59 30.1))
