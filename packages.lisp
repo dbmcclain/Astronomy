@@ -113,6 +113,7 @@
    #:d.t
 
    #:prec
+   #:precn
    ;; #:precessn
    ;; #:precess
 
