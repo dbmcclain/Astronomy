@@ -36,14 +36,14 @@
   (/ (y2k epoch) 100))
 
 (defun horner (x coffs)
-  (second
+  (car
    (reduce (lambda (coff state)
-             (destructuring-bind (xx accum) state
-               (list (* x xx) (+ coff (* xx accum)))
+             (destructuring-bind (accum xx) state
+               (list (+ coff (* xx accum)) (* x xx))
                ))
            coffs
            :from-end t
-           :initial-value (list 1 0))))
+           :initial-value '(0 1))))
 
 (defun poly-eval (x coffs)
   (car
