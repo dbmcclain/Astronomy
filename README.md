@@ -338,6 +338,17 @@ There was a different quick and dirty version that we used many years ago. It di
 (RA 9 23 11.916)
 (DEC 80 8 50.086)
 ```
+
+**prec** _RA-ang Dec-ang from-epoch &optional to-epoch => RA_ang, Dec_ang_
+- Implements the IAU long-term Precession models for Ecliptic and Equatorial polar precession.
+- As good as it gets, sans Nutation and Aberration
+```
+(map-mult (#'to-ra #'to-dec)
+  (prec (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01)))
+=>
+(RA 9 24 26.071)
+(DEC 80 8 49.398)
+```
 ---
 ## Az/El and Equatorial Coordinates
 Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
