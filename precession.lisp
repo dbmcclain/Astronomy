@@ -303,14 +303,6 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   (mat-mulm m2 m1))
 
 ;; --------------------------------------------------
-;; Grubby routine from years ago...
-(defun qd-precess (ra dec nyr)
-  (let* ((m  #.(secs 3.07496))
-         (n  #.(arcsec 20.0431))
-         (cs (* nyr n (cis ra))))
-    (values (+ ra (* nyr m) (* (imagpart cs) (tan dec)))
-            (+ dec (realpart cs))
-            )))
 
 (let ((to-epoch   (jdn 2050 01 01 :lcl-ut 0))
       (ra         (ra  00 00 00))
@@ -320,7 +312,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                     (prec ra dec *j2000* to-epoch))))
   (print (multiple-value-list
           (map-mult (#'to-ra #'to-dec)
-                    (qd-precess ra dec 24))))
+                    (precN ra dec 24))))
   (values))
 
 (let* ((to-epoch   (jdn 2050 01 01 :lcl-ut 0))
@@ -336,7 +328,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                     (multiple-value-bind (rap decp)
                         (prec ra dec *j2000* to-epoch)
                       (multiple-value-bind (rag decg)
-                          (qd-precess ra dec (round (y2k to-epoch)))
+                          (precN ra dec (round (y2k to-epoch)))
                         (let* ((vp (to-xyz rap decp))
                                (vg (to-xyz rag decg))
                                (vx (vcross vp vg))
@@ -371,7 +363,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
       (print (list :PRECESSN (to-ra ran) (to-dec decn))))
     
     (multiple-value-bind (raq decq)
-        (qd-precess ra dec djd)
+        (precN ra dec djd)
       #|
       (print (list (to-ra-h.ms ra)
                    (to-ra-h.ms rap)
