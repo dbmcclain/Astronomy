@@ -337,7 +337,7 @@ Well, a quick and dirty analysis over the whole sky, precessing for 50 years fro
 
 So here we provide the grubby version too. It allows you to precess approximately, without needing to specify a full Epoch. Just state the number of years.
 
-**precN** _ra-ang dec-ang nyrs => ra-ang, dec-ang_
+**precN** _RA-ang Dec-ang nyrs => RA-ang, Dec-ang_
 - Does the grubby precession for you.
 
 ---
