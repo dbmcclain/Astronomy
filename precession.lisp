@@ -116,6 +116,7 @@
   (+ 2000.0 (y2k epoch)))
 
 (defun epjc (epj)
+  ;; Centuries between 2000 and epj.
   (/ (- epj 2000) 100))
 
 (defun per-sum (w coffs)
