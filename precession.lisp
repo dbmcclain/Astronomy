@@ -46,15 +46,17 @@
            :initial-value '(0 1))))
 
 (defun poly-eval (x coffs)
-  (car
-   (reduce (lambda (state coff)
-             (destructuring-bind (accum xx) state
-               (list (+ accum (* xx coff)) (* x xx))
-               ))
-           coffs
-           :from-end nil
-           :initial-value '(0 1))
-   ))
+  (if (< (abs x) 1.0)
+      (horner x coffs)
+    (car
+     (reduce (lambda (state coff)
+               (destructuring-bind (accum xx) state
+                 (list (+ accum (* xx coff)) (* x xx))
+                 ))
+             coffs
+             :from-end nil
+             :initial-value '(0 1))
+     )))
 
 ;; ------------------------------------------------------
 #|
