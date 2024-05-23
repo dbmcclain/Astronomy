@@ -94,11 +94,17 @@
 ;; ------------------------------------------------------
 ;; From IAU SOFA, J.Vrondak,et al, "New precession expressions, valid for long time intervals", AA, 2011
 ;; Computed for J2000.0
+;; Adapted from IAU/SOFA 2023 C Library
 
-(defun pecl (epoch)
+(defun epj (epoch)
+  ;; Compute the Julian Epoch for a given JDN
+  (+ 2000.0 (/ (- epch *j2000*) *days-per-year*)))
+
+(defun pecl (epj)
   ;; Precession of the Ecliptic
   ;; Compute unit vector to Ecliptic pole at epoch.
-  (let* ((dt    (c2k epoch))
+  ;; EPJ is a Julian Epoch
+  (let* ((dt    (/ (- epj 2000) 100))
          (eps0  #.(arcsec 84381.406))
          (pqpol #.#2A(( 5851.607687  -0.1189000  -0.00028913   0.000000101)
                       (-1600.886300   1.1689818  -0.00000020  -0.000000437)))
@@ -140,10 +146,11 @@
             (- (* c 2) (* s q)))
       )))
            
-(defun pequ (epoch)
-  ;; Precessoin of the Equator
+(defun pequ (epj)
+  ;; Precession of the Equator
   ;; Compute unit vector to Equatorial pole at epoch.
-  (let* ((dt    (c2k epoch))
+  ;; EPJ is a Julian Epoch
+  (let* ((dt    (/ (- epj 2000) 100))
          (xypol #.#2A((  5453.282155   0.4252841   -0.00037173   -0.000000152)
                       (-73750.930350  -0.7675452   -0.00018725    0.000000231)))
          (xyper #.#2A(( 256.75  -819.940624 75004.344875 81491.287984  1558.515853)
@@ -187,8 +194,9 @@
   ;; Compute long term precession matrix.
   ;; Produces a precession matrix that will transform from J2000.0 to Epoch.
   ;; To be applied against an XYZ vector arising from RA, Dec at J2000.0.
-  (let* ((z    (pequ epoch)) ;; pole of Equator
-         (eclp (pecl epoch)) ;; pole of Ecliptic
+  (let* ((epj  (epj epoch))
+         (z    (pequ epj)) ;; pole of Equator
+         (eclp (pecl epj)) ;; pole of Ecliptic
          (x    (vnormalize (vcross z eclp)))
          (y    (vcross z x)))
     (list x y z)))
