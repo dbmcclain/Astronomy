@@ -98,7 +98,7 @@
 
 (defun epj (epoch)
   ;; Compute the Julian Epoch for a given JDN
-  (+ 2000.0 (/ (- epoch *j2000*) *days-per-year*)))
+  (+ 2000.0 (y2k epoch)))
 
 (defun pecl (epj)
   ;; Precession of the Ecliptic
@@ -214,6 +214,11 @@
 (defun mat-mulv (m v)
   (mapcar (um:curry #'vdot v) m))
 
+(defun mat-mulm (m1 m2)
+  (mapcar (lambda (row)
+            (mat-mulv m1 row))
+          (trn m2)))
+
 (defun prec (ra dec from-epoch &optional (to-epoch (current-epoch)))
   ;; Precess using IAU long-term models for Ecliptic and Equatorial precession.
   (let* ((xyz1  (to-xyz ra dec))
@@ -223,6 +228,24 @@
 
 ;; ------------------------------------------------
 #|
+(let ((to-epoch   (jdn 2024 01 01 :lcl-ut 0))
+      (ra         (ra  06 59 30.1))
+      (dec        (dec 85 55 13  )))
+  (map-mult (#'to-ra #'to-dec)
+            (prec ra dec *j2000* to-epoch)))
+
+(let* ((epoch (jdn 2024 01 01 :lcl-ut 0))
+       (m     (pmat epoch)))
+  (mat-mulm m (trn m)))
+
+(let* ((to-epoch   (jdn 2024 01 01 :lcl-ut 0))
+       (from-epoch (- to-epoch (* 10 *days-per-year*)))
+       (ra         (ra  06 59 30.1))
+       (dec        (dec 85 55 13  ))
+       (m1         (trn (pmat from-epoch)))
+       (m2         (pmat to-epoch)))
+  (mat-mulm m2 m1))
+
 ;; Grubby routine from years ago...
 (defun qd-precess (ra dec nyr)
   (values (+ ra (* nyr (+ #.(secs 3.07496)
