@@ -115,6 +115,9 @@
   ;; Compute the Julian Epoch for a given JDN
   (+ 2000.0 (y2k epoch)))
 
+(defun epjc (epj)
+  (/ (- epj 2000) 100))
+
 (defun per-sum (w coffs)
   ;; perform a pair of periodic component sums
   (let ((s1 0)
@@ -154,7 +157,7 @@
   ;; Precession of the Ecliptic
   ;; Compute unit vector to Ecliptic pole at epoch.
   ;; EPJ is a Julian Epoch
-  (let* ((dt    (/ (- epj 2000) 100))
+  (let* ((dt    (epjc epj))
          (eps0  #.(arcsec 84381.406))
          (pqpol #.#(( 5851.607687  -0.1189000  -0.00028913   0.000000101)
                     (-1600.886300   1.1689818  -0.00000020  -0.000000437)))
@@ -191,7 +194,7 @@ pecl = ( +0.00041724785764001342 −0.40495491104576162693 +0.914336560531265523
   ;; Precession of the Equator
   ;; Compute unit vector to Equatorial pole at epoch.
   ;; EPJ is a Julian Epoch
-  (let* ((dt    (/ (- epj 2000) 100))         
+  (let* ((dt    (epjc epj))
          (xypol #.#((  5453.282155   0.4252841   -0.00037173   -0.000000152)
                     (-73750.930350  -0.7675452   -0.00018725    0.000000231)))
          (xyper #.#2A(( 256.75  -819.940624 75004.344875 81491.287984  1558.515853)
