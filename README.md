@@ -322,7 +322,7 @@ Accurate Precession between any two epochs - uses IAU Long-Term Ecliptic and Equ
 (map-mult (#'to-ra #'to-dec)
   (prec (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01)))
 =>
-(RA 9 24 26.071)
+(RA 9 23 12.106)
 (DEC 80 8 49.398)
 ```
 ---
