@@ -337,6 +337,8 @@ Well, a quick and dirty analysis over the whole sky, precessing for 50 years, ei
 
 The camera in my little 2-inch telescope has 1080 pixels spanning 43 arcmin across. Without any corrections for precession, the star could wind up off-frame. But, correcting for precession, our star will still end up pretty darn close to the image center, even with these errors.
 
+![Precession vs Position](https://github.com/dbmcclain/Astronomy/assets/3160577/18f17cd0-9ab1-4918-a19f-ac1ad9561a83)
+
 So here I provide the grubby version too. It allows you to precess approximately, without needing to specify a full Epoch. Just state the number of years.
 
 **precN** _RA-ang Dec-ang nyrs => RA-ang, Dec-ang_
