@@ -6,6 +6,23 @@
 (in-package #:astro)
 
 ;; ----------------------------------
+;;
+;; We Earthlings usually reckon with time reported as UTC, available
+;; from any number of time services. Atomic Time, TAI = UTC + ΔAT, is
+;; as kept by an Atomic Clock. ΔAT is the accumulated number of leap
+;; seconds applied to UTC. You have to look it up. It is currently
+;; 37s, as of 2024/05/20.
+;;
+;; And, finally, TT = TAI + 32.184s is "Terrestrial Time", used for
+;; all Astronomy calculations. That 32.184s will never change. It is
+;; part of the definition of TT arising from a special moment in 1977.
+;;
+;; So in this body of code, whenever you enter a UTC time for an
+;; epoch, we need to first add 37s to get TAI, and then add 32.184s,
+;; to reach TT. That is the reason for the two offsets being added in
+;; the code below.
+;;
+;; ----------------------------------
 
 #|
 -----------------------------
@@ -42,7 +59,12 @@ The Julian date for the current Universal Time is:
 ;; Julian Day Numbers
 
 (defun jdn (y m d &key (hh 0) (mm 0) (ss 0) (lcl-ut *qth-tz*) &allow-other-keys)
-  (let* ((ddx (+ d (/ (+ ss (* 60. (+ mm (* 60. (- hh (to-hrs lcl-ut)))))) 86400.))))
+  (let* ((ddx (+ d (/ (+ ss 37 32.184 (* 60. (+ mm (* 60. (- hh (to-hrs lcl-ut)))))) 86400.))))
+    ;;                 --------------
+    ;;                        |
+    ;;                        +-- Computation of TT from UTC
+    ;;                            (someday you might have to change the 37 leap secs)
+    ;;
     (multiple-value-bind (mx yx)
         (if (> m 2.)
             (values m y)

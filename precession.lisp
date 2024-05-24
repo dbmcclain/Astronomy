@@ -319,6 +319,10 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                     (precN ra dec 24))))
   (values))
 
+;; How bad is the grubby precession algorithm?  Over the whole sky,
+;; avoiding just 1 deg Dec near the poles, it looks like our maximum
+;; error would be 2.8 arcmin, on the sky, 50 years from J2000.
+
 (let* ((to-epoch   (jdn 2050 01 01 :lcl-ut 0))
        (img        (make-array '(181 360)
                                :element-type 'single-float
@@ -345,7 +349,39 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   (plt:plot-image 'plt-ra '(0 24) '(-90 90) img :clear t)
   (print (list mina maxa))
   )
-                     
+
+;; How large is the precession correction on the sky? Over the same
+;; region, whole sky, 50 years from J2000, the maximum precession
+;; correction amounts to a shift of 43 arcmin. So the grubby algorithm
+;; is within 7%.
+
+(let* ((to-epoch   (jdn 2050 01 01 :lcl-ut 0))
+       (img        (make-array '(181 360)
+                               :element-type 'single-float
+                               :initial-element 0.0f0))
+       (maxa   0)
+       (mina   most-positive-single-float))
+  (loop for ix from 0 below 360 do
+        (let ((ra (deg ix)))
+          (loop for jx from 1 below 180 do
+                  (let ((dec (deg (- jx 90))))
+                    (multiple-value-bind (rap decp)
+                        (prec ra dec *j2000* to-epoch)
+                      (let* ((v0 (to-xyz ra dec))
+                             (vp (to-xyz rap decp))
+                             (vx (vcross vp v0))
+                             (ang (to-arcsec (asin (vnorm vx)))))
+                        (unless (zerop ang)
+                          (setf mina (min mina ang)
+                                maxa (max maxa ang)))
+                        (setf (aref img jx ix) (float ang 1f0))
+                        ))))))
+  (plt:plot-image 'plt-ra '(0 24) '(-90 90) img :clear t
+                  :title "Precession Correction on the Sky"
+                  :xtitle "Right Ascension [hrs]"
+                  :ytitle "Declination [deg]")
+  (print (list mina maxa))
+  )
        
 
 ;; --------------------------------------------------
@@ -392,3 +428,79 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     (values)
     ))
 |#
+
+;; ------------------------------------------
+;; IAU 2006 Precession
+;; ICRS Procedures - International Celestial Reference System
+;; Ref, P.T.Wallace and N.Capitaine: "IAU 2006 precession-nutation procedures"
+
+(defun EO (epoch)
+  (- (ERA epoch) (#|GST0|# LMST0 epoch)))
+
+(defun ERA (epoch)
+  ;; Earth Rotation Angle
+  (let ((Tu  (d2k epoch))) ;; should actually use UT1 instead of UTC, but, oh well...
+    (turns (+ (mod epoch 1.0)
+              0.7790572732640
+              (* Tu 0.00273781191135448 )))
+    ))
+
+(defun M_CIO (epoch)
+  ;; Simplified precession, good to 0.12 arcsec in 21st cy,
+  ;; good to 0.85 arcsec over ±2 cy
+  ;;
+  ;;  v_TIRS = R(TT,UT) . v_GCRS
+  ;;  v_CIRS = M_CIO(TT) . v_GCRS
+  ;;
+  ;; This function is M_CIO(TT).
+  ;;
+  (let* ((τ  (d2k epoch))
+         (Ω  (rad (+ 2.182 (* τ -9.242d-4))))
+         (cs (cis Ω))
+         (X  (+ (* τ 2.6603d-7)   (* -33.2d-6 (imagpart cs))))
+         (Y  (+ (* τ τ -8.14d-14) (*  44.6d-6 (realpart cs)))))
+    `(( 1  0  ,(- X))
+      ( 0  1  ,(- Y))
+      (,X ,Y  1))
+    ))
+
+(defun GCRS-to-CIRS (ra dec &optional (epoch (current-epoch)))
+  (let* ((v_GCRS  (to-xyz ra dec))
+         (M_CIO   (M_CIO epoch))
+         (v_CIRS  (mat-mulv M_CIO v_GCRS)))
+    (to-thphi v_CIRS)))
+
+#|
+;; Check from Wallace and Capitaine
+;; For TT = 2400000.5+53750.892855138888889(JD)
+;;   MCIO ≈ (( +1.00000000000000000 +0.00000000000000000 −0.00058224012792061)
+;;           ( +0.00000000000000000 +1.00000000000000000 −0.00004374943683668)
+;;           ( +0.00058224012792061 +0.00004374943683668 +1.00000000000000000))
+;;
+(let* ((tt (+ 2400000.5 53750.892855138888889)))
+  (M_CIO tt))
+=>
+(( 1                    0                    -5.822401279206334E-4)
+ ( 0                    1                    -4.374943683668478E-5)
+ ( 5.822401279206334E-4 4.374943683668478E-5 1                    ))
+|#
+
+#|
+(let ((epoch (jdn 2024 01 01 :lcl-ut 0))
+      (ra    (ra  06 59 30.1))
+      (dec   (dec 85 55 13  )))
+  (terpri)
+  (print (list :ERA (to-ra (era epoch))))
+  (print (list :EO  (to-ra (eo epoch))))
+  (print (list :START (to-ra ra) (to-dec dec)))
+  (multiple-value-bind (rap decp)
+      (map-mult (#'to-ra #'to-dec)
+                 (prec ra dec epoch))
+    (print (list rap decp)))
+  (multiple-value-bind (rap decp)
+      (map-mult (#'to-ra #'to-dec)
+                 (GCRS-to-CIRS ra dec epoch))
+    (print (list rap decp)))
+  (values)
+  )
+ |#
