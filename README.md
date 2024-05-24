@@ -333,7 +333,7 @@ Okay, in the past, we used a grubby little routine on our calculators to precess
 ```
 You see the _Tan(δ)_ in there? It means you shouldn't try to use this near the North/South poles. And that tangent can make a huge change in RA. But so what? You are near the pole. How bad on the sky is this really? 
 
-Well, a quick and dirty analysis over the whole sky, precessing for 50 years, either side from J2000, shows at most 2.8 arcmin error on the sky, even if you operate as close as 1 deg from the poles, and even as the maximum change in apparent position due to precession is 43 arcmins. The camera in my little 2-inch telescope has 1080 pixels spanning 43 arcmin across. Without any corrections for precession, the star could wind up off-frame. But with precession correctoins, your star will still end up pretty darn close to the image center, even with these errors.
+Well, a quick and dirty analysis over the whole sky, precessing for 50 years, either side from J2000, shows at most 2.8 arcmin error on the sky, even if you operate as close as 1 deg from the poles, and even as the maximum change in apparent position due to precession is 43 arcmins. The camera in my little 2-inch telescope has 1080 pixels spanning 43 arcmin across. Without any corrections for precession, the star could wind up off-frame. But, correcting for precession, our star will still end up pretty darn close to the image center, even with these errors.
 
 So here we provide the grubby version too. It allows you to precess approximately, without needing to specify a full Epoch. Just state the number of years.
 
