@@ -3,8 +3,17 @@
 
 (in-package :cl-user)
 
-(defpackage #:angle
+(defpackage #:astro.convenience
   (:use #:common-lisp)
+  (:export
+   #:db
+   #:mvb
+   #:mvl
+   #:map-mult
+   ))
+
+(defpackage #:astro.angle
+  (:use #:common-lisp #:astro.convenience)
   (:shadow
    #:sin
    #:cos
@@ -65,6 +74,7 @@
    #:rotx
    #:rotx-ang
 
+   #:frac
    #:unipolar
    #:bipolar
 
@@ -80,8 +90,8 @@
 
 
 (defpackage #:astro
-  (:use #:common-lisp #:angle)
-  (:shadowing-import-from #:angle
+  (:use #:common-lisp #:astro.convenience #:astro.angle)
+  (:shadowing-import-from #:astro.angle
    #:sin
    #:cos
    #:tan
@@ -91,7 +101,10 @@
    #:cis
    #:phase)
   #.`(:export
-      ,@(loop for sym being the external-symbols of '#:angle
+      ,@(loop for sym being the external-symbols of '#:astro.angle
+              collect sym))
+  #.`(:export
+      ,@(loop for sym being the external-symbols of '#:astro.convenience
               collect sym))
   (:export
    #:ra
@@ -141,8 +154,6 @@
    #:airmass
    #:radec-airmass
    #:hadec-airmass
-   
-   #:map-mult
 ))
 
 

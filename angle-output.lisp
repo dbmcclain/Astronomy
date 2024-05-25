@@ -3,21 +3,21 @@
 ;; DM/RAL  2024/05/20 06:07:25 UTC
 ;; ----------------------------------
 
-(in-package #:angle)
+(in-package #:astro.angle)
 
 ;; -----------------------------------------------
 ;; used mainly for output prep
 
-(defun tmod (x)
+(defun frac (x)
   (mod x 1.0))
 
 (defun unipolar (x)
   ;; Normalize background angle value to Principal Values, (0 360) deg
-  (turns (tmod (to-turns x))))
+  (turns (frac (to-turns x))))
 
 (defun bipolar (x)
   ;; Normalize background angle value to Principal Values, (-180 180) deg
-  (turns (- (tmod (+ (to-turns x) 1/2)) 1/2)))
+  (turns (- (frac (+ (to-turns x) 1/2)) 1/2)))
 
 ;; ----------------------------------
 

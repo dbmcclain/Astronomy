@@ -24,6 +24,15 @@
 ;;
 ;; ----------------------------------
 
+(defvar *ΔAT*    37)      ;; Leap seconds added to UTC to match TAI
+(defvar *DUT1*   -0.0448) ;; = (UT1 - UTC) secs, was -44.8ms on 2023-06-14
+
+(defconstant +TAI-OFFSET+  32.184)       ;; secs, TT = TAI + +TAI-OFFSET+, never changes
+(defconstant +J2000+       2_451_545.0)  ;; Standard Epoch for Jan 1, 2000 at 12:00
+(defconstant +sec/day+     86400)
+(defconstant +days/year+   365.25)
+(defconstant +days/cent+   36525)
+
 #|
 -----------------------------
 From AAVSO conversion website:
@@ -52,29 +61,37 @@ The Julian date for the current Universal Time is:
         d
         -32075.))
    -0.5
-   (/ (+ ss (* 60. (+ mm (* 60. (- hh (to-hrs lcl-ut)))))) 86400.)
+   (hms hh mm ss)
+   (- lcl-ut)
    ))
 |#
+#|
+(defun lmst (&key (lon *qth-lon*) (epoch (current-epoch)))
+  ;; Local Mean Sidereal Time at longitude long, expressed in degs.
+  ;; = RA on Meridian
+  (unipolar (+ (lmst0 epoch) lon)))
+|#
+
+
 ;; ------------------------------------------------------------------------
 ;; Julian Day Numbers
 
-(defun jdn (y m d &key (hh 0) (mm 0) (ss 0) (lcl-ut *qth-tz*) &allow-other-keys)
-  (let* ((ddx (+ d (/ (+ ss 37 32.184 (* 60. (+ mm (* 60. (- hh (to-hrs lcl-ut)))))) 86400.))))
-    ;;                 --------------
-    ;;                        |
-    ;;                        +-- Computation of TT from UTC
-    ;;                            (someday you might have to change the 37 leap secs)
-    ;;
-    (multiple-value-bind (mx yx)
-        (if (> m 2.)
-            (values m y)
-          (values (+ m 12.) (1- y)))
-      (let* ((a (truncate yx 100.))
-             (b (- 2. a (truncate a -4.)))) ;; for Gregorian dates, for Julian dates use B = 0
-        (+ (truncate (* 365.25 (+ yx 4716.)))
-           (truncate (* 30.6001 (1+ mx)))
-           ddx b -1524.5)
-        ))))
+(defun ymd (yyyy &optional (mm 1) (dd 1))
+  (mvb (mx yx)
+       (if (> mm 2.)
+           (values mm yyyy)
+         (values (+ mm 12.) (1- yyyy)))
+    (let* ((a (truncate yx 100.))
+           (b (- 2. a (truncate a -4.)))) ;; for Gregorian dates, for Julian dates use B = 0
+      (+ (truncate (* 365.25 (+ yx 4716.)))
+         (truncate (* 30.6001 (1+ mx)))
+         dd b -1524.5)
+      )))
+    
+(defun jdn (y m d &key (time 0) (lcl-ut *qth-tz*) &allow-other-keys)
+  ;; Compute JDN(UTC)
+  (+ (ymd y m d)
+     (- time lcl-ut)))
          
 (defun current-epoch ()
   (multiple-value-bind (ss mm hh dd mo yyyy dow daylight-p ut-lcl)
@@ -82,7 +99,7 @@ The Julian date for the current Universal Time is:
     (declare (ignore dow))
     (when daylight-p
       (incf hh))
-    (jdn yyyy mo dd :hh hh :mm mm :ss ss :lcl-ut (hrs (- ut-lcl)))))
+    (jdn yyyy mo dd :time (hms hh mm ss) :lcl-ut (hrs (- ut-lcl)))))
 
 #|
 (current-epoch)
@@ -115,12 +132,32 @@ The Julian date for the current Universal Time is:
               (truncate (* hfrac 100.))
             (let ((ss (* 100. mfrac)))
               (jdn yyyy mo dd
-                   :hh hh
-                   :mm mm
-                   :ss ss
+                   :time (hms hh mm ss)
                    :lcl-ut lcl-ut)
               )))))))
 
 (defun d.t (x &key (lcl-ut *qth-tz*))
   (date.time x :lcl-ut lcl-ut))
+
+;; -----------------------------------------------
+
+(defun jyrs (dt)
+  ;; Julian years for dt days
+  (/ dt +days/year+))
+
+(defun jcs (dt)
+  ;; Julian centuries for dt days
+  (/ dt +days/cent+))
+
+(defun d2k (epoch)
+  ;; days since J2000
+  (- epoch +j2000+))
+
+(defun y2k (epoch)
+  ;; years since J2000
+  (jyrs (d2k epoch)))
+
+(defun c2k (epoch)
+  ;; centuries since J2000
+  (/ (y2k epoch) 100))
 

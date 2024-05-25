@@ -14,51 +14,6 @@
 (defvar *days-per-century* 36525)
 
 ;; ------------------------------------------------------
-
-(defun jyrs (dt)
-  ;; Julian years for dt days
-  (/ dt *days-per-year*))
-
-(defun jcs (dt)
-  ;; Julian centuries for dt days
-  (/ dt *days-per-century*))
-
-(defun d2k (epoch)
-  ;; days since J2000
-  (- epoch *j2000*))
-
-(defun y2k (epoch)
-  ;; years since J2000
-  (jyrs (d2k epoch)))
-
-(defun c2k (epoch)
-  ;; centuries since J2000
-  (/ (y2k epoch) 100))
-
-(defun horner (x coffs)
-  (car
-   (reduce (lambda (coff state)
-             (destructuring-bind (accum xx) state
-               (list (+ coff (* xx accum)) (* x xx))
-               ))
-           coffs
-           :from-end t
-           :initial-value '(0 1))))
-
-(defun poly-eval (x coffs)
-  (if (< (abs x) 1.0)
-      (horner x coffs)
-    (car
-     (reduce (lambda (state coff)
-               (destructuring-bind (accum xx) state
-                 (list (+ accum (* xx coff)) (* x xx))
-                 ))
-             coffs
-             :from-end nil
-             :initial-value '(0 1))
-     )))
-
-;; ------------------------------------------------------
 #|
  
 ;; Mean obliquity not really constant, but varies by
@@ -429,13 +384,14 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     ))
 |#
 
+#|
 ;; ------------------------------------------
 ;; IAU 2006 Precession
 ;; ICRS Procedures - International Celestial Reference System
 ;; Ref, P.T.Wallace and N.Capitaine: "IAU 2006 precession-nutation procedures"
 
 (defun EO (epoch)
-  (- (ERA epoch) (#|GST0|# LMST0 epoch)))
+  (- (ERA epoch) (GMST epoch)))
 
 (defun ERA (epoch)
   ;; Earth Rotation Angle
@@ -504,3 +460,4 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   (values)
   )
  |#
+|#
