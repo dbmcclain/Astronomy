@@ -9,9 +9,9 @@
 ;; Precession
 ;;
 
-(defvar *j2000*            (jdn 2000 01 01 :hh 12 :lcl-ut 0))
-(defvar *days-per-year*    365.25)
-(defvar *days-per-century* 36525)
+(defvar *j2000*            (jdn 2000. 01 01 :hh 12. :lcl-ut 0))
+(defvar *days-per-year*    365.25d0)
+(defvar *days-per-century* 36525.)
 
 ;; ------------------------------------------------------
 #|
@@ -20,10 +20,10 @@
 ;; about -47" per century.
 (defvar *mean-obliquity*
   ;; J2000 from 2023 Almanac
-  `(,(arcsec 84381.406)       ;; ≈ 23.4 deg
-    ,(arcsec   -46.836_769))) ;; change in obliquity per century
+  `(,(arcsec 84381.406d0)       ;; ≈ 23.4 deg
+    ,(arcsec   -46.836_769d0))) ;; change in obliquity per century
   
-(defvar *precession*       (arcsec    50.28796_195))   ;; annual general precession - 2023 Almanac
+(defvar *precession*       (arcsec    50.28796_195d0))   ;; annual general precession - 2023 Almanac
 
 (defun obliquity-for-epoch (epoch)
   ;; Mean obliquity is declining at rate of -47 arcsec/century.
