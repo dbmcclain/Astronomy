@@ -246,13 +246,17 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 ---
 ## Epoch Construction
 
-**\*J2000\*** _=> epoch_
-- For fast reference to the standard epoch = JDN 2451545.0.
+**\+J2000\+** _=> epoch_
+- DEFCONSTANT for fast reference to the standard epoch = JDN 2451545.0.
+
+**YMD** _yyyy &optional mm dd => epoch_
+- Compute JDN for 0h UT on specified date
+- Date analog of **HMS** and **DMS**.
   
-**JDN** _yyyy mm dd &key hh mm ss lcl-ut &allow-other-keys => epoch_
+**JDN** _yyyy mm dd &key time lcl-ut &allow-other-keys => epoch_
 - Compute JDN for specified date & time.
 - Defaults to zero hours and local timezone offset.
-- `(JDN 2000 01 01 :hh 12 :lcl-ut 0) => 2451545.0  ;; = *J2000*`
+- `(JDN 2000 01 01 :time (HMS 12) :lcl-ut 0) => 2451545.0  ;; = +J2000+`
 - While Lisp is fond of using '-' as a spacer in symbol names, we also mean that quite literally here for keyword _:LCL-UT_. IOW, we mean Local minus UT, usually stated in hours. So use `:LCL-UT (hrs -7)` to mean Mountain Standard Time zone.
 - Like UTC time, JDN is universally the same for all observers, regardless of their local clock time. The time zone info is needed to correct your reported clock time to become UTC time, before computing the JDN.
 
@@ -271,10 +275,13 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 ---
 ## Mean Siderial Time
 
-**LMST0** _epoch => ang_
+**ERA** _epoch => ang_
+- Compute Earth Rotation Angle for epoch.
+  
+**GMST** _epoch => ang_
 - Compute siderial time at Greenwich for given epoch.
 - To get the LMST anywhere else, add your longitude to this result.
-- `(to-hms (unipolar (lmst0 *j2000*))) => (HMS 18 41 50.548)`
+- `(to-hms (unipolar (gmst *j2000*))) => (HMS 6 39 52.271)`
 
 **LMST** _&key lon epoch => ang_
 - Compute siderial time.
