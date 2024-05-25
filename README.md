@@ -251,6 +251,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 
 **YMD** _yyyy &optional mm dd => epoch_
 - Compute JDN for 0h UT on specified date
+- mm and dd default to 1.
 - Date analog of **HMS** and **DMS**.
   
 **JDN** _yyyy mm dd &key time lcl-ut &allow-other-keys => epoch_
