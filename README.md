@@ -251,6 +251,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 
 **YMD** _yyyy &optional mm dd => epoch_
 - Compute JDN for 0h UT on specified date
+- mm and dd default to 1.
 - Date analog of **HMS** and **DMS**.
   
 **JDN** _yyyy mm dd &key time lcl-ut &allow-other-keys => epoch_
@@ -281,7 +282,9 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 **GMST** _epoch => ang_
 - Compute siderial time at Greenwich for given epoch.
 - To get the LMST anywhere else, add your longitude to this result.
-- `(to-hms (unipolar (gmst *j2000*))) => (HMS 6 39 52.271)`
+- `(to-hms (gmst +j2000+)) => (HMS 6 39 52.271)`
+- Validated to within 1ms against USNO for 50 years, beginning epoch 2000-05-24T00:00:00Z, incrementing by 365d.
+![GMST Validation](https://github.com/dbmcclain/Astronomy/assets/3160577/41ee87ed-64fc-4dd6-81d4-b8cbfb4f4ef1)
 
 **LMST** _&key lon epoch => ang_
 - Compute siderial time.
@@ -327,7 +330,7 @@ Accurate Precession between any two epochs - uses IAU Long-Term Ecliptic and Equ
 - Claims to be within 100 arcsec for 200,000 years on either side of J2000.0. (Who would know? if it isn't.)
 ```
 (map-mult (#'to-ra #'to-dec)
-  (prec (ra 9 20) (dec 80 15) *j2000* (d.t 2024_01_01)))
+  (prec (ra 9 20) (dec 80 15) +j2000+ (d.t 2024_01_01)))
 =>
 (RA 9 23 12.106)
 (DEC 80 8 49.398)
@@ -344,8 +347,11 @@ Well, a quick and dirty analysis over the whole sky, precessing for 50 years, ei
 
 The camera in my little 2-inch telescope has 1080 pixel width, spanning 43 arcmin across. Without any corrections for precession, the star could wind up off-frame. But, correcting for precession, our star will still end up pretty darn close to the image center, even with these errors.
 
-The little pic here shows the relative amount of precession correction, measured on the sky. Max correction is not at the poles...
+The little pic here shows the relative amount of precession correction, measured on the sky. (Black = None, White = Max) Despite the _Tan(δ)_, Max correction is not at the Equatorial poles.
+
 ![Precession vs Position](https://github.com/dbmcclain/Astronomy/assets/3160577/30386066-38b3-4384-9014-014c36c22f25)
+
+Precession corrections on the sky, actual displacements seen, as opposed to increments in RA, are greatest in a broad band surrounding the Ecliptic plane. Those dark regions, which show little precession correction, are near the Ecliptic poles.
 
 So here I provide the grubby version too. It allows you to precess approximately, without needing to specify a full Epoch. Just state the number of years.
 
