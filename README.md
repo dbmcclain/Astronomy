@@ -283,6 +283,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - To get the LMST anywhere else, add your longitude to this result.
 - `(to-hms (gmst +j2000+)) => (HMS 6 39 52.271)`
 - Validated to within 1ms against USNO for 50 years, beginning epoch 2000-05-24T00:00:00Z, incrementing by 365d.
+![GMST Validation](https://github.com/dbmcclain/Astronomy/assets/3160577/aead2191-26c8-4ab1-9d61-894ea6638f54)
 
 **LMST** _&key lon epoch => ang_
 - Compute siderial time.
