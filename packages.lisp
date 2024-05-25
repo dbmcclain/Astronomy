@@ -120,17 +120,17 @@
    #:ra-to-ha
    #:ha-to-ra
 
+   #:ymd
    #:jdn
    #:current-epoch
    #:date.time
    #:d.t
 
+   #:era
    #:prec
    #:precn
-   ;; #:precessn
-   ;; #:precess
 
-   #:lmst0
+   #:gmst
    #:lmst
    #:ha
 
