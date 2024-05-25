@@ -285,6 +285,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - `(to-hms (gmst +j2000+)) => (HMS 6 39 52.271)`
 - Validated to within 1ms against USNO for 50 years, beginning epoch 2000-05-24T00:00:00Z, incrementing by 365d.
   - mean ≈ -1ms, sigma ≈ 28μs
+    
 ![GMST Validation](https://github.com/dbmcclain/Astronomy/assets/3160577/542c5bd1-584f-4ac1-88ff-118b726de31d)
 
 
