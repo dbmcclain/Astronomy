@@ -7,26 +7,13 @@
 
 ;; ----------------------------------------
 
-(defun horner (x coffs)
-  (um:nlet iter ((ans  0)
-                 (cs   (reverse coffs)))
-    (if (endp cs)
-        ans
-      (go-iter (+ (car cs) (* x ans)) (cdr cs))
-      )))
-
 (defun poly-eval (x coffs)
-  (if (< (abs x) 1.0)
-      (horner x coffs)
-    (car
-     (reduce (lambda (state coff)
-               (destructuring-bind (accum xx) state
-                 (list (+ accum (* xx coff)) (* x xx))
-                 ))
-             coffs
-             :from-end nil
-             :initial-value '(0 1))
-     )))
+  ;; Horner's rule...
+  (reduce (lambda (c acc)
+            (+ c (* x acc)))
+          coffs
+          :from-end t
+          :initial-value 0))
 
 ;; ------------------------------------------------------------------------
 ;;
