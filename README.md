@@ -286,7 +286,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - Validated to within 1ms against USNO for 50 years, beginning epoch 2000-05-24T00:00:00Z, incrementing by 365d.
   - mean ≈ -1ms, sigma ≈ 28μs
     
-![GMST Validation](https://github.com/dbmcclain/Astronomy/assets/3160577/cf16402b-9f68-4281-89f4-a5c56f834109)
+![GMST Validation](https://github.com/dbmcclain/Astronomy/assets/3160577/3103ef77-94fd-4a8a-9ea3-2e9d03af152e)
 
 
 **LMST** _&key lon epoch => ang_
