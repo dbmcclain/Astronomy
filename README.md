@@ -347,7 +347,7 @@ Well, a quick and dirty analysis over the whole sky, precessing for 50 years, ei
 
 The camera in my little 2-inch telescope has 1080 pixel width, spanning 43 arcmin across. Without any corrections for precession, the star could wind up off-frame. But, correcting for precession, our star will still end up pretty darn close to the image center, even with these errors.
 
-The little pic here shows the relative amount of precession correction, measured on the sky. (Black = None, White = Max) Max correction is not at the poles.
+The little pic here shows the relative amount of precession correction, measured on the sky. (Black = None, White = Max) Max correction is not at the Equatorial poles.
 ![Precession vs Position](https://github.com/dbmcclain/Astronomy/assets/3160577/30386066-38b3-4384-9014-014c36c22f25)
 
 Precession corrections on the sky, actual displacements seen, as opposed to increments in RA, are greatest in a broad band surrounding the Ecliptic plane. Those dark regions, which show little precession correction, are near the Ecliptic poles.
