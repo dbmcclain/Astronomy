@@ -63,7 +63,24 @@
 
 ;; ------------------------------------------------------
 ;; From IAU/SOFA 2023 C Library
-;; See also, J.Vrondak,et al, "New precession expressions, valid for long time intervals", 2011 AA
+;;
+;; See also, J.Vrondak,et al, "New precession expressions, valid for
+;; long time intervals", 2011 AA
+;;
+;; Many thanks also to P.T.Wallace and N.Capitaine, and G.H.Kaplan, for
+;; their papers and for the SOFA library at IAU.
+;;
+;; N. Capitaine and P. T. Wallace: "High precision methods for
+;; locating the celestial intermediate pole and origin”
+;;
+;; P. T. Wallace and N. Capitaine: "IAU 2006 precession-nutation
+;; procedures”
+;;
+;; G.H.Kaplan, "The IAU Resolutions on Astronomical Reference Systems,
+;; Time Scales, and Earth Rotation Models - Explanation and
+;; Implementation"
+
+
 ;; Computed for Mean Ecliptic and Equator of J2000.0
 
 (defun epj (epoch)
