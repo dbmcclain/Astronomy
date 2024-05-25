@@ -85,11 +85,11 @@
 
 (defun epj (epoch)
   ;; Compute the Julian Epoch for a given JDN
-  (+ 2000.0 (y2k epoch)))
+  (+ 2000. (y2k epoch)))
 
 (defun epjc (epj)
   ;; Centuries between 2000 and epj.
-  (/ (- epj 2000) 100))
+  (/ (- epj 2000.) 100.))
 
 (defun per-sum (w coffs)
   ;; perform a pair of periodic component sums
@@ -101,9 +101,9 @@
              (c  (realpart cs))
              (s  (imagpart cs)))
         (incf s1 (+ (* c (aref coffs ix 1))
-                    (* s (aref coffs ix 3))))
-        (incf s2 (+ (* c (aref coffs ix 2))
-                    (* s (aref coffs ix 4))))
+                    (* s (aref coffs ix 3.))))
+        (incf s2 (+ (* c (aref coffs ix 2.))
+                    (* s (aref coffs ix 4.))))
         ))
     (values s1 s2)
     ))
@@ -131,17 +131,17 @@
   ;; Compute unit vector to Ecliptic pole at epoch.
   ;; EPJ is a Julian Epoch
   (let* ((dt    (epjc epj))
-         (eps0  #.(arcsec 84381.406))
-         (pqpol #.#(( 5851.607687  -0.1189000  -0.00028913   0.000000101)
-                    (-1600.886300   1.1689818  -0.00000020  -0.000000437)))
-         (pqper #.#2A(( 708.15 -5486.751211 -684.661560   667.666730 -5523.863691)
-                      (2309.00   -17.127623 2446.283880 -2354.886252  -549.747450)
-                      (1620.00  -617.517403  399.671049  -428.152441  -310.998056)
-                      ( 492.20   413.442940 -356.652376   376.202861   421.535876)
-                      (1183.00    78.614193 -186.387003   184.778874   -36.776172)
-                      ( 622.00  -180.732815 -316.800070   335.321713  -145.278396)
-                      ( 882.00   -87.676083  198.296701  -185.138669   -34.744450)
-                      ( 547.00    46.140315  101.135679  -120.972830    22.885731))))
+         (eps0  #.(arcsec 84381.406d0))
+         (pqpol #.#(( 5851.607687d0  -0.1189000d0  -0.00028913d0   0.000000101d0)
+                    (-1600.886300d0   1.1689818d0  -0.00000020d0  -0.000000437d0)))
+         (pqper #.#2A(( 708.15d0 -5486.751211d0 -684.661560d0   667.666730d0 -5523.863691d0)
+                      (2309.00d0   -17.127623d0 2446.283880d0 -2354.886252d0  -549.747450d0)
+                      (1620.00d0  -617.517403d0  399.671049d0  -428.152441d0  -310.998056d0)
+                      ( 492.20d0   413.442940d0 -356.652376d0   376.202861d0   421.535876d0)
+                      (1183.00d0    78.614193d0 -186.387003d0   184.778874d0   -36.776172d0)
+                      ( 622.00d0  -180.732815d0 -316.800070d0   335.321713d0  -145.278396d0)
+                      ( 882.00d0   -87.676083d0  198.296701d0  -185.138669d0   -34.744450d0)
+                      ( 547.00d0    46.140315d0  101.135679d0  -120.972830d0    22.885731d0))))
     (multiple-value-bind (psum qsum)
         (pol-per-sum dt pqpol pqper)
       (let* ((p  (to-rad (arcsec psum)))
@@ -156,7 +156,7 @@
         ))))
 
 #|
-(pecl (epj 1219339.078000))
+(pecl (epj 1219339.078000d0))
 => (4.172478576400136E-4 -0.4049549137582655 0.9143365593299115)
 Check from Vondrak:
 For JDN = 1219339.078000
@@ -168,22 +168,22 @@ pecl = ( +0.00041724785764001342 −0.40495491104576162693 +0.914336560531265523
   ;; Compute unit vector to Equatorial pole at epoch.
   ;; EPJ is a Julian Epoch
   (let* ((dt    (epjc epj))
-         (xypol #.#((  5453.282155   0.4252841   -0.00037173   -0.000000152)
-                    (-73750.930350  -0.7675452   -0.00018725    0.000000231)))
-         (xyper #.#2A(( 256.75  -819.940624 75004.344875 81491.287984  1558.515853)
-                      ( 708.15 -8444.676815   624.033993   787.163481  7774.939698)
-                      ( 274.20  2600.009459  1251.136893  1251.296102 -2219.534038)
-                      ( 241.45  2755.175630 -1102.212834 -1257.950837 -2523.969396)
-                      (2309.00  -167.659835 -2660.664980 -2966.799730   247.850422)
-                      ( 492.20   871.855056   699.291817   639.744522  -846.485643)
-                      ( 396.10    44.769698   153.167220   131.600209 -1393.124055)
-                      ( 288.90  -512.313065  -950.865637  -445.040117   368.526116)
-                      ( 231.10  -819.415595   499.754645   584.522874   749.045012)
-                      (1610.00  -538.071099  -145.188210   -89.756563   444.704518)
-                      ( 620.00  -189.793622   558.116553   524.429630   235.934465)
-                      ( 157.87  -402.922932   -23.923029   -13.549067   374.049623)
-                      ( 220.30   179.516345  -165.405086  -210.157124  -171.330180)
-                      (1200.00    -9.814756     9.344131   -44.919798   -22.899655))))
+         (xypol #.#((  5453.282155d0   0.4252841   -0.00037173   -0.000000152)
+                    (-73750.930350d0  -0.7675452   -0.00018725    0.000000231)))
+         (xyper #.#2A(( 256.75d0  -819.940624d0 75004.344875d0 81491.287984d0  1558.515853d0)
+                      ( 708.15d0 -8444.676815d0   624.033993d0   787.163481d0  7774.939698d0)
+                      ( 274.20d0  2600.009459d0  1251.136893d0  1251.296102d0 -2219.534038d0)
+                      ( 241.45d0  2755.175630d0 -1102.212834d0 -1257.950837d0 -2523.969396d0)
+                      (2309.00d0  -167.659835d0 -2660.664980d0 -2966.799730d0   247.850422d0)
+                      ( 492.20d0   871.855056d0   699.291817d0   639.744522d0  -846.485643d0)
+                      ( 396.10d0    44.769698d0   153.167220d0   131.600209d0 -1393.124055d0)
+                      ( 288.90d0  -512.313065d0  -950.865637d0  -445.040117d0   368.526116d0)
+                      ( 231.10d0  -819.415595d0   499.754645d0   584.522874d0   749.045012d0)
+                      (1610.00d0  -538.071099d0  -145.188210d0   -89.756563d0   444.704518d0)
+                      ( 620.00d0  -189.793622d0   558.116553d0   524.429630d0   235.934465d0)
+                      ( 157.87d0  -402.922932d0   -23.923029d0   -13.549067d0   374.049623d0)
+                      ( 220.30d0   179.516345d0  -165.405086d0  -210.157124d0  -171.330180d0)
+                      (1200.00d0    -9.814756d0     9.344131d0   -44.919798d0   -22.899655d0))))
     (multiple-value-bind (xsum ysum)
         (pol-per-sum dt xypol xyper)
       (let* ((x  (to-rad (arcsec xsum)))
@@ -193,7 +193,7 @@ pecl = ( +0.00041724785764001342 −0.40495491104576162693 +0.914336560531265523
         ))))
 
 #|
-(pequ (epj 1219339.078000))
+(pequ (epj 1219339.078000d0))
 => (-0.2943764379736904 -0.11719098023370263 0.9484770882408209)
 Check from Vondrak:
 For JDN = 1219339.078000
@@ -212,7 +212,7 @@ pequ = ( −0.29437643797369031532 −0.11719098023370257855 +0.9484770882408209
     (list xv yv zv)))
 
 #|
-(pmat 1219339.078000)
+(pmat 1219339.078000d0)
 =>
 ((0.6847339092712664 0.6664779364917481 0.2948671457856752)
  (-0.6666948224337814 0.7362563645372211 -0.11595076290574136)
@@ -250,8 +250,8 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 ;; Grubby routine from years ago...
 
 (defun precN (ra dec nyr)
-  (let* ((m  #.(secs 3.07496))
-         (n  #.(arcsec 20.0431))
+  (let* ((m  #.(secs 3.07496d0))
+         (n  #.(arcsec 20.0431d0))
          (cs (* nyr n (cis ra))))
     (values (+ ra (* nyr m) (* (imagpart cs) (tan dec)))
             (+ dec (realpart cs))
@@ -259,54 +259,54 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 ;; ------------------------------------------------
 #|
-(let ((to-epoch   (jdn 2024 01 01 :lcl-ut 0))
-      (ra         (ra  06 59 30.1))
-      (dec        (dec 85 55 13  )))
+(let ((to-epoch   (jdn 2024. 01 01 :lcl-ut 0))
+      (ra         (ra  06. 59. 30.1))
+      (dec        (dec 85. 55. 13.  )))
   (map-mult (#'to-ra #'to-dec)
-            (prec ra dec *j2000* to-epoch)))
+            (prec ra dec +j2000+ to-epoch)))
 
-(let* ((epoch (jdn 2024 01 01 :lcl-ut 0))
+(let* ((epoch (jdn 2024. 01 01 :lcl-ut 0))
        (m     (pmat epoch)))
   (print m)
   (mat-mulm m (trn m)))
 
-(let* ((to-epoch   (jdn 2024 01 01 :lcl-ut 0))
-       (from-epoch (- to-epoch (* 10 *days-per-year*)))
-       (ra         (ra  16 59 30.1))
-       (dec        (dec 85 55 13  ))
+(let* ((to-epoch   (jdn 2024. 01 01 :lcl-ut 0))
+       (from-epoch (- to-epoch (* 10. *days-per-year*)))
+       (ra         (ra  16. 59. 30.1))
+       (dec        (dec 85. 55. 13  ))
        (m1         (trn (pmat from-epoch)))
        (m2         (pmat to-epoch)))
   (mat-mulm m2 m1))
 
 ;; --------------------------------------------------
 
-(let ((to-epoch   (jdn 2050 01 01 :lcl-ut 0))
+(let ((to-epoch   (jdn 2050. 01 01 :lcl-ut 0))
       (ra         (ra  00 00 00))
-      (dec        (dec 87 00 00  )))
+      (dec        (dec 87. 00 00  )))
   (print (multiple-value-list
           (map-mult (#'to-ra #'to-dec)
                     (prec ra dec *j2000* to-epoch))))
   (print (multiple-value-list
           (map-mult (#'to-ra #'to-dec)
-                    (precN ra dec 24))))
+                    (precN ra dec 24.))))
   (values))
 
 ;; How bad is the grubby precession algorithm?  Over the whole sky,
 ;; avoiding just 1 deg Dec near the poles, it looks like our maximum
 ;; error would be 2.8 arcmin, on the sky, 50 years from J2000.
 
-(let* ((to-epoch   (jdn 2050 01 01 :lcl-ut 0))
-       (img        (make-array '(181 360)
+(let* ((to-epoch   (jdn 2050. 01 01 :lcl-ut 0))
+       (img        (make-array '(181. 360.)
                                :element-type 'single-float
                                :initial-element 0.0f0))
        (maxa   0)
        (mina   most-positive-single-float))
-  (loop for ix from 0 below 360 do
+  (loop for ix from 0 below 360. do
         (let ((ra (deg ix)))
-          (loop for jx from 1 below 178 do
-                  (let ((dec (deg (- jx 90))))
+          (loop for jx from 1 below 180. do
+                  (let ((dec (deg (- jx 90.))))
                     (multiple-value-bind (rap decp)
-                        (prec ra dec *j2000* to-epoch)
+                        (prec ra dec +j2000+ to-epoch)
                       (multiple-value-bind (rag decg)
                           (precN ra dec (round (y2k to-epoch)))
                         (let* ((vp (to-xyz rap decp))
@@ -318,7 +318,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                                   maxa (max maxa ang)))
                           (setf (aref img jx ix) (float ang 1f0))
                           )))))))
-  (plt:plot-image 'plt-ra '(0 24) '(-90 90) img :clear t)
+  (plt:plot-image 'plt-ra '(0 24.) '(-90. 90.) img :clear t)
   (print (list mina maxa))
   )
 
@@ -327,18 +327,18 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 ;; correction amounts to a shift of 43 arcmin. So the grubby algorithm
 ;; is within 7%.
 
-(let* ((to-epoch   (jdn 2050 01 01 :lcl-ut 0))
-       (img        (make-array '(181 360)
+(let* ((to-epoch   (jdn 2050. 01 01 :lcl-ut 0))
+       (img        (make-array '(181. 360.)
                                :element-type 'single-float
                                :initial-element 0.0f0))
        (maxa   0)
        (mina   most-positive-single-float))
-  (loop for ix from 0 below 360 do
+  (loop for ix from 0 below 360. do
         (let ((ra (deg ix)))
-          (loop for jx from 1 below 180 do
-                  (let ((dec (deg (- jx 90))))
+          (loop for jx from 1 below 180. do
+                  (let ((dec (deg (- jx 90.))))
                     (multiple-value-bind (rap decp)
-                        (prec ra dec *j2000* to-epoch)
+                        (prec ra dec +j2000+ to-epoch)
                       (let* ((v0 (to-xyz ra dec))
                              (vp (to-xyz rap decp))
                              (vx (vcross vp v0))
@@ -348,7 +348,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                                 maxa (max maxa ang)))
                         (setf (aref img jx ix) (float ang 1f0))
                         ))))))
-  (plt:plot-image 'plt-ra '(0 24) '(-90 90) img :clear t
+  (plt:plot-image 'plt-ra '(0 24.) '(-90. 90.) img :clear t
                   :title "Precession Correction on the Sky"
                   :xtitle "Right Ascension [hrs]"
                   :ytitle "Declination [deg]")
@@ -358,14 +358,14 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 ;; --------------------------------------------------
 ;; Test out the various precession methods
-(let ((to-epoch (jdn 2024 01 01 :lcl-ut 0))
-      (ra       (ra  06 59 30.1))
-      (dec      (dec 85 55 13  )))
+(let ((to-epoch (jdn 2024. 01 01 :lcl-ut 0))
+      (ra       (ra  06. 59. 30.1))
+      (dec      (dec 85. 55. 13.  )))
   (terpri)
   (print (list :START (to-ra ra) (to-dec dec)))
 
   (multiple-value-bind (rap decp)
-      (precess ra dec *j2000* to-epoch)
+      (precess ra dec +j2000+ to-epoch)
     (print (list :PRECESS (to-ra rap)
                  (to-dec decp))))
   
@@ -389,7 +389,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
       ))
   
   (multiple-value-bind (ra2 dec2)
-      (prec ra dec *j2000* to-epoch)
+      (prec ra dec +j2000+ to-epoch)
     (print (list :PREC (to-ra ra2)
                  (to-dec dec2)))
 
@@ -414,8 +414,8 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;; Earth Rotation Angle
   (let ((Tu  (d2k epoch))) ;; should actually use UT1 instead of UTC, but, oh well...
     (turns (+ (mod epoch 1.0)
-              0.7790572732640
-              (* Tu 0.00273781191135448 )))
+              0.7790572732640d0
+              (* Tu 0.00273781191135448d0 )))
     ))
 
 (defun M_CIO (epoch)
@@ -428,7 +428,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;; This function is M_CIO(TT).
   ;;
   (let* ((τ  (d2k epoch))
-         (Ω  (rad (+ 2.182 (* τ -9.242d-4))))
+         (Ω  (rad (+ 2.182d0 (* τ -9.242d-4))))
          (cs (cis Ω))
          (X  (+ (* τ 2.6603d-7)   (* -33.2d-6 (imagpart cs))))
          (Y  (+ (* τ τ -8.14d-14) (*  44.6d-6 (realpart cs)))))
@@ -450,7 +450,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 ;;           ( +0.00000000000000000 +1.00000000000000000 −0.00004374943683668)
 ;;           ( +0.00058224012792061 +0.00004374943683668 +1.00000000000000000))
 ;;
-(let* ((tt (+ 2400000.5 53750.892855138888889)))
+(let* ((tt (+ 2400000.5d0 53750.892855138888889d0)))
   (M_CIO tt))
 =>
 (( 1                    0                    -5.822401279206334E-4)
