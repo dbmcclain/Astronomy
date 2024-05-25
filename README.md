@@ -349,6 +349,7 @@ The camera in my little 2-inch telescope has 1080 pixel width, spanning 43 arcmi
 
 The little pic here shows the relative amount of precession correction, measured on the sky. Max correction is not at the poles.
 ![Precession vs Position](https://github.com/dbmcclain/Astronomy/assets/3160577/30386066-38b3-4384-9014-014c36c22f25)
+
 Precession corrections on the sky, actual displacements seen, as opposed to increments in RA, is dominated by a band surrounding the Ecliptic plane. Those dark regions, which show little effect, are the Ecliptic poles.
 
 So here I provide the grubby version too. It allows you to precess approximately, without needing to specify a full Epoch. Just state the number of years.
