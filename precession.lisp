@@ -25,7 +25,7 @@
 ;;
 ;; G.H.Kaplan, "The IAU Resolutions on Astronomical Reference Systems,
 ;; Time Scales, and Earth Rotation Models - Explanation and
-;; Implementation"
+;; Implementation", US Naval Observatory, Circular No. 179., Oct 2005.
 ;;
 ;; "Explanatory Supplement to the Astronomical Almanac", E.Urban and
 ;; P.Kenneth Seidelmann, 3rd edition, University Science Books.
