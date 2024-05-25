@@ -9,54 +9,6 @@
 ;; Precession
 ;;
 ;; ------------------------------------------------------
-#|
- 
-;; Mean obliquity not really constant, but varies by
-;; about -47" per century.
-(defvar *mean-obliquity*
-  ;; J2000 from 2023 Almanac
-  `(,(arcsec 84381.406d0)       ;; ≈ 23.4 deg
-    ,(arcsec   -46.836_769d0))) ;; change in obliquity per century
-  
-(defvar *precession*       (arcsec    50.28796_195d0))   ;; annual general precession - 2023 Almanac
-
-(defun obliquity-for-epoch (epoch)
-  ;; Mean obliquity is declining at rate of -47 arcsec/century.
-  (horner (c2k epoch) *mean-obliquity*))
-
-;; ------------------------------------------------------
-
-(defvar *start-obliquity*  (obliquity-for-epoch +J2000+))
-(defvar *end-obliquity*    (obliquity-for-epoch +J2000+))
-
-(defun to-ecliptic (ra dec)
-  (rotx-ang ra dec (- *start-obliquity*)))
-
-(defun from-ecliptic (long lat)
-  (rotx-ang long lat *end-obliquity*))
-
-;; ------------------------------------------------------
-
-(defun precessn (ra dec nyr)
-  ;; Precess nyr using mean obliquity for J2000.
-  ;; It would be more accurate to specify starting and ending epochs using PRECESS below.
-  ;; Using Ecliptic coords prevents problems near NCP.
-  (multiple-value-bind (lon lat)
-      (to-ecliptic ra dec)
-    (from-ecliptic (+ lon (* nyr *precession*)) lat)
-    ))
-
-;; ------------------------------------------------------
-
-(defun precess (ra dec from-epoch &optional (to-epoch (current-epoch)))
-  ;; for RA, Dec expressed in deg, epochs as JDN
-  (let ((*start-obliquity* (obliquity-for-epoch from-epoch))
-        (*end-obliquity*   (obliquity-for-epoch to-epoch)))
-    (precessn ra dec (jyrs (- to-epoch from-epoch)))
-    ))
-|#
-
-;; ------------------------------------------------------
 ;; From IAU/SOFA 2023 C Library
 ;;
 ;; See also, J.Vrondak,et al, "New precession expressions, valid for
@@ -74,6 +26,11 @@
 ;; G.H.Kaplan, "The IAU Resolutions on Astronomical Reference Systems,
 ;; Time Scales, and Earth Rotation Models - Explanation and
 ;; Implementation"
+;;
+;; "Explanatory Supplement to the Astronomical Almanac", E.Urban and
+;; P.Kenneth Seidelmann, 3rd edition, University Science Books.
+;;
+;; "The Astronomical Almanac for the Year 2023", US Govt Printing Office.
 
 
 ;; Computed for Mean Ecliptic and Equator of J2000.0
