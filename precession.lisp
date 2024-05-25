@@ -8,11 +8,6 @@
 ;; ----------------------------------
 ;; Precession
 ;;
-
-(defvar *j2000*            (jdn 2000. 01 01 :hh 12. :lcl-ut 0))
-(defvar *days-per-year*    365.25d0)
-(defvar *days-per-century* 36525.)
-
 ;; ------------------------------------------------------
 #|
  
@@ -31,8 +26,8 @@
 
 ;; ------------------------------------------------------
 
-(defvar *start-obliquity*  (obliquity-for-epoch *J2000*))
-(defvar *end-obliquity*    (obliquity-for-epoch *J2000*))
+(defvar *start-obliquity*  (obliquity-for-epoch +J2000+))
+(defvar *end-obliquity*    (obliquity-for-epoch +J2000+))
 
 (defun to-ecliptic (ra dec)
   (rotx-ang ra dec (- *start-obliquity*)))
@@ -271,7 +266,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   (mat-mulm m (trn m)))
 
 (let* ((to-epoch   (jdn 2024. 01 01 :lcl-ut 0))
-       (from-epoch (- to-epoch (* 10. *days-per-year*)))
+       (from-epoch (- to-epoch (* 10. +days/year+)))
        (ra         (ra  16. 59. 30.1))
        (dec        (dec 85. 55. 13  ))
        (m1         (trn (pmat from-epoch)))
@@ -285,7 +280,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
       (dec        (dec 87. 00 00  )))
   (print (multiple-value-list
           (map-mult (#'to-ra #'to-dec)
-                    (prec ra dec *j2000* to-epoch))))
+                    (prec ra dec +j2000+ to-epoch))))
   (print (multiple-value-list
           (map-mult (#'to-ra #'to-dec)
                     (precN ra dec 24.))))
