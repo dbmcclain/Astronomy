@@ -68,8 +68,8 @@
         ))
 
 (unless (boundp '*1turn*)
-  (set-ang-mode :turns)
-  ;; (set-ang-mode :rad)
+  ;; (set-ang-mode :turns)
+  (set-ang-mode :rad)
   )
 
 ;; ----------------------------------
@@ -86,6 +86,9 @@
 
 (defun arcsec (x)
   (arcmin (/ x 60.)))
+
+(defun mas (x)
+  (arcsec (/ x 1000)))
 
 (defun hrs (x)
   (turns (/ x 24.)))
@@ -122,6 +125,9 @@
 
 (defun to-arcsec (x)
   (* 60. (to-arcmin x)))
+
+(defun to-mas (x)
+  (* 1000 (to-arcsec x)))
 
 (defun to-hrs (x)
   (* (to-turns x) 24.))

@@ -44,37 +44,34 @@
 ;;
 ;; - DM/RAL 2024/05/25 12:53:56 UTC
 
-(defun ERA (epochUTC)
+(defun ERA (epochUT1)
   ;; Earth Rotation Angle
-  (let* ((JD0  (+ 1/2 (floor (- epochUTC 1/2))))
-         (H    (- epochUTC JD0))
-         (Dut  (d2k JD0))
-         (a0   #.(- 0.779_057_273_2640d0
-                    1/2
-                    (to-turns (arcsec 0.014506d0))))
-         (a1   0.002_737_811_911_354_48d0))
+  (let* ((Dut  (d2k epochUT1)))
     (unipolar
      (turns
-      (+ a0
-         (* Dut a1)
-         (* H   a1)
-         H
+      (+ 0.779_057_273_2640d0
+         (* Dut 0.002_737_811_911_354_48d0)
+         (frac Dut)
          )))
     ))
 
-(defun GMST (epochUTC)
-  ;; Greenwich mean siderial time
-  (let* ((Tc   (c2k epochUTC))  ;; centuries from J2000
-         (ERA  (ERA epochUTC))
-         ;; precession of Equinox, arcsec/cent
+(defun EO (epoch_TT)
+  ;; Equation of Mean Equinox
+  (let* ((Tc  (c2k epoch_TT))
          (prec (poly-eval Tc '(   0.014506d0
                                4612.156534d0
                                   1.3915817d0
                                  -0.00000044d0
                                  -0.000029956d0
                                  -0.0000000368d0))))
+    (- (arcsec prec))))
+
+(defun GMST (epochUT1)
+  ;; Greenwich mean siderial time
+  (let* ((ERA  (ERA epochUT1))
+         (EO   (EO  epochUT1)))
     (unipolar
-     (+ ERA (arcsec prec)))
+     (- ERA EO))
     ))
 
 (defun LMST (&key (epoch (current-epoch))

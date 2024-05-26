@@ -30,6 +30,7 @@
    #:deg
    #:arcmin
    #:arcsec
+   #:mas
    #:hrs
    #:mins
    #:secs
@@ -43,6 +44,7 @@
    #:to-deg
    #:to-arcmin
    #:to-arcsec
+   #:to-mas
    #:to-hrs
    #:to-mins
    #:to-secs
