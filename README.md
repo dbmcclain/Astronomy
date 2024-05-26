@@ -282,7 +282,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 **GMST** _epoch => ang_
 - Compute siderial time at Greenwich for given epoch.
 - To get the LMST anywhere else, add your longitude to this result.
-- `(to-hms (gmst +j2000+)) => (HMS 6 39 52.271)`
+- `(to-hms (gmst +j2000+)) => (HMS 18 41 50.549)`
 - Validated to within a few μsec of USNO for 50 years, beginning epoch 2000-05-24T00:00:00Z, incrementing by 365d.
   - mean ≈ 0.47μs, sigma ≈ 28μs
   - validation used UTC instead of the proper UT1 and TT    
