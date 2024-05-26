@@ -32,20 +32,25 @@
 ;;
 ;; Validated to within 1ms against USNO, testing every year for 50
 ;; years, starting with 2000-05-24T00:00:00Z, and incrementing by 365 days.
+;; Results (GMST - USNO): mean = -0.97ms, sigma = 0.028ms
+;;
 ;; - DM/RAL 2024/05/25 12:53:56 UTC
 
 (defun ERA (epochUTC)
   ;; Earth Rotation Angle
   (let* ((JD0  (+ 1/2 (floor (- epochUTC 1/2))))
          (H    (- epochUTC JD0))
-         (Dut  (d2k JD0)))
+         (Dut  (d2k JD0))
+         (a0   #.(- 0.779_057_273_2640d0
+                    1/2
+                    (to-turns (arcsec 0.014506d0))))
+         (a1  0.002_737_811_911_354_48d0))
     (unipolar
      (turns
-      (+ #.(- 0.779_057_273_2640d0
-              1/2
-              (to-turns (arcsec 0.014506d0)))
-         (* Dut 0.002_737_811_911_354_48d0)
-         (* H   1.002_737_811_911_354_48d0)
+      (+ a0
+         (* Dut a1)
+         (* H   a1)
+         H
          )))
     ))
 
