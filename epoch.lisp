@@ -24,10 +24,6 @@
 ;;
 ;; ----------------------------------
 
-(defvar *ΔAT*    37)      ;; Leap seconds added to UTC to match TAI
-(defvar *DUT1*   -0.0448) ;; = (UT1 - UTC) secs, was -44.8ms on 2023-06-14
-
-(defconstant +TAI-OFFSET+  32.184)       ;; secs, TT = TAI + +TAI-OFFSET+, never changes
 (defconstant +J2000+       2_451_545.0)  ;; Standard Epoch for Jan 1, 2000 at 12:00
 (defconstant +sec/day+     86400)
 (defconstant +days/year+   365.25)

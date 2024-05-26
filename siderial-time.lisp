@@ -18,14 +18,22 @@
 ;; ------------------------------------------------------------------------
 ;;
 
-(defun JD_UT1 (JD_TT)
+(defvar *ΔAT*    37)      ;; Leap seconds added to UTC to match TAI
+(defvar *DUT1*   -0.0448) ;; = (UT1 - UTC) secs, was -44.8ms on 2023-06-14
+
+(defconstant +TAI-OFFSET+  32.184) ;; secs, TT = TAI + +TAI-OFFSET+, never changes
+
+(defun JD_UTC-to-UT1 (JD_UTC)
+  (+ JD_UTC *DUT1*))
+
+(defun JD_UTC-to-TT (JD_UTC)
+  (+ JD_UTC (/ (+ +TAI-OFFSET+ *ΔAT*) +sec/day+)))
+
+(defun JD_TT-to-UT1 (JD_TT)
   ;; Compute UT1 from TT (which itself came from UTC)
   (let ((ΔT  (+ +TAI-OFFSET+ *ΔAT* (- *DUT1*)))) ;; secs
     (- JD_TT (/ ΔT +sec/day+))
     ))
-
-(defun JD_TT (JD_UTC)
-  (+ JD_UTC (/ (+ +TAI-OFFSET+ *ΔAT*) +sec/day+)))
 
 ;; ----------------------------------------
 ;; Local Mean Siderial Time
@@ -44,7 +52,7 @@
          (a0   #.(- 0.779_057_273_2640d0
                     1/2
                     (to-turns (arcsec 0.014506d0))))
-         (a1  0.002_737_811_911_354_48d0))
+         (a1   0.002_737_811_911_354_48d0))
     (unipolar
      (turns
       (+ a0
