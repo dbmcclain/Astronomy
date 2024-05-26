@@ -40,6 +40,9 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 **arcsec** _arcsecs => ang_
 - 60 arcsec = 1 arcmin.
 
+**mas** _mas => ang_
+- 1000 mas = 1 arcsec.
+
 **dms** _ddd &optional mm ss => ang_
 - An easy way to specify an angle in deg, arcmin, arcsec.
 
@@ -83,6 +86,8 @@ View any angle in any measure, e.g., `(to-μrad (arcsec 1)) => 4.848.`
 **to-arcmin** _ang => arcmin_
   
 **to-arcsec** _ang => arcsec_
+
+**to-mas** _ang => mas_
   
 **to-dms** _ang => (DMS ddd mm ss.sss)_
   
