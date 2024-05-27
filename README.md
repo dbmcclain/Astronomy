@@ -357,7 +357,7 @@ Which method is the quickest to use? Probably the one that we always used in our
 **prec** _RA-ang Dec-ang from-epoch &optional to-epoch => RA_ang, Dec_ang_
 - Implements the IAU Long-Term Precession models for Ecliptic and Equatorial polar precession.
 - to-epoch defaults to now.
-- As good as it gets, sans Nutation and Aberration.
+- As good as it gets, in this library of code - incorporates the most complete, long-term, precession and nutation.
 - Claims to be within 100 arcsec for 200,000 years on either side of J2000.0. (Who would know? if it isn't.)
 ```
 (map-mult (#'to-ra #'to-dec)
@@ -395,10 +395,13 @@ So here I provide the grubby version too. It allows you to precess approximately
 **preca** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang
 - Does the precession using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
 - Claims better than 1 arcsec accuracy for the next century.
+- From-epoch defaults to +J2000+, and to-epoch defaults to `(CURRENT-EPOCH)`
 
 **prec-aa** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang_
 - Does the precession using another cheap approximation, coming out of the Explanatory Supplement to the American Almanac.
 - Claims better than 1 arcsec accurcy for the next century.
+- From-epoch defaults to +J2000+, and to-epoch defaults to `(CURRENT-EPOCH)`
+
 ---
 ## Az/El and Equatorial Coordinates
 Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
