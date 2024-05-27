@@ -182,7 +182,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 ;; --------------------------------------------
 ;; Using precision long-term Equatorial and Ecliptic pole positions
 
-(defun prec (ra dec &optional (from-epoch +j2000+) (to-epoch (current-epoch)))
+(defun prec (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
   ;; Precess using IAU long-term models for Ecliptic and Equatorial precession.
   (let* ((xyz1  (to-xyz ra dec))
          (xyz2k (mat-mulv (trn (pmat from-epoch)) xyz1))
@@ -256,7 +256,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 ;; ------------------------------------------------------------
 
-(defun preca (ra dec &optional (from-epoch +j2000+) (to-epoch (current-epoch)))
+(defun preca (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
   ;; CIRS-based precession
   (mvb (ra2k dec2k)
       (CIRS-to-GCRS ra dec from-epoch)
@@ -565,7 +565,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 ;; ------------------------------------------------------
 
-(defun prec-aa (ra dec &optional (from-epoch +j2000+) (to-epoch (current-epoch)))
+(defun prec-aa (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
   (mvb (ra2k dec2k)
       (cirs-to-gcrs-aa ra dec from-epoch)
     (gcrs-to-cirs-aa ra2k dec2k to-epoch)))
