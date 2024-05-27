@@ -36,13 +36,17 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 
 **arcmin** _arcmins => ang_
 - 60 arcmin = 1 deg.
+- The approximate limit of human visual resolution.
 
 **arcsec** _arcsecs => ang_
 - 60 arcsec = 1 arcmin.
+- About the angular size of an American quarter dollar coin, viewed from a distance of 3.25 miles.
 
 **mas** _mas => ang_
 - 1,000 mas = 1 arcsec.
 - About the angular size of an American quarter dollar coin, stationed in NYC, and viewed from Los Angeles.
+  - That same quarter, stationed on the Moon, would have an angular extent of about 14μas.
+  - VLBI Astronomy can discern 0.1μas.
 
 **dms** _ddd &optional mm ss => ang_
 - An easy way to specify an angle in deg, arcmin, arcsec.
