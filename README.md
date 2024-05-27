@@ -38,7 +38,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 **arcmin** _arcmins => ang_
 - 60 arcmin = 1 deg.
 - 1 arcmin ≈ the approximate limit of human visual resolution.
-  - The same quarter dollar viewed from a distance of 286 feet. Almost the length of a football field. 
+  - That same quarter dollar viewed from a distance of 286 feet. Almost the length of a football field. 
 
 **arcsec** _arcsecs => ang_
 - 60 arcsec = 1 arcmin.
