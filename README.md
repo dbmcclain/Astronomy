@@ -343,7 +343,7 @@ Since the 2000-2006 IAU Resolutions for the ICRS position framework, GMST has be
 ```
 ---
 ## Accurate Precession
-Accurate Precession between any two epochs - uses IAU Long-Term Ecliptic and Equatorial polar precession models. Adopted from the IAU/SOFA C routines in the 2023 release.
+Accurate Precession between any two epochs - uses IAU Long-Term Ecliptic and Equatorial polar precession models. Adopted from the IAU/SOFA C routines from their 2023 release.
 
 ---
 So, what exactly is "accurate" precession? 
