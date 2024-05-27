@@ -218,148 +218,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
             )))
 
 ;; ------------------------------------------------
-#|
-(let ((to-epoch   (jdn 2024. 01 01 :lcl-ut 0))
-      (ra         (ra  06. 59. 30.1))
-      (dec        (dec 85. 55. 13.  )))
-  (map-mult (#'to-ra #'to-dec)
-            (prec ra dec +j2000+ to-epoch)))
 
-(let* ((epoch (jdn 2024. 01 01 :lcl-ut 0))
-       (m     (pmat epoch)))
-  (print m)
-  (mat-mulm m (trn m)))
-
-(let* ((to-epoch   (jdn 2024. 01 01 :lcl-ut 0))
-       (from-epoch (- to-epoch (* 10. +days/year+)))
-       (ra         (ra  16. 59. 30.1))
-       (dec        (dec 85. 55. 13  ))
-       (m1         (trn (pmat from-epoch)))
-       (m2         (pmat to-epoch)))
-  (mat-mulm m2 m1))
-
-;; --------------------------------------------------
-
-(let ((to-epoch   (jdn 2050. 01 01 :lcl-ut 0))
-      (ra         (ra  00 00 00))
-      (dec        (dec 87. 00 00  )))
-  (print (multiple-value-list
-          (map-mult (#'to-ra #'to-dec)
-                    (prec ra dec +j2000+ to-epoch))))
-  (print (multiple-value-list
-          (map-mult (#'to-ra #'to-dec)
-                    (precN ra dec 24.))))
-  (values))
-
-;; How bad is the grubby precession algorithm?  Over the whole sky,
-;; avoiding just 1 deg Dec near the poles, it looks like our maximum
-;; error would be 2.8 arcmin, on the sky, 50 years from J2000.
-
-(let* ((to-epoch   (jdn 2050. 01 01 :lcl-ut 0))
-       (img        (make-array '(181. 360.)
-                               :element-type 'single-float
-                               :initial-element 0.0f0))
-       (maxa   0)
-       (mina   most-positive-single-float))
-  (loop for ix from 0 below 360. do
-        (let ((ra (deg ix)))
-          (loop for jx from 1 below 180. do
-                  (let ((dec (deg (- jx 90.))))
-                    (multiple-value-bind (rap decp)
-                        (prec ra dec +j2000+ to-epoch)
-                      (multiple-value-bind (rag decg)
-                          (precN ra dec (round (y2k to-epoch)))
-                        (let* ((vp (to-xyz rap decp))
-                               (vg (to-xyz rag decg))
-                               (vx (vcross vp vg))
-                               (ang (to-arcsec (asin (vnorm vx)))))
-                          (unless (zerop ang)
-                            (setf mina (min mina ang)
-                                  maxa (max maxa ang)))
-                          (setf (aref img jx ix) (float ang 1f0))
-                          )))))))
-  (plt:plot-image 'plt-ra '(0 24.) '(-90. 90.) img :clear t)
-  (print (list mina maxa))
-  )
-
-;; How large is the precession correction on the sky? Over the same
-;; region, whole sky, 50 years from J2000, the maximum precession
-;; correction amounts to a shift of 43 arcmin. So the grubby algorithm
-;; is within 7%.
-
-(let* ((to-epoch   (jdn 2050. 01 01 :lcl-ut 0))
-       (img        (make-array '(181. 360.)
-                               :element-type 'single-float
-                               :initial-element 0.0f0))
-       (maxa   0)
-       (mina   most-positive-single-float))
-  (loop for ix from 0 below 360. do
-        (let ((ra (deg ix)))
-          (loop for jx from 1 below 180. do
-                  (let ((dec (deg (- jx 90.))))
-                    (multiple-value-bind (rap decp)
-                        (prec ra dec +j2000+ to-epoch)
-                      (let* ((v0 (to-xyz ra dec))
-                             (vp (to-xyz rap decp))
-                             (vx (vcross vp v0))
-                             (ang (to-arcsec (asin (vnorm vx)))))
-                        (unless (zerop ang)
-                          (setf mina (min mina ang)
-                                maxa (max maxa ang)))
-                        (setf (aref img jx ix) (float ang 1f0))
-                        ))))))
-  (plt:plot-image 'plt-ra '(0 24.) '(-90. 90.) img :clear t
-                  :title "Precession Correction on the Sky"
-                  :xtitle "Right Ascension [hrs]"
-                  :ytitle "Declination [deg]")
-  (print (list mina maxa))
-  )
-       
-
-;; --------------------------------------------------
-;; Test out the various precession methods
-(let ((to-epoch (jdn 2024. 01 01 :lcl-ut 0))
-      (ra       (ra  06. 59. 30.1))
-      (dec      (dec 85. 55. 13.  )))
-  (terpri)
-  (print (list :START (to-ra ra) (to-dec dec)))
-
-  (multiple-value-bind (rap decp)
-      (precess ra dec +j2000+ to-epoch)
-    (print (list :PRECESS (to-ra rap)
-                 (to-dec decp))))
-  
-  (let ((djd (y2k to-epoch)))
-    (multiple-value-bind (ran decn)
-        (precessn ra dec djd)
-      (print (list :PRECESSN (to-ra ran) (to-dec decn))))
-    
-    (multiple-value-bind (raq decq)
-        (precN ra dec djd)
-      #|
-      (print (list (to-ra-h.ms ra)
-                   (to-ra-h.ms rap)
-                   (to-ra-h.ms raq)))
-      (print (list (to-dec-d.ms dec)
-                   (to-dec-d.ms decp)
-                   (to-dec-d.ms decq)))
-      |#
-      (print (list :GRUBBY (to-ra raq)
-                   (to-dec decq)))
-      ))
-  
-  (multiple-value-bind (ra2 dec2)
-      (prec ra dec +j2000+ to-epoch)
-    (print (list :PREC (to-ra ra2)
-                 (to-dec dec2)))
-
-    #|
-      (print (list (to-arcsec (bipolar (- rap raq)))
-                   (to-arcsec (bipolar (- decp decq)))))
-      |#
-    (values)
-    ))
-|#
 
 ;; ------------------------------------------
 ;; IAU 2006 Precession
@@ -367,6 +226,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 ;; Ref, P.T.Wallace and N.Capitaine: "IAU 2006 precession-nutation procedures"
 
 (defun GCRS-XYZ (epoch)
+  ;; Compute CIP of epoch.
   ;; Approx, assumes small angle s=0
   (let* ((τ  (d2k epoch))
          (Ω  (rad (+ 2.182d0 (* τ -9.242d-4))))
@@ -470,40 +330,6 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
      )))))
 |#
 
-#|
-(defun R_TIRS (epoch)
-  ;; Simplified precession, good to 0.12 arcsec in 21st cy,
-  ;; good to 0.85 arcsec over ±2 cy
-  ;;
-  ;;  v_TIRS = R(TT,UT) . v_GCRS
-  ;;  v_CIRS = M_CIO(TT) . v_GCRS
-  ;;
-  ;; This function is R(TT,UT).
-  ;;
-  (db (X Y Z) (GCRS-XYZ epoch)
-    (let* ((a     (/ (1+ Z)))
-           
-           (β     (ERA epoch)) ;; ignoring small angle s
-           (csβ   (cis β))
-           (cxy   (complex X Y))
-           (cprod (* cxy csβ))
-           (cβ    (realpart csβ))
-           (sβ    (imagpart csβ))
-           
-           (a13   (- (realpart cprod)))
-           (a11   (+ cβ           (* a X a13)))
-           (a12   (- (* a Y a13)  sβ))
-           
-           (a23   (imagpart cprod))
-           (a21   (- sβ           (* a X a23)))
-           (a22   (- cβ           (* a Y a23))))
-      
-      `(( ,a11 ,a12 ,a13)
-        ( ,a21 ,a22 ,a23)
-        ( ,X   ,Y   ,Z))
-      )))
-|#
-
 (defun R1 (x)
   (let* ((cs  (cis x))
          (cx  (realpart cs))
@@ -565,25 +391,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     (GCRS-to-CIRS ra2k dec2k to-epoch)
     ))
 
-#|
-(let ((epoch (jdn 2024 01 01 :lcl-ut 0))
-      (ra    (ra  06 59 30.1))
-      (dec   (dec 85 55 13  )))
-  (terpri)
-  (print (list :ERA (to-ra (era epoch))))
-  (print (list :EO  (to-ra (eo epoch))))
-  (print (list :START (to-ra ra) (to-dec dec)))
-  (multiple-value-bind (rap decp)
-      (map-mult (#'to-ra #'to-dec)
-                 (prec ra dec epoch))
-    (print (list rap decp)))
-  (multiple-value-bind (rap decp)
-      (map-mult (#'to-ra #'to-dec)
-                 (GCRS-to-CIRS ra dec epoch))
-    (print (list rap decp)))
-  (values)
-  )
- |#
+;; -------------------------------------------------------------
 
 (defun chk-prec (epoch_TT)
   ;; Check our system
@@ -735,6 +543,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
         :ΔEO_qlt (to-arcsec (- EOqlt EO)) ))
       (values))))
 
+;; -------------------------------------------------------------
 #|
 (chk-prec +j2000+)
 (chk-prec (ymd 2024))
@@ -742,7 +551,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 (gcrs-to-tirs 0 0 +j2000+)
 
 (let* ((ra  (ra 6 0 0))
-       (dec (dec 90 0 0))
+       (dec (dec 60 0 0))
        (from 1950)
        (to   2024)
        (nyrs (- to from))
