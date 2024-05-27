@@ -41,7 +41,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 - 60 arcsec = 1 arcmin.
 
 **mas** _mas => ang_
-- 1000 mas = 1 arcsec.
+- 1,000 mas = 1 arcsec.
 
 **dms** _ddd &optional mm ss => ang_
 - An easy way to specify an angle in deg, arcmin, arcsec.
