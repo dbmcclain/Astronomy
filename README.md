@@ -33,21 +33,21 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 **deg** _degs => ang_ 
 - 360 deg = 1 turn.
 - `(to-turns (deg 90)) => 0.25`
-- The angular size of an American quarter dollar coin, or 1 Euro coin, viewd from a distance of almost 6 feet.
+- 1 deg ≈ the angular size of an American quarter dollar coin, or 1 Euro coin, viewd from a distance of almost 6 feet.
 
 **arcmin** _arcmins => ang_
 - 60 arcmin = 1 deg.
-- The approximate limit of human visual resolution.
+- 1 arcmin ≈ the approximate limit of human visual resolution.
   - The same quarter dollar viewed from a distance of 286 feet. Almost the length of a football field. 
 
 **arcsec** _arcsecs => ang_
 - 60 arcsec = 1 arcmin.
-- About the angular size of an American quarter dollar coin, viewed from a distance of 3.25 miles.
+- 1 arcsec ≈ the angular size of an American quarter dollar coin, viewed from a distance of 3.25 miles.
 - Our MMT Telescope could point and track to an accuracy of 0.1 arcsec. (ca. 1980) I.e., the coin at 32 miles.
 
 **mas** _mas => ang_
 - 1,000 mas = 1 arcsec.
-- About the angular size of an American quarter dollar coin, stationed in NYC, and viewed from Los Angeles.
+- 1 mas ≈ the angular size of an American quarter dollar coin, stationed in NYC, and viewed from Los Angeles.
   - That same quarter, stationed on the Moon, would have an angular extent of about 14μas.
   - VLBI Astronomy can discern 0.1μas.
 
