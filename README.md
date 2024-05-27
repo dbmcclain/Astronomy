@@ -352,6 +352,7 @@ So, in that regard, I have included 4 different ways to perform stellar precessi
 
 Which method is the quickest to use? Probably the one that we always used in our calculators. Which method is the most precise? Probably the one using both the precessed and nutated Ecliptic and Equatorial pole positions. But even the other two, based on GCRS to CIRS transforms, claim to be sub-arcsec in precision. Who knows? As long as it is better than 1 arcmin, I personally don't have a dog in that fight.
 
+---
 
 **prec** _RA-ang Dec-ang from-epoch &optional to-epoch => RA_ang, Dec_ang_
 - Implements the IAU Long-Term Precession models for Ecliptic and Equatorial polar precession.
