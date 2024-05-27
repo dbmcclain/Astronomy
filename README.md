@@ -39,7 +39,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 - 60 arcmin = 1 deg.
 - 1 arcmin ≈ the approximate limit of human visual acuity.
   - That same quarter dollar viewed from a distance of 286 feet. Almost the length of a football field.
-  - Mizar and Alcor are separated by 11 arcmin. They were an ancient test of visual acuity. I can see them separated in the night sky, but my eyes are dark-adapted. And that means I'm seeing with the rod cells of my eyes, not the cone cells. Those rod cells do have a higher angular resolution, but they are relagated to the periphery of the fovea. And so it seems a lower quality of acuity despite their higher resolution.
+  - Mizar and Alcor are separated by 11 arcmin. They were an ancient test of visual acuity. I can see them separated in the night sky, but my eyes are dark-adapted. And that means I'm seeing with the rod cells of my eyes, not the cone cells. Those rod cells do have a higher angular resolution, but they are relagated to the periphery of the fovea. And so it seems a lower quality of acuity despite their higher resolution. You often have to view with averted vision.
 
 **arcsec** _arcsecs => ang_
 - 60 arcsec = 1 arcmin.
