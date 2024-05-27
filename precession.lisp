@@ -192,7 +192,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 ;; --------------------------------------------------
 ;; Grubby routine from years ago...
 
-(defun precN (ra dec nyr)
+(defun precN (ra dec &optional (nyr (y2k (current-epoch))))
   (let* ((m  #.(secs 3.07496d0))
          (n  #.(arcsec 20.0431d0))
          (cs (* nyr n (cis ra))))
