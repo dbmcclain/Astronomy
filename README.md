@@ -331,6 +331,28 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 ## Accurate Precession
 Accurate Precession between any two epochs - uses IAU Long-Term Ecliptic and Equatorial polar precession models. Adopted from the IAU/SOFA C routines in the 2023 release.
 
+---
+So, what exactly is "accurate" precession? 
+
+In general, most of us don't care about an accuracy more precise than about 10-60 arcsec on the sky. We don't care at all what it tells us to set for the RA, since that gets multiplied by (Cos δ) on the way to the sky. What we care about is getting the telescope pointed so that the target is roughly centered in the field of view.
+
+In the years 2000-2006, the IAU established a new standard, called GCRS (Geocentric Celestial Reference System), for position reckoning. We saw huge progress in the decades from 1980-2000, where VLBI was able to discern sub-mas errors and inconsistencies with our old way of working against the sky, the old FK4 and FK5 system. The IAU came up with a system that divorced our dependence on Earth, and its rotation, from the way we account for star and galaxy positions.
+
+So consequently they suggest a more rigorous way to perform precession and nutation all at once in every transformation of star positions from their catalogued positions, matching the Equinox of J2000.0. Time is reckoned differently now too, based primarily on TAI (atomic clocks), instead of relying on Earth's rotation period.
+
+The IAU methods of today can transform catalog positions to your current epoch to an astonishing sub-mas precision. (1 mas = 0.001 arcsec). This enables researchers to look for miniscule deviations caused by gravity bending light as it traverses the universe and passes near massive objects.
+
+That's really great! But you probably won't care about that kind of accuracy from your backyard observatory.
+
+The new way to do precession on your star catalog positions is quite unlike the way we once did it. Traditionally we cared about the location of the North Celestial Pole *and* the North Ecliptic Pole. Knowing those two things we could then derive where the 0h of RA was (The First Point of Aires), where the Equatorial plane and Ecliptic plane intersect on the ascending node. And we could know the current obliquity, or tilt of the Earth's Equatorial plane relative to the Ecliptic plane. Hence knowing what those features were when the star was catalogued, and what those features are today, allows us to compute the shifted apparent position of the star in todays coordinate frame.
+
+Today, the IAU just has us transform from one fixed system, forever unchanging, to your local equinox, and there is no need to know anything at all about the Ecliptic system. The two approaches are completely equivalent, but the GCRS to CIRS transform is the modern way, based on a fixed reference frame. In the past we always had to know which Equinox was used to report star position. Now those positions are firmly fixed, except for visible proper motion and parallax. Distant Quasars are so far away that they will never change their positions from our viewpoint. This is the system that our orbiting observatories can utilize - they aren't on the ground and aren't subject to the erratic rotation of the Earth. We on Earth can also use the system.
+
+So, in that regard, I have included 4 different ways to perform stellar precession. One of them is a "back-of-the-envelope" approximation that we had on our programmable calculators. It performed crude precession, but ignored nutation. The other 3 methods offer varying degrees of approximation to a more complete precession + nutation correction. One of the other 3 still utilizes the Ecliptic pole position in relation to the Equatorial pole position. Both poles move slowly over time due to precession and nutation. The other 2 methods ignore the Ecliptic entirely, and work within the new IAU GCRS and CIRS system.
+
+Which method is the quickest to use? Probably the one that we always used in our calculators. Which method is the most precise? Probably the one using both the precessed and nutated Ecliptic and Equatorial pole positions. But even the other two, based on GCRS to CIRS transforms, claim to be sub-arcsec in precision. Who knows? As long as it is better than 1 arcmin, I personally don't have a dog in that fight.
+
+
 **prec** _RA-ang Dec-ang from-epoch &optional to-epoch => RA_ang, Dec_ang_
 - Implements the IAU Long-Term Precession models for Ecliptic and Equatorial polar precession.
 - to-epoch defaults to now.
@@ -366,6 +388,13 @@ So here I provide the grubby version too. It allows you to precess approximately
 **precN** _RA-ang Dec-ang nyrs => RA-ang, Dec-ang_
 - Does the grubby precession for you.
 
+**preca** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang
+- Does the precession using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
+- Claims better than 1 arcsec accuracy for the next century.
+
+- **prec-aa** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang_
+- Does the precession using another cheap approximation, coming out of the Explanatory Supplement to the American Almanac.
+- Claims better than 1 arcsec accurcy for the next century.
 ---
 ## Az/El and Equatorial Coordinates
 Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
