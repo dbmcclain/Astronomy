@@ -302,7 +302,8 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - `(to-hms (gmst +j2000+)) => (HMS 18 41 50.549)`
 - Validated to within a few μsec of USNO for 50 years, beginning epoch 2000-05-24T00:00:00Z, incrementing by 365d.
   - mean ≈ 0.47μs, sigma ≈ 28μs
-  - validation used UTC instead of the proper UT1 and TT    
+  - validation used UTC instead of the proper UT1 and TT
+    - this is somewhat puzzling... I expect that USNO uses only the very best calculations for their web service page. Yet when I provide UT1 and TT to the **GMST** function, as theoretically required, then I get the same sigma scatter, but my mean measurement against theirs has a mean difference of 7 μsec. So doing things wrong produces better results. But both results are more than adequate for our purposes.     
 ![GMST Validation](https://github.com/dbmcclain/Astronomy/assets/3160577/2b84d301-b82c-4469-abd2-185679211598)
 
 
