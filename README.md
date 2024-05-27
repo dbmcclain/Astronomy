@@ -392,7 +392,7 @@ So here I provide the grubby version too. It allows you to precess approximately
 - Does the precession using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
 - Claims better than 1 arcsec accuracy for the next century.
 
-- **prec-aa** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang_
+**prec-aa** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang_
 - Does the precession using another cheap approximation, coming out of the Explanatory Supplement to the American Almanac.
 - Claims better than 1 arcsec accurcy for the next century.
 ---
