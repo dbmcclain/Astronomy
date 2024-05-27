@@ -426,6 +426,8 @@ So here I provide the grubby version too. It allows you to precess approximately
 (DEC 80 8 55.785000000000004)
 ```
 
+_[So... which one was correct? (They all were, unless you need sub-arcsec accuracy.)]_
+
 ---
 ## Az/El and Equatorial Coordinates
 Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
