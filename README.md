@@ -392,7 +392,13 @@ So here I provide the grubby version too. It allows you to precess approximately
 - Does the grubby precession for you.
 - _nyrs_ defaults to the number of years from J2000.0 to your current epoch.
   - It is likely, going forward, that most of your catalogued positions will refer to J2000.0.
-
+```
+(map-mult (#'to-ra #'to-dec)
+  (precn (ra 9 20) (dec 80 15) 24))
+=>
+(RA 9 23 13.763)
+(DEC 80 8 51.506)
+```
 ---
 **preca** and **prec-aa** both use the modern IAU GCRS to CIRS transforms. (GCRS = Geocentric Celestial Reference System, CIRS = Celestial Intermediate Reference System). GCRS corresponds to a catalog of star positions reported as J2000.0. CIRS refers to any other epoch, like the one you are using during an observing run.
 
@@ -400,11 +406,25 @@ So here I provide the grubby version too. It allows you to precess approximately
 - Does the precession using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
 - Claims better than 1 arcsec accuracy for the next century.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
+```
+(map-mult (#'to-ra #'to-dec)
+  (preca (ra 9 20) (dec 80 15) (d.t 2024_01_01) +j2000+))
+=>
+(RA 9 23 17.021)
+(DEC 80 8 55.794000000000004)
+```
 
 **prec-aa** _RA-ang Dec-ang &optional to-epoch from-epoch => Ra-ang, Dec-ang_
 - Does the precession using another cheap approximation, coming out of the Explanatory Supplement to the American Almanac.
 - Claims better than 1 arcsec accurcy for the next century.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
+```
+(map-mult (#'to-ra #'to-dec)
+  (prec-aa (ra 9 20) (dec 80 15) (d.t 2024_01_01) +j2000+))
+=>
+(RA 9 23 16.997)
+(DEC 80 8 55.785000000000004)
+```
 
 ---
 ## Az/El and Equatorial Coordinates
