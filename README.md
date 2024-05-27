@@ -43,6 +43,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 **arcsec** _arcsecs => ang_
 - 60 arcsec = 1 arcmin.
 - About the angular size of an American quarter dollar coin, viewed from a distance of 3.25 miles.
+- Our MMT Telescope could point and track to an accuracy of 0.1 arcsec. (ca. 1980)
 
 **mas** _mas => ang_
 - 1,000 mas = 1 arcsec.
