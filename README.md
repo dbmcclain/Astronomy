@@ -402,7 +402,7 @@ So here I provide the grubby version too. It allows you to precess approximately
 
 **precN** _RA-ang Dec-ang &optional nyrs => RA-ang, Dec-ang_
 - Does the grubby precession for you.
-- Ignores Nutation.
+- Ignores Nutation. Nutation is generally ≈ 10 arcsec or less.
 - _nyrs_ defaults to the number of years from J2000.0 to your current epoch.
   - It is likely, going forward, that most of your catalogued positions will refer to J2000.0.
 ```
