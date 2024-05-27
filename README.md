@@ -32,11 +32,13 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 
 **deg** _degs => ang_ 
 - 360 deg = 1 turn.
-- `(to-turns (deg 90)) => 0.25`	
+- `(to-turns (deg 90)) => 0.25`
+- The angular size of an American quarter dollar coin, or 1 Euro coin, viewd from a distance of almost 6 feet.
 
 **arcmin** _arcmins => ang_
 - 60 arcmin = 1 deg.
 - The approximate limit of human visual resolution.
+  - The same quarter dollar viewed from a distance of 286 feet. Almost the length of a football field. 
 
 **arcsec** _arcsecs => ang_
 - 60 arcsec = 1 arcmin.
