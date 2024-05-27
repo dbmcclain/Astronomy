@@ -390,7 +390,7 @@ So here I provide the grubby version too. It allows you to precess approximately
 - Does the grubby precession for you.
 
 ---
-**preca** and **prec-aa** both use the modern IAU GCRS to CIRS transforms. (GCRS = Geocentric Ceelstial Reference System, CIRS = Celestial Intermediate Reference System)
+**preca** and **prec-aa** both use the modern IAU GCRS to CIRS transforms. (GCRS = Geocentric Celestial Reference System, CIRS = Celestial Intermediate Reference System). GCRS corresponds to a catalog of star positions reported as J2000.0. CIRS refers to any other epoch, like the one you are using during an observing run.
 
 **preca** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang
 - Does the precession using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
