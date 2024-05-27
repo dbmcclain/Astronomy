@@ -306,6 +306,7 @@ Your observatory location and time zone should be set in Observatory.lisp. These
     - This is somewhat puzzling... I expect that USNO uses only the very best calculations for their web service page. Yet when I provide UT1 and TT to the **GMST** function, as theoretically required, then I get the same sigma scatter, but my calculation error rises against theirs to a mean difference of 7 μsec. So doing things wrong produces better results. But both results are more than adequate for our purposes.     
 ![GMST Validation](https://github.com/dbmcclain/Astronomy/assets/3160577/2b84d301-b82c-4469-abd2-185679211598)
 
+Since the 2000-2006 IAU Resolutions for the ICRS position framework, GMST has taken on a secondary role. Research doesn't even need to know the siderial time corresponding to observations. I do still use GMST for my own observing, and I'm sure that I'm not alone. But see the section below on _Accurate Precession_.
 
 **LMST** _&key lon epoch => ang_
 - Compute siderial time.
