@@ -356,7 +356,7 @@ Which method is the quickest to use? Probably the one that we always used in our
 
 **prec** _RA-ang Dec-ang from-epoch &optional to-epoch => RA_ang, Dec_ang_
 - Implements the IAU Long-Term Precession models for Ecliptic and Equatorial polar precession.
-- to-epoch defaults to now.
+- From-epoch defaults to +J2000+, to-epoch defaults to `(CURRENT-EPOCH)`.
 - As good as it gets, in this library of code - incorporates the most complete, long-term, precession and nutation.
 - Claims to be within 100 arcsec for 200,000 years on either side of J2000.0. (Who would know? if it isn't.)
 ```
