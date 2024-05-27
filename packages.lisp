@@ -131,6 +131,8 @@
    #:era
    #:prec
    #:precn
+   #:preca
+   #:prec-aa
 
    #:gmst
    #:lmst

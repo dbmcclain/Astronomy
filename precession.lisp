@@ -180,6 +180,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   (trn (mapcar (um:curry #'mat-mulv m1) (trn m2))))
 
 ;; --------------------------------------------
+;; Using precision long-term Equatorial and Ecliptic pole positions
 
 (defun prec (ra dec &optional (from-epoch +j2000+) (to-epoch (current-epoch)))
   ;; Precess using IAU long-term models for Ecliptic and Equatorial precession.
@@ -200,21 +201,19 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
             )))
 
 ;; ------------------------------------------------
-
-
 ;; ------------------------------------------
-;; IAU 2006 Precession
+;; IAU 2006 GCRS/CIRS Precession
 ;; ICRS Procedures - International Celestial Reference System
 ;; Ref, P.T.Wallace and N.Capitaine: "IAU 2006 precession-nutation procedures"
 
 (defun GCRS-XYZ (epoch)
   ;; Compute CIP of epoch.
   ;; Approx, assumes small angle s=0
-  (let* ((τ  (d2k epoch))
-         (Ω  (rad (+ 2.182d0 (* τ -9.242d-4))))
+  (let* ((D  (d2k epoch))
+         (Ω  (rad (+ 2.182d0 (* D -9.242d-4))))
          (cs (cis Ω))
-         (X  (+ (* τ 2.6603d-7)   (* -33.2d-6 (imagpart cs))))
-         (Y  (+ (* τ τ -8.14d-14) (*  44.6d-6 (realpart cs))))
+         (X  (+ (* D 2.6603d-7)   (* -33.2d-6 (imagpart cs))))
+         (Y  (+ (* D D -8.14d-14) (*  44.6d-6 (realpart cs))))
          (Z  (sqrt
               (max 0
                    (- 1 (* x x) (* y y))))
@@ -255,13 +254,16 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
          (v_GCRS  (mat-mulv M_CIO v_CIRS)))
     (to-thphi v_GCRS)))
 
+;; ------------------------------------------------------------
+
 (defun preca (ra dec &optional (from-epoch +j2000+) (to-epoch (current-epoch)))
-  ;; Most accurate (?) precession
+  ;; CIRS-based precession
   (mvb (ra2k dec2k)
       (CIRS-to-GCRS ra dec from-epoch)
     (GCRS-to-CIRS ra2k dec2k to-epoch)
     ))
 
+;; ------------------------------------------------------------
 #|
 ;; Check from Wallace and Capitaine
 ;; For TT = 2400000.5+53750.892855138888889(JD)  20060115T21:24:37.5Z
@@ -358,6 +360,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     (to-thphi v_GCRS)
     ))
 
+;; -------------------------------------------------------------
 ;; -------------------------------------------------------------
 
 (defun chk-prec (epoch_TT)
@@ -511,48 +514,15 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
       (values))))
 
 ;; -------------------------------------------------------------
-#|
-(chk-prec +j2000+)
-(chk-prec (ymd 2024))
-
-(let* ((ra  (ra 0 0 0))
-       (dec (dec 60 0 0))
-       (from 1950)
-       (to   2024)
-       (nyrs (- to from))
-       (from-epoch (ymd from))
-       (to-epoch   (ymd to)))
-  (let ((*print-length* nil))
-    (print
-     (list
-      :eo-from (to-hms (EO from-epoch))
-      :eo-to   (to-hms (EO to-epoch))
-      :prec
-      (mvl (map-mult (#'to-ra #'to-dec)
-             (prec ra dec from-epoch to-epoch)))
-      :precn
-      (mvl (map-mult (#'to-ra #'to-dec)
-             (precn ra dec nyrs)))
-      :preca
-      (mvl (map-mult (#'to-ra #'to-dec)
-             (preca ra dec from-epoch to-epoch)))
-      :prec-aa
-      (mvl (map-mult (#'to-ra #'to-dec)
-             (prec-aa ra dec to-epoch)))
-      ))
-    (values)
-    ))
-|#
-
-#|
 ;; ---------------------------------------------------
-;; From Explanatory Supplement to American Almanac
-;; Is this better than MCIO because of nutation incorporation?
 ;;
-(defun mcio-aa (epoch)
+;; From Explanatory Supplement to American Almanac
+;; Is this better than M_CIO? Ought to be about the same.
+;;
+(defun GCRS-XY-aa (epoch)
   (let* ((Tc  (c2k epoch))
          (L   (deg (+ 280.5d0 (* Tc 36_000.8))))
-         (Ω   (deg (- 125.0d0 (* Tc 1934.1d0))))
+         (Ω   (deg (+ 125.0d0 (* Tc -1934.1d0))))
          (X   (arcsec (+ (* Tc 2004.19d0)
                          (* Tc Tc -0.43d0)
                          (* -6.84d0 (sin Ω))
@@ -562,43 +532,43 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                          (* Tc Tc -22.41d0)
                          (* 9.21d0 (cos Ω))
                          (* 0.57d0 (cos (+ L L))))
-                      ))
-         (X   (to-rad X))
-         (Y   (to-rad Y))
-         (β   (- 1 (* 1/2 X X))))
-
-    `(( ,β   0   ,(- X) )
-      (  0   1   ,(- Y) )
-      ( ,X  ,Y    ,β   ))
-    
+                      )))
+    `(,(to-rad X)  ;; ≈ (Sin X)
+      ,(to-rad Y)) ;; ≈ (Sin Y)
     ))
   
-(defun GCRS-to-CIRS-aa (ra dec epoch)
-  (let* ((mat (mcio-aa epoch))
-         (v   (to-xyz ra dec))
-         (vp  (mat-mulv mat v)))
+(defun mcio-aa (epoch)
+  (db (X Y)
+      (GCRS-XY-aa epoch)
+    (let ((cX  (- 1 (* 1/2 X X)) )) ;; ≈ (Cos X)
+      `(( ,cX  0   ,(- X) )
+        (  0   1   ,(- Y) )
+        ( ,X  ,Y    ,cX   ))
+    )))
+
+(defun GCRS-to-CIRS-aa (ra dec &optional (epoch (current-epoch)))
+  (let* ((EO      (EO epoch))
+         (mat     (mcio-aa epoch))
+         (v_GCRS  (to-xyz ra dec))
+         (v_CIRS  (mat-mulv mat v_GCRS)))
     (mvb (rap decp)
-        (to-thphi vp)
-      (values (- rap (EO epoch)) decp)
+        (to-thphi v_CIRS)
+      (values (- rap EO) decp)
       )))
 
-(defun CIRS-to-GCRS-aa (ra dec epoch)
-  (let* ((mat (trn (mcio-aa epoch)))
-         (v   (to-xyz (+ ra (EO epoch)) dec))
-         (vp  (mat-mulv mat v)))
-    (to-thphi vp)))
+(defun CIRS-to-GCRS-aa (ra dec &optional (epoch (current-epoch)))
+  (let* ((EO      (EO epoch))
+         (mat     (trn (mcio-aa epoch)))
+         (v_CIRS  (to-xyz (+ ra EO) dec))
+         (v_GCRS  (mat-mulv mat v_CIRS)))
+    (to-thphi v_GCRS)))
+
+;; ------------------------------------------------------
 
 (defun prec-aa (ra dec &optional (from-epoch +j2000+) (to-epoch (current-epoch)))
   (mvb (ra2k dec2k)
       (cirs-to-gcrs-aa ra dec from-epoch)
     (gcrs-to-cirs-aa ra2k dec2k to-epoch)))
 
-#|
-(let ((ra  (hms 0 0 0))
-      (dec (dms 0 0 0))
-      (epoch (ymd 2024)))
-  (map-mult (#'to-ra #'to-dec)
-    (prec-aa ra dec +j2000+ epoch))
-  )
-|#
-|#
+;; ------------------------------------------------------
+
