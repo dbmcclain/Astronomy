@@ -33,7 +33,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 **deg** _degs => ang_ 
 - 360 deg = 1 turn.
 - `(to-turns (deg 90)) => 0.25`
-- 1 deg ≈ the angular size of an American quarter dollar coin, or 1 Euro coin, viewed from a distance of 4.5 feet. About the same size as the width of your thumb on an outstretched arm.
+- 1 deg ≈ the angular size of an American quarter dollar coin, or 1 Euro coin, viewed from a distance of 4.5 feet. About the same size as the width of your thumb on an outstretched arm. Also about twice the size of the Moon and the Sun.
 
 **arcmin** _arcmins => ang_
 - 60 arcmin = 1 deg.
