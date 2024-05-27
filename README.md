@@ -386,8 +386,10 @@ Precession corrections on the sky, actual displacements seen, as opposed to incr
 
 So here I provide the grubby version too. It allows you to precess approximately, without needing to specify a full Epoch. Just state the number of years.
 
-**precN** _RA-ang Dec-ang nyrs => RA-ang, Dec-ang_
+**precN** _RA-ang Dec-ang &optional nyrs => RA-ang, Dec-ang_
 - Does the grubby precession for you.
+- nyrs defaults to the number of years from J2000.0 to your current epoch.
+  - It is likely, going forward, that most of your catalogued positions will refer to J2000.0.
 
 ---
 **preca** and **prec-aa** both use the modern IAU GCRS to CIRS transforms. (GCRS = Geocentric Celestial Reference System, CIRS = Celestial Intermediate Reference System). GCRS corresponds to a catalog of star positions reported as J2000.0. CIRS refers to any other epoch, like the one you are using during an observing run.
