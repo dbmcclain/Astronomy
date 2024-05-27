@@ -365,7 +365,7 @@ Which method is the quickest to use? Probably the one that we always used in our
 (RA 9 23 12.106)
 (DEC 80 8 49.398)
 ```
-
+---
 Okay, in the past, we used a grubby little routine on our calculators to precess our targets for the night's observing. It goes like this:
 ```
 Δα = 3.07496 + 1.33621 Tan(δ)Sin(α)   - secs/yr
