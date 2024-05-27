@@ -40,7 +40,7 @@
 ;;
 ;; Validated to within 1ms against USNO, testing every year for 50
 ;; years, starting with 2000-05-24T00:00:00Z, and incrementing by 365 days.
-;; Results (GMST - USNO): mean = -0.97ms, sigma = 0.028ms
+;; Results (GMST - USNO): mean = +0.47 μs, sigma = 28 μs
 ;;
 ;; - DM/RAL 2024/05/25 12:53:56 UTC
 
