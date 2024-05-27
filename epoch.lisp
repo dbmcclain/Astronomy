@@ -78,7 +78,7 @@ The Julian date for the current Universal Time is:
            (values mm yyyy)
          (values (+ mm 12.) (1- yyyy)))
     (let* ((a (truncate yx 100.))
-           (b (- 2. a (truncate a -4.)))) ;; for Gregorian dates, for Julian dates use B = 0
+           (b (+ (- 2. a) (truncate a 4.)))) ;; for Gregorian dates, for Julian dates use B = 0
       (+ (truncate (* 365.25 (+ yx 4716.)))
          (truncate (* 30.6001 (1+ mx)))
          dd b -1524.5)

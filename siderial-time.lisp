@@ -24,10 +24,10 @@
 (defconstant +TAI-OFFSET+  32.184) ;; secs, TT = TAI + +TAI-OFFSET+, never changes
 
 (defun JD_UTC-to-UT1 (JD_UTC)
-  (+ JD_UTC *DUT1*))
+  (+ JD_UTC (/ *DUT1* +sec/day+)))
 
-(defun JD_UTC-to-TT (JD_UTC)
-  (+ JD_UTC (/ (+ +TAI-OFFSET+ *ΔAT*) +sec/day+)))
+(defun JD_UT1-to-TT (JD_UT1)
+  (+ JD_UT1 (/ (+ +TAI-OFFSET+ *ΔAT*) +sec/day+)))
 
 (defun JD_TT-to-UT1 (JD_TT)
   ;; Compute UT1 from TT (which itself came from UTC)
@@ -44,9 +44,9 @@
 ;;
 ;; - DM/RAL 2024/05/25 12:53:56 UTC
 
-(defun ERA (epochUT1)
+(defun ERA (epoch_UT1)
   ;; Earth Rotation Angle
-  (let* ((Dut  (d2k epochUT1)))
+  (let* ((Dut  (d2k epoch_UT1)))
     (unipolar
      (turns
       (+ 0.779_057_273_2640d0
@@ -66,10 +66,10 @@
                                  -0.0000000368d0))))
     (- (arcsec prec))))
 
-(defun GMST (epochUT1)
+(defun GMST (epoch_UT1)
   ;; Greenwich mean siderial time
-  (let* ((ERA  (ERA epochUT1))
-         (EO   (EO  epochUT1)))
+  (let* ((ERA  (ERA epoch_UT1))
+         (EO   (EO  epoch_UT1)))
     (unipolar
      (- ERA EO))
     ))

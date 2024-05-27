@@ -68,8 +68,8 @@
         ))
 
 (unless (boundp '*1turn*)
-  ;; (set-ang-mode :turns)
-  (set-ang-mode :rad)
+  (set-ang-mode :turns)
+  ;; (set-ang-mode :rad)
   )
 
 ;; ----------------------------------

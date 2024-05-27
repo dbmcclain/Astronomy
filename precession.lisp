@@ -194,7 +194,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
             (4 5 6)
             (7 8 9))
           '((0 0 0)
-            (0 1 0)
+            (0 0 1)
             (0 0 0)))
  |#
 ;; --------------------------------------------
@@ -366,7 +366,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 ;; ICRS Procedures - International Celestial Reference System
 ;; Ref, P.T.Wallace and N.Capitaine: "IAU 2006 precession-nutation procedures"
 
-(defun XYZ (epoch)
+(defun GCRS-XYZ (epoch)
   ;; Approx, assumes small angle s=0
   (let* ((τ  (d2k epoch))
          (Ω  (rad (+ 2.182d0 (* τ -9.242d-4))))
@@ -389,7 +389,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;;
   ;; This function is M_CIO(TT).
   ;;
-  (db (X Y _) (XYZ epoch)
+  (db (X Y _) (GCRS-XYZ epoch)
     (declare (ignore _))
     `(( 1  0  ,(- X))
       ( 0  1  ,(- Y))
@@ -404,20 +404,51 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 #|
 ;; Check from Wallace and Capitaine
-;; For TT = 2400000.5+53750.892855138888889(JD)
+;; For TT = 2400000.5+53750.892855138888889(JD)  20060115T21:24:37.5Z
 ;;   MCIO ≈ (( +1.00000000000000000 +0.00000000000000000 −0.00058224012792061)
 ;;           ( +0.00000000000000000 +1.00000000000000000 −0.00004374943683668)
 ;;           ( +0.00058224012792061 +0.00004374943683668 +1.00000000000000000))
 ;;
-(let* ((tt (+ 2400000.5d0 53750.892855138888889d0)))
-  (M_CIO tt))
+(let* ((tt (+ 2400000.5d0 53750.892855138888889d0))
+       (jd (jd_ut1-to-tt
+            (jdn 2006 01 15
+                 :time (hms 21 24 37.5)
+                 :lcl-ut 0))))
+  (list (- tt 2400000.5)
+        (- jd 2400000.5)
+        (to-secs (- jd tt))
+        (to-hms (frac (+ 1/2 tt)))
+        (to-hms (frac (+ 1/2 jd)))
+        (M_CIO tt)))
 =>
+(53750.89285513898  ;; tt
+ 53750.892901435495 ;; JD_TT
+ 4.000018537044525  ;; JD-tt secs
+ (HMS 21 25 42.684) ;; tt
+ (HMS 21 25 46.684) ;; JD
+ ((1 0 -5.822401279206334E-4)
+  (0 1 -4.374943683668478E-5)
+  (5.822401279206334E-4 4.374943683668478E-5 1)))
+
+(53750.89285513898 ;; tt
+ 53750.89210069459 ;; JD
+ -65.18399566411972
+ (HMS 9 25 42.684)
+ (HMS 9 24 37.5)
+ ((1                    0                    -5.822401279206334E-4)
+  (0                    1                    -4.374943683668478E-5)
+  (5.822401279206334E-4 4.374943683668478E-5 1)))
+
+53750.89285513898
+(HMS 9 25 42.684)
 (( 1                    0                    -5.822401279206334E-4)
  ( 0                    1                    -4.374943683668478E-5)
  ( 5.822401279206334E-4 4.374943683668478E-5 1                    ))
 ;; ---------------
 (let* ((ut1 (+ 2400000.5d0 53750.892855138888889d0 (/ 0.3341 +sec/day+))))
   (list
+   :era (to-deg (ERA ut1))
+   :era (to-hms (ERA ut1))
    (-
    (to-mas (ERA ut1))
    (to-mas
@@ -438,7 +469,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;;
   ;; This function is R(TT,UT).
   ;;
-  (db (X Y Z) (XYZ epoch)
+  (db (X Y Z) (GCRS-XYZ epoch)
     (let* ((a     (/ (1+ Z)))
            
            (β     (ERA epoch)) ;; ignoring small angle s
@@ -462,12 +493,30 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
       )))
 |#
 
+(defun R1 (x)
+  (let* ((cs  (cis x))
+         (cx  (realpart cs))
+         (sx  (imagpart cs)))
+    `((  1    0     0)
+      (  0   ,cx   ,sx)
+      (  0 ,(- sx) ,cx))
+    ))
+
+(defun R2 (x)
+  (let* ((cs  (cis x))
+         (cx  (realpart cs))
+         (sx  (imagpart cs)))
+    `((  ,cx    0  ,(- sx))
+      (   0     1     0)
+      (  ,sx    0   ,cx))
+    ))
+
 (defun R3 (x)
   (let* ((cs  (cis x))
          (cx  (realpart cs))
          (sx  (imagpart cs)))
-    `((  ,cx  ,(- sx)  0)
-      (  ,sx    ,cx    0)
+    `((  ,cx    ,sx    0)
+      (,(- sx)  ,cx    0)
       (   0       0    1))
     ))
 
@@ -588,7 +637,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                     (- 1 (* X X) (* Y Y)))))
 
          (_   (let ()
-                (db (Xq Yq Zq) (XYZ epoch) ;; get quick est
+                (db (Xq Yq Zq) (GCRS-XYZ epoch) ;; get quick est
                   ;; shows 7.7 as for J2000
                   ;;       8.9 as for J2024
                   (print `(:ΔCIP  ,(to-arcsec (acos (vdot `(,X ,Y ,Z) `(,Xq ,Yq ,Zq))))))
@@ -644,7 +693,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
          ;; Compae with quick XYZ. using quick XYZ to compute CIP
          ;; against true form of ecliptic, kv from above.
-         (nv_q (XYZ epoch))
+         (nv_q (GCRS-XYZ epoch))
          (Σq   (db (Xq Yq Zq) nv_q
                  (let ((aq (/ (1+ Zq))))
                    `(,(- 1 (* aq Xq Xq))
@@ -676,19 +725,11 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 (chk-prec +j2000+)
 (chk-prec (ymd 2024))
 
-(let ((jdcy 0.06040774415164651d0))
-  (to-hms (unipolar (* 36525 jdcy))))
-
-(let ((jd  (+ 2400000.5d0 53750.892855138888889d0)))
-  (list jd (c2k jd) (to-hms (mod (- jd 0.5) 1.0))))
-
-(hms 21 0 24.375)
-
-(let* ((utc  (jdn 2006 01 15 :time (hms 21 0 0.924d.t 20060115.2124375)))))
+(gcrs-to-tirs 0 0 +j2000+)
 
 (let* ((ra  (ra 0 0 0))
        (dec (dec 0 0 0))
-       (from 1950)
+       (from 2000)
        (to   2024)
        (nyrs (- to from))
        (from-epoch (ymd from))
@@ -697,14 +738,18 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
    :prec
    (mvl (map-mult (#'to-ra #'to-dec)
           (prec ra dec from-epoch to-epoch)))
-   :preca
-   (mvl (map-mult (#'to-ra #'to-dec)
-          (preca ra dec from-epoch to-epoch)))
    :precn
    (mvl (map-mult (#'to-ra #'to-dec)
           (precn ra dec nyrs)))
+   :preca
+   (mvl (map-mult (#'to-ra #'to-dec)
+          (preca ra dec from-epoch to-epoch)))
+   #|
    :tirs-gcrs
    (mvl (map-mult (#'to-ra #'to-dec)
           (tirs-to-gcrs ra dec from-epoch)))
+   |#
    ))
+
+(mat-mulv (r3 (deg 30)) '(0 0 1))
 |#
