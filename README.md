@@ -148,7 +148,7 @@ I did carefully consider my options when I wrote this code. I wrote a 24-bit int
 
 _[To think about it... are there any practical uses for radian measure? Since π is irrational, you can never get to a full circle angular sweep without overshooting. And what do you use to directly measure radians? So why not stop at the intermediate measure you do use to determine them? 😁]_
 
-_[To answer the question... there is at least 1 important use for radian measure. By expressing your angles in radians, small angle approximations for (Sin x) ≈ x and (Cos x) ≈ 1 - x^2/2. Just like using Natural Logs vs Log10, where, for small x, (exp x) ≈ 1+x.]_
+_[To answer the question... there is at least 1 important use for radian measure. By expressing your angles in radians, small angle approximations for (Sin x) ≈ x and (Cos x) ≈ 1 - x^2/2. Just like using Natural Logs vs Log10, where, for small x, (exp x) ≈ 1+x, and (log (1+ x)) ≈ 1/(1+x).]_
 
 ---
 ## Redefined Trig Functions
