@@ -354,9 +354,9 @@ Which method is the quickest to use? Probably the one that we always used in our
 
 ---
 
-**prec** _RA-ang Dec-ang from-epoch &optional to-epoch => RA_ang, Dec_ang_
+**prec** _RA-ang Dec-ang &optional to-epoch from-epoch => RA_ang, Dec_ang_
 - Implements the IAU Long-Term Precession models for Ecliptic and Equatorial polar precession.
-- _from-epoch_ defaults to `+J2000+`, _to-epoch_ defaults to `(CURRENT-EPOCH)`.
+- _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
 - As good as it gets, in this library of code - incorporates the most complete, long-term, precession and nutation.
 - Claims to be within 100 arcsec for 200,000 years on either side of J2000.0. (Who would know? if it isn't.)
 ```
@@ -394,15 +394,15 @@ So here I provide the grubby version too. It allows you to precess approximately
 ---
 **preca** and **prec-aa** both use the modern IAU GCRS to CIRS transforms. (GCRS = Geocentric Celestial Reference System, CIRS = Celestial Intermediate Reference System). GCRS corresponds to a catalog of star positions reported as J2000.0. CIRS refers to any other epoch, like the one you are using during an observing run.
 
-**preca** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang
+**preca** _RA-ang Dec-ang &optional to-epoch from-epoch => Ra-ang, Dec-ang
 - Does the precession using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
 - Claims better than 1 arcsec accuracy for the next century.
-- _from-epoch_ defaults to `+J2000+`, and _to-epoch_ defaults to `(CURRENT-EPOCH)`
+- _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
 
-**prec-aa** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang_
+**prec-aa** _RA-ang Dec-ang &optional to-epoch from-epoch => Ra-ang, Dec-ang_
 - Does the precession using another cheap approximation, coming out of the Explanatory Supplement to the American Almanac.
 - Claims better than 1 arcsec accurcy for the next century.
-- _from-epoch_ defaults to `+J2000+`, and _to-epoch_ defaults to `(CURRENT-EPOCH)`
+- _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
 
 ---
 ## Az/El and Equatorial Coordinates
