@@ -348,15 +348,16 @@ The new way to do precession on your star catalog positions is quite unlike the 
 
 Today, the IAU just has us transform from one fixed system, forever unchanging, to your local equinox, and there is no need to know anything at all about the Ecliptic system. The two approaches are completely equivalent, but the GCRS to CIRS transform is the modern way, based on a fixed reference frame. In the past we always had to know which Equinox was used to report star position. Now those positions are firmly fixed, except for visible proper motion and parallax. Distant Quasars are so far away that they will never change their positions from our viewpoint. This is the system that our orbiting observatories can utilize - they aren't on the ground and aren't subject to the erratic rotation of the Earth. We on Earth can also use the system.
 
-So, in that regard, I have included 4 different ways to perform stellar precession. One of them is a "back-of-the-envelope" approximation that we had on our programmable calculators. It performed crude precession, but ignored nutation. The other 3 methods offer varying degrees of approximation to a more complete precession + nutation correction. One of the other 3 still utilizes the Ecliptic pole position in relation to the Equatorial pole position. Both poles move slowly over time due to precession and nutation. The other 2 methods ignore the Ecliptic entirely, and work within the new IAU GCRS and CIRS system.
+So, in that regard, I have included 4 different ways to perform stellar precession. One of them is a "back-of-the-envelope" approximation that we had on our programmable calculators. It performs crude precession, but ignores nutation. The other 3 methods offer varying degrees of approximation to a more complete precession + nutation correction. One of the other 3 still utilizes the Ecliptic pole position in relation to the Equatorial pole position. Both poles move slowly over time due to precession and nutation. The other 2 methods ignore the Ecliptic entirely, and work within the new IAU GCRS and CIRS system.
 
 Which method is the quickest to use? Probably the one that we always used in our calculators. Which method is the most precise? Probably the one using both the precessed and nutated Ecliptic and Equatorial pole positions. But even the other two, based on GCRS to CIRS transforms, claim to be sub-arcsec in precision. Who knows? As long as it is better than 1 arcmin, I personally don't have a dog in that fight.
 
+---
 
 **prec** _RA-ang Dec-ang from-epoch &optional to-epoch => RA_ang, Dec_ang_
 - Implements the IAU Long-Term Precession models for Ecliptic and Equatorial polar precession.
-- to-epoch defaults to now.
-- As good as it gets, sans Nutation and Aberration.
+- _from-epoch_ defaults to `+J2000+`, _to-epoch_ defaults to `(CURRENT-EPOCH)`.
+- As good as it gets, in this library of code - incorporates the most complete, long-term, precession and nutation.
 - Claims to be within 100 arcsec for 200,000 years on either side of J2000.0. (Who would know? if it isn't.)
 ```
 (map-mult (#'to-ra #'to-dec)
@@ -365,7 +366,7 @@ Which method is the quickest to use? Probably the one that we always used in our
 (RA 9 23 12.106)
 (DEC 80 8 49.398)
 ```
-
+---
 Okay, in the past, we used a grubby little routine on our calculators to precess our targets for the night's observing. It goes like this:
 ```
 Δα = 3.07496 + 1.33621 Tan(δ)Sin(α)   - secs/yr
@@ -385,16 +386,24 @@ Precession corrections on the sky, actual displacements seen, as opposed to incr
 
 So here I provide the grubby version too. It allows you to precess approximately, without needing to specify a full Epoch. Just state the number of years.
 
-**precN** _RA-ang Dec-ang nyrs => RA-ang, Dec-ang_
+**precN** _RA-ang Dec-ang &optional nyrs => RA-ang, Dec-ang_
 - Does the grubby precession for you.
+- _nyrs_ defaults to the number of years from J2000.0 to your current epoch.
+  - It is likely, going forward, that most of your catalogued positions will refer to J2000.0.
+
+---
+**preca** and **prec-aa** both use the modern IAU GCRS to CIRS transforms. (GCRS = Geocentric Celestial Reference System, CIRS = Celestial Intermediate Reference System). GCRS corresponds to a catalog of star positions reported as J2000.0. CIRS refers to any other epoch, like the one you are using during an observing run.
 
 **preca** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang
 - Does the precession using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
 - Claims better than 1 arcsec accuracy for the next century.
+- _from-epoch_ defaults to `+J2000+`, and _to-epoch_ defaults to `(CURRENT-EPOCH)`
 
-- **prec-aa** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang_
+**prec-aa** _RA-ang Dec-ang &optional from-epoch to-epoch => Ra-ang, Dec-ang_
 - Does the precession using another cheap approximation, coming out of the Explanatory Supplement to the American Almanac.
 - Claims better than 1 arcsec accurcy for the next century.
+- _from-epoch_ defaults to `+J2000+`, and _to-epoch_ defaults to `(CURRENT-EPOCH)`
+
 ---
 ## Az/El and Equatorial Coordinates
 Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
