@@ -338,7 +338,7 @@ So, what exactly is "accurate" precession?
 
 In general, most of us don't care about an accuracy more precise than about 10-60 arcsec on the sky. We don't care at all what it tells us to set for the RA, since that gets multiplied by (Cos δ) on the way to the sky. What we care about is getting the telescope pointed so that the target is roughly centered in the field of view.
 
-In the years 2000-2006, the IAU established a new standard, called GCRS (Geocentric Celestial Reference System), for position reckoning. We saw huge progress in the decades from 1980-2000, where VLBI was able to discern sub-mas errors and inconsistencies with our old way of working against the sky, the old FK4 and FK5 system. The IAU came up with a system that divorced our dependence on Earth, and its rotation, from the way we account for star and galaxy positions.
+In the years 2000-2006, the IAU established a new standard, called ICRS (International Celestial Reference System), for position reckoning. We saw huge progress in the decades from 1980-2000, where VLBI was able to discern sub-mas errors and inconsistencies with our old way of working against the sky, the old FK4 and FK5 system. The IAU came up with a system that divorced our dependence on Earth, and its rotation, from the way we account for star and galaxy positions.
 
 So consequently they suggest a more rigorous way to perform precession and nutation all at once in every transformation of star positions from their catalogued positions, matching the Equinox of J2000.0. Time is reckoned differently now too, based primarily on TAI (atomic clocks), instead of relying on Earth's rotation period.
 
