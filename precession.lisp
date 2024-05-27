@@ -35,14 +35,6 @@
 
 ;; Computed for Mean Ecliptic and Equator of J2000.0
 
-(defun epj (epoch)
-  ;; Compute the Julian Epoch for a given JDN
-  (+ 2000. (y2k epoch)))
-
-(defun epjc (epj)
-  ;; Centuries between 2000 and epj.
-  (/ (- epj 2000.) 100.))
-
 (defun per-sum (w coffs)
   ;; perform a pair of periodic component sums
   (let ((s1 0)
@@ -78,12 +70,11 @@
                        
 ;; --------------------------------------------------
 
-(defun pecl (epj)
+(defun pecl (Tc)
   ;; Precession of the Ecliptic
   ;; Compute unit vector to Ecliptic pole at epoch.
-  ;; EPJ is a Julian Epoch
-  (let* ((dt    (epjc epj))
-         (eps0  #.(arcsec 84381.406d0))
+  ;; Tc is Julian Centuries from J2000.
+  (let* ((eps0  #.(arcsec 84381.406d0))
          (pqpol #.#(( 5851.607687d0  -0.1189000d0  -0.00028913d0   0.000000101d0)
                     (-1600.886300d0   1.1689818d0  -0.00000020d0  -0.000000437d0)))
          (pqper #.#2A(( 708.15d0 -5486.751211d0 -684.661560d0   667.666730d0 -5523.863691d0)
@@ -95,7 +86,7 @@
                       ( 882.00d0   -87.676083d0  198.296701d0  -185.138669d0   -34.744450d0)
                       ( 547.00d0    46.140315d0  101.135679d0  -120.972830d0    22.885731d0))))
     (multiple-value-bind (psum qsum)
-        (pol-per-sum dt pqpol pqper)
+        (pol-per-sum Tc pqpol pqper)
       (let* ((p  (to-rad (arcsec psum)))
              (q  (to-rad (arcsec qsum)))
              (r  (sqrt (max 0 (- 1 (* p p) (* q q)))))
@@ -108,19 +99,18 @@
         ))))
 
 #|
-(pecl (epj 1219339.078000d0))
+(pecl (c2k 1219339.078000d0))
 => (4.172478576400136E-4 -0.4049549137582655 0.9143365593299115)
 Check from Vondrak:
 For JDN = 1219339.078000
 pecl = ( +0.00041724785764001342 −0.40495491104576162693 +0.91433656053126552350 )
  |#
 
-(defun pequ (epj)
+(defun pequ (Tc)
   ;; Precession of the Equator
   ;; Compute unit vector to Equatorial pole at epoch.
-  ;; EPJ is a Julian Epoch
-  (let* ((dt    (epjc epj))
-         (xypol #.#((  5453.282155d0   0.4252841   -0.00037173   -0.000000152)
+  ;; Tc is Julian Centuries from J2000.
+  (let* ((xypol #.#((  5453.282155d0   0.4252841   -0.00037173   -0.000000152)
                     (-73750.930350d0  -0.7675452   -0.00018725    0.000000231)))
          (xyper #.#2A(( 256.75d0  -819.940624d0 75004.344875d0 81491.287984d0  1558.515853d0)
                       ( 708.15d0 -8444.676815d0   624.033993d0   787.163481d0  7774.939698d0)
@@ -137,7 +127,7 @@ pecl = ( +0.00041724785764001342 −0.40495491104576162693 +0.914336560531265523
                       ( 220.30d0   179.516345d0  -165.405086d0  -210.157124d0  -171.330180d0)
                       (1200.00d0    -9.814756d0     9.344131d0   -44.919798d0   -22.899655d0))))
     (multiple-value-bind (xsum ysum)
-        (pol-per-sum dt xypol xyper)
+        (pol-per-sum Tc xypol xyper)
       (let* ((x  (to-rad (arcsec xsum)))
              (y  (to-rad (arcsec ysum)))
              (z  (sqrt (max 0 (- 1 (* x x) (* y y))))))
@@ -145,7 +135,7 @@ pecl = ( +0.00041724785764001342 −0.40495491104576162693 +0.914336560531265523
         ))))
 
 #|
-(pequ (epj 1219339.078000d0))
+(pequ (c2k 1219339.078000d0))
 => (-0.2943764379736904 -0.11719098023370263 0.9484770882408209)
 Check from Vondrak:
 For JDN = 1219339.078000
@@ -156,9 +146,9 @@ pequ = ( −0.29437643797369031532 −0.11719098023370257855 +0.9484770882408209
   ;; Compute long term precession matrix.
   ;; Produces a precession matrix that will transform from J2000.0 to Epoch.
   ;; To be applied against an XYZ vector arising from RA, Dec at J2000.0.
-  (let* ((epj  (epj epoch))
-         (zv   (pequ epj)) ;; pole of Equator
-         (eclp (pecl epj)) ;; pole of Ecliptic
+  (let* ((Tc   (c2k epoch))
+         (zv   (pequ Tc)) ;; pole of Equator
+         (eclp (pecl Tc)) ;; pole of Ecliptic
          (xv   (vnormalize (vcross zv eclp)))
          (yv   (vcross zv xv)))
     (list xv yv zv)))
@@ -505,7 +495,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
          ;; Compare Long Term Ecliptic model
          ;; Shows +52.8 mas for J2000
          ;;       +51.3 mas for J2024   
-         (kvlt (pecl (epj epoch_TT)))
+         (kvlt (pecl (c2k epoch_TT)))
          (Γlt  (vcross nv kvlt))
          (yvlt (vcross nv Γlt))
          (EOlt (- s (atan (vdot yvlt Σ) (vdot Γlt Σ))))
