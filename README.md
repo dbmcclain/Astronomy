@@ -415,7 +415,7 @@ So here I provide the grubby version too. It allows you to precess approximately
 ```
 
 **prec-aa** _RA-ang Dec-ang &optional to-epoch from-epoch => Ra-ang, Dec-ang_
-- Does the precession using another cheap approximation, coming out of the "3rd Ed. Explanatory Supplement to the Astronomical Almanac", sec. 7,4,5,1, pp. 298-299. 
+- Does the precession using another cheap approximation, coming out of the "3rd Ed. Explanatory Supplement to the Astronomical Almanac", sec. 7.4.5.1, pp. 298-299. 
 - Claims better than 1 arcsec accurcy for the next century.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
 ```
