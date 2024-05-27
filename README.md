@@ -42,6 +42,7 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 
 **mas** _mas => ang_
 - 1,000 mas = 1 arcsec.
+- About the angular size of an American quarter dollar coin, staioned in NYC, and viewed from Los Angeles.
 
 **dms** _ddd &optional mm ss => ang_
 - An easy way to specify an angle in deg, arcmin, arcsec.
