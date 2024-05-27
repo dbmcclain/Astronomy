@@ -26,7 +26,7 @@
   (let ((sf  1d-3))
     (* sf (round x sf))))
 
-(defun degs-to-dms (x)
+(defun degs-to-dms (x turn)
   (multiple-value-bind (d dfrac)
       (truncate x)
     (multiple-value-bind (m mfrac)
@@ -38,13 +38,15 @@
           (when (>= m 60.)
             (decf m 60.)
             (incf d)
-            ))
+            (when (>= d turn)
+              (decf d turn)
+              )))
         (values d m s)
         ))))
 
-(defun sexi-out (x pref)
+(defun sexi-out (x pref turn)
   (multiple-value-bind (d m s)
-      (degs-to-dms (abs x))
+      (degs-to-dms (abs x) turn)
     `(,pref ,(if (minusp x)
                  (- d)
                d)
@@ -60,10 +62,10 @@
     ))
     
 (defun to-dms (x)
-  (sexi-out (to-deg x) 'dms))
+  (sexi-out (to-deg x) 'dms 360))
 
 (defun to-hms (x)
-  (sexi-out (to-hrs x) 'hms))
+  (sexi-out (to-hrs x) 'hms 24))
 
 #|
 ;; E.g.,
@@ -73,17 +75,17 @@
 
 ;; ---------------------------------------------
 
-(defun dot-conv-out (x)
+(defun dot-conv-out (x turn)
   (multiple-value-bind (d m s)
-      (degs-to-dms (abs x))
+      (degs-to-dms (abs x) turn)
     (* (signum x) (/ (+ s (* 100. (+ m (* 100. d)))) 10_000.))
     ))
 
 (defun to-d.ms (x)
-  (dot-conv-out (to-deg x)))
+  (dot-conv-out (to-deg x) 360))
 
 (defun to-h.ms (x)
-  (dot-conv-out (to-hrs x)))
+  (dot-conv-out (to-hrs x) 24))
 
 #|
 ;; E.g.,

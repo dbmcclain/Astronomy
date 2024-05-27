@@ -391,16 +391,27 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;;
   (db (X Y _) (GCRS-XYZ epoch)
     (declare (ignore _))
-    `(( 1  0  ,(- X))
-      ( 0  1  ,(- Y))
-      (,X ,Y  1))
+    `((  1  0  ,(- X))
+      (  0  1  ,(- Y))
+      ( ,X ,Y  1    ))
     ))
 
 (defun GCRS-to-CIRS (ra dec &optional (epoch (current-epoch)))
-  (let* ((v_GCRS  (to-xyz ra dec))
+  (let* ((EO      (EO epoch))
+         (v_GCRS  (to-xyz ra dec))
          (M_CIO   (M_CIO epoch))
          (v_CIRS  (mat-mulv M_CIO v_GCRS)))
-    (to-thphi v_CIRS)))
+    (mvb (rap decp)
+        (to-thphi v_CIRS)
+      (values (- rap EO) decp)
+      )))
+
+(defun CIRS-to-GCRS (ra dec &optional (epoch (current-epoch)))
+  (let* ((EO      (EO epoch))
+         (v_CIRS  (to-xyz (+ ra EO) dec))
+         (M_CIO   (trn (M_CIO epoch)))
+         (v_GCRS  (mat-mulv M_CIO v_CIRS)))
+    (to-thphi v_GCRS)))
 
 #|
 ;; Check from Wallace and Capitaine
@@ -550,8 +561,8 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 (defun preca (ra dec &optional (from-epoch +j2000+) (to-epoch (current-epoch)))
   ;; Most accurate (?) precession
   (mvb (ra2k dec2k)
-      (TIRS-to-GCRS ra dec from-epoch)
-    (GCRS-to-TIRS ra2k dec2k to-epoch)
+      (CIRS-to-GCRS ra dec from-epoch)
+    (GCRS-to-CIRS ra2k dec2k to-epoch)
     ))
 
 #|
@@ -574,10 +585,10 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   )
  |#
 
-(defun chk-prec (epoch)
+(defun chk-prec (epoch_TT)
   ;; Check our system
   ;; Needs values for: s, Δψ_2000A, Δε_2000A
-  (let* ((τ   (c2k epoch))
+  (let* ((τ   (c2k epoch_TT))
          (f   (* -2.7774d-6 τ))
          
          (γ_  (arcsec
@@ -637,7 +648,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                     (- 1 (* X X) (* Y Y)))))
 
          (_   (let ()
-                (db (Xq Yq Zq) (GCRS-XYZ epoch) ;; get quick est
+                (db (Xq Yq Zq) (GCRS-XYZ epoch_TT) ;; get quick est
                   ;; shows 7.7 as for J2000
                   ;;       8.9 as for J2024
                   (print `(:ΔCIP  ,(to-arcsec (acos (vdot `(,X ,Y ,Z) `(,Xq ,Yq ,Zq))))))
@@ -661,8 +672,8 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                 ,(- X)))
          
          ;; Check 1st way, against explicitly constructed M_class.
-         (EO   (EO epoch))
-         (s    0) ;; ??
+         (EO   (EO epoch_TT))
+         (s    0) ;; (* -1/2 X Y)) ;; ??
          
          (EO1  (- s (atan (vdot yv Σ) (vdot Γ Σ))))
          
@@ -686,14 +697,14 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
          ;; Compare Long Term Ecliptic model
          ;; Shows +52.8 mas for J2000
          ;;       +51.3 mas for J2024   
-         (kvlt (pecl (epj epoch)))
+         (kvlt (pecl (epj epoch_TT)))
          (Γlt  (vcross nv kvlt))
          (yvlt (vcross nv Γlt))
          (EOlt (- s (atan (vdot yvlt Σ) (vdot Γlt Σ))))
 
          ;; Compae with quick XYZ. using quick XYZ to compute CIP
          ;; against true form of ecliptic, kv from above.
-         (nv_q (GCRS-XYZ epoch))
+         (nv_q (GCRS-XYZ epoch_TT))
          (Σq   (db (Xq Yq Zq) nv_q
                  (let ((aq (/ (1+ Zq))))
                    `(,(- 1 (* aq Xq Xq))
@@ -713,13 +724,16 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     ;; Shows ΔEO_1 = ΔEO_2
     ;;       = -0.094 mas for J2000, ΔEO_lt = 52.8 mas, ΔEO_q = 12.9 as, ΔEO_qlt = 12.9 as
     ;;       = -1.5 mas for J2024, ΔEO_lt = 51.3 mas, ΔEO_q = 5.6 as, ΔEO_qlt = 5.6 as
-    (list
-     :ΔEO_1   (to-mas (- EO1  EO))
-     :ΔEO_2   (to-mas (- EO2  EO))
-     :ΔEO_lt  (to-mas (- EOlt EO))
-     :ΔEO_q   (to-arcsec (- EOq  EO))
-     :ΔEO_qlt (to-arcsec (- EOqlt EO)))
-    ))
+    (let ((*print-length* nil))
+      (print
+       (list
+        :EO      (to-hms EO)
+        :ΔEO_1   (to-mas (- EO1  EO))
+        :ΔEO_2   (to-mas (- EO2  EO))
+        :ΔEO_lt  (to-mas (- EOlt EO))
+        :ΔEO_q   (to-arcsec (- EOq  EO))
+        :ΔEO_qlt (to-arcsec (- EOqlt EO)) ))
+      (values))))
 
 #|
 (chk-prec +j2000+)
@@ -727,29 +741,100 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 (gcrs-to-tirs 0 0 +j2000+)
 
-(let* ((ra  (ra 0 0 0))
-       (dec (dec 0 0 0))
-       (from 2000)
+(let* ((ra  (ra 6 0 0))
+       (dec (dec 90 0 0))
+       (from 1950)
        (to   2024)
        (nyrs (- to from))
        (from-epoch (ymd from))
        (to-epoch   (ymd to)))
-  (list
-   :prec
-   (mvl (map-mult (#'to-ra #'to-dec)
-          (prec ra dec from-epoch to-epoch)))
-   :precn
-   (mvl (map-mult (#'to-ra #'to-dec)
-          (precn ra dec nyrs)))
-   :preca
-   (mvl (map-mult (#'to-ra #'to-dec)
-          (preca ra dec from-epoch to-epoch)))
-   #|
-   :tirs-gcrs
-   (mvl (map-mult (#'to-ra #'to-dec)
-          (tirs-to-gcrs ra dec from-epoch)))
-   |#
-   ))
+  (let ((*print-length* nil))
+    (print
+     (list
+      :eo-from (to-hms (EO from-epoch))
+      :eo-to   (to-hms (EO to-epoch))
+      :prec
+      (mvl (map-mult (#'to-ra #'to-dec)
+             (prec ra dec from-epoch to-epoch)))
+      :precn
+      (mvl (map-mult (#'to-ra #'to-dec)
+             (precn ra dec nyrs)))
+      :preca
+      (mvl (map-mult (#'to-ra #'to-dec)
+             (preca ra dec from-epoch to-epoch)))
+      :prec-aa
+      (mvl (map-mult (#'to-ra #'to-dec)
+             (prec-aa ra dec to-epoch)))
+      ))
+    (values)
+    ))
 
 (mat-mulv (r3 (deg 30)) '(0 0 1))
+|#
+
+#|
+;; ---------------------------------------------------
+;; From Explanatory Supplement to American Almanac
+;; Is this better than MCIO because of nutation incorporation?
+;;
+(defun mcio-aa (epoch)
+  (let* ((Tc  (c2k epoch))
+         (L   (deg (+ 280.5d0 (* Tc 36_000.8))))
+         (Ω   (deg (- 125.0d0 (* Tc 1934.1d0))))
+         (X   (arcsec (+ (* Tc 2004.19d0)
+                         (* Tc Tc -0.43d0)
+                         (* -6.84d0 (sin Ω))
+                         (* -0.52d0 (sin (+ L L))))
+                      ))
+         (Y   (arcsec (+ (* Tc -0.03d0)
+                         (* Tc Tc -22.41d0)
+                         (* 9.21d0 (cos Ω))
+                         (* 0.57d0 (cos (+ L L))))
+                      ))
+         (X   (to-rad X))
+         (Y   (to-rad Y))
+         (β   (- 1 (* 1/2 X X))))
+    #|
+         (csx (cis X))
+         (cX  (realpart csx))
+         (sX  (imagpart csx))
+         (sY  (sin Y)))
+    `(( ,cX   0   ,(- sX) )
+      (  0    1   ,(- sY) )
+      ( ,sX  ,sY    ,cX   ))
+    |#
+    `(( ,β   0   ,(- X) )
+      (  0   1   ,(- Y) )
+      ( ,X  ,Y    ,β   ))
+    
+    ))
+  
+(defun GCRS-to-CIRS-aa (ra dec epoch)
+  (let* ((mat (mcio-aa epoch))
+         (v   (to-xyz ra dec))
+         (vp  (mat-mulv mat v)))
+    (mvb (rap decp)
+        (to-thphi vp)
+      (values (- rap (EO epoch)) decp)
+      )))
+
+(defun CIRS-to-GCRS-aa (ra dec epoch)
+  (let* ((mat (trn (mcio-aa epoch)))
+         (v   (to-xyz (+ ra (EO epoch)) dec))
+         (vp  (mat-mulv mat v)))
+    (to-thphi vp)))
+
+(defun prec-aa (ra dec &optional (from-epoch +j2000+) (to-epoch (current-epoch)))
+  (mvb (ra2k dec2k)
+      (cirs-to-gcrs-aa ra dec from-epoch)
+    (gcrs-to-cirs-aa ra2k dec2k to-epoch)))
+
+#|
+(let ((ra  (hms 0 0 0))
+      (dec (dms 0 0 0))
+      (epoch (ymd 2024)))
+  (map-mult (#'to-ra #'to-dec)
+    (prec-aa ra dec +j2000+ epoch))
+  )
+|#
 |#

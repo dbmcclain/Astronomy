@@ -31,7 +31,7 @@
 
 (defun JD_TT-to-UT1 (JD_TT)
   ;; Compute UT1 from TT (which itself came from UTC)
-  (let ((ΔT  (+ +TAI-OFFSET+ *ΔAT* (- *DUT1*)))) ;; secs
+  (let ((ΔT  (+ +TAI-OFFSET+ *ΔAT*))) ;; secs
     (- JD_TT (/ ΔT +sec/day+))
     ))
 
@@ -58,13 +58,13 @@
 (defun EO (epoch_TT)
   ;; Equation of Mean Equinox
   (let* ((Tc  (c2k epoch_TT))
-         (prec (poly-eval Tc '(   0.014506d0
-                               4612.156534d0
-                                  1.3915817d0
-                                 -0.00000044d0
-                                 -0.000029956d0
-                                 -0.0000000368d0))))
-    (- (arcsec prec))))
+         (prec (poly-eval Tc '(   -0.014506d0
+                               -4612.156534d0
+                                 -1.3915817d0
+                                  0.00000044d0
+                                  0.000029956d0
+                                  0.0000000368d0))))
+    (arcsec prec)))
 
 (defun GMST (epoch_UT1)
   ;; Greenwich mean siderial time
