@@ -238,16 +238,19 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     ))
 
 (defun cio-to-eqx (ra dec epoch)
+  ;; Convert CIO-based RA,Dec to EQX-based values.
   (values (- ra (EO epoch))
           dec))
 
 (defun eqx-to-cio (ra dec epoch)
+  ;; Convert EQX-based RA, Dec to CIO-based values.
   (values (+ ra (EO epoch))
           dec))
 
 (defun GCRS-to-CIRS (ra dec &optional (epoch (current-epoch)))
-  ;; Apply precesssion+nutation to a GCRS J2000.0 position.  RA and
-  ;; Dec should refer to a CIO-based position, not an EQX-position.
+  ;; Apply precesssion + nutation to a GCRS J2000.0 position.  On
+  ;; entry, RA and Dec should refer to a CIO-based position, not an
+  ;; EQX-position.
   (let* ((v_GCRS  (to-xyz ra dec))
          (M_CIO   (M_CIO epoch))
          (v_CIRS  (mat-mulv M_CIO v_GCRS)))
@@ -255,9 +258,10 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     ))
 
 (defun CIRS-to-GCRS (ra dec &optional (epoch (current-epoch)))
-  ;; Undo the precession+nutation from a CIO-based position at epoch,
-  ;; to produce the equivalent J2000.0 GCRS position.  RA and Dec
-  ;; should refer to a CIO-based position, not an EQX-position.
+  ;; Undo the precession + nutation from a CIO-based position at
+  ;; epoch, to produce the equivalent J2000.0 GCRS position.  On
+  ;; entry, RA and Dec should refer to a CIO-based position, not an
+  ;; EQX-position.
   (let* ((v_CIRS  (to-xyz ra dec))
          (M_CIO   (trn (M_CIO epoch)))
          (v_GCRS  (mat-mulv M_CIO v_CIRS)))
@@ -370,7 +374,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;;      (RA,Dec) -> Prec(RA,Dec,epoch) - ERA(epoch) = -HA(epoch).
   ;;
   ;; This is the -HA of the position at Greenwich on epoch. Done
-  ;; entirely without needing knowledge of GMST.
+  ;; entirely without needing knowledge of GMST, nor the Equinox.
   (let* ((v_GCRS  (to-xyz ra dec))
          (R_TIRS  (R_TIRS epoch))
          (v_TIRS  (mat-mulv R_TIRS v_GCRS)))
@@ -379,7 +383,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 (defun TIRS-to-GCRS (ra dec &optional (epoch (current-epoch)))
   ;; On entry, RA and Dec should refer to a CIO-based position. This
-  ;; computes RA, Dec (CIO-based) at J2000.0, given the RA = -HA at
+  ;; computes CIO-based RA, Dec at J2000.0, given the RA = -HA at
   ;; Greenwich on epoch.
   (let* ((v_TIRS  (to-xyz ra dec))
          (R_TIRS  (trn (R_TIRS epoch)))
