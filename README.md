@@ -444,7 +444,7 @@ The CIP is usually designated by a unit vector, with Cartesian components X, Y, 
 
 ![Nutation](https://github.com/dbmcclain/Astronomy/assets/3160577/126294b8-a914-4f8b-bbd8-877a439a9de6)
 
-Here is the same 30-year information, but shows also the long term Precession in both axes. In this graph the X and Y axes are not drawn to the same scale. Doing so would swamp the little Y nutation. There is a steady drift in X of around 20.04 arcsec/year, but only around 3 arcsec/year in Y.
+Here is the same 30-year information, but shows also the long term Precession in both axes. In this graph the X and Y axes are not drawn to the same scale. Doing so would swamp the little Y nutation. There is a steady drift in X of 20 arcsec/year, but only 3 arcsec/year in Y.
 
 ![Precession + Nutation](https://github.com/dbmcclain/Astronomy/assets/3160577/602bbd55-1457-4308-bf80-9cea84dcb401)
 
