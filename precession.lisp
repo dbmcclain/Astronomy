@@ -143,7 +143,7 @@ pequ = ( −0.29437643797369031532 −0.11719098023370257855 +0.9484770882408209
  |#
 
 (defun pmat (epoch)
-  ;; Compute long term precession matrix.
+  ;; Compute long term precession matrix. (= M_class)
   ;; Produces a precession matrix that will transform from J2000.0 to Epoch.
   ;; To be applied against an XYZ vector arising from RA, Dec at J2000.0.
   (let* ((Tc   (c2k epoch))
@@ -606,4 +606,100 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
         ))))
 
 ;; ------------------------------------------------------
+;; Approx CIRS precession + nutation, with XY obtained from
+;; more accurate long-term CIP model.
 
+(defun M_CIO-e (epoch)
+  (let* ((Tc     (c2k epoch))
+         (CIP    (pequ Tc))
+         (X      (first CIP))
+         (Y      (second CIP)))
+    `((1   0   ,(- X))
+      (0   1   ,(- Y))
+      (,X  ,Y  1))
+    ))
+  
+(defun GCRS-to-CIRS-e (ra dec epoch)
+  (let* ((m_cio  (M_CIO-e epoch))
+         (v_gcrs (to-xyz ra dec))
+         (v_cirs (mat-mulv m_cio v_gcrs)))
+    (to-thphi v_cirs)
+    ))
+
+(defun CIRS-to-GCRS-e (ra dec epoch)
+  (let* ((m_cio  (M_CIO-e epoch))
+         (v_cirs (to-xyz ra dec))
+         (v_gcrs (mat-mulv (trn m_cio) v_cirs)))
+    (to-thphi v_gcrs)
+    ))
+
+(defun prece (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
+  ;; CIRS-based precession
+  ;; On entry, RA and Dec should refer to an EQX-based position.
+  ;; Results seem identical with PREC based on Long Term Equator and Equinox.
+  (mvb (rac decc) ;; convert to CIO-based position
+      (eqx-to-cio ra dec from-epoch)
+    (mvb (ra2k dec2k)  ;; unwind precession+nutation to reach J2000.0
+        (CIRS-to-GCRS-e rac decc from-epoch)
+      (mvb (rap decp) ;; apply precession+nutation for to-epoch
+          (GCRS-to-CIRS-e ra2k dec2k to-epoch)
+        (cio-to-eqx rap decp to-epoch) ;; convert to EQX-base position
+        ))))
+
+(defun R3EO-e (epoch)
+  ;; From M_CIO = R3(-EO) . M_class => R3(-EO) = M_CIO . Trn(M_class)
+  ;;
+  ;; Our PMAT routine computes M_class based on long-term models for CIP and Ecliptic Pole.
+  ;;
+  ;; R3(ang) applied to CIO vectors subtracts ang from CIO RA.
+  ;; So we can subtract EO from RA, to convert from CIO α to EQX α, by applying:
+  ;;
+  ;;    R3(EO) = Trn(R3(-EO)) = Trn(M_CIO . Trn(M_class)) = M_class . Trn(M_CIO)
+  ;;
+  ;; Returns R3(EO) = ((  cos EO  sin EO  0)
+  ;;                   ( -sin EO  cos EO  0)
+  ;;                   (  0       0       1))
+  ;;
+  (let* ((M_class  (pmat epoch))
+         ;; Bottom row of M_class is unit vector (X,Y,Z) to GCRS CIP
+         (CIP      (third M_class))
+         (X        (first CIP))
+         (Y        (second CIP))
+         (trnM_CIO `((1      0      ,X)
+                     (0      1      ,Y)
+                     (,(- X) ,(- Y) 1))))
+    (mat-mulm M_class trnM_CIO)
+    ))
+
+(defun EO-e (epoch)
+  (let* ((R3EO  (R3EO-e epoch))
+         (Row1  (first R3EO))
+         (cEO   (first Row1))
+         (sEO   (second Row1)))
+    (atan sEO cEO)))
+
+#|
+(plt:fplot 'plt '(0 50)
+           (lambda (dyr)
+             (let* ((epoch (ymd (+ 2000 dyr)))
+                    (EO    (EO epoch))
+                    (EO-e  (EO-e epoch)))
+               (to-mas (- EO-e EO))))
+           :clear t
+           :thick 2)
+
+(let* ((epoch (ymd 2024))
+       (epoch +j2000+)
+       (epoch (ymd 2050))
+       (EO    (EO epoch))
+       (EO-e  (EO-e epoch)))
+  ;; EO-e and EO differ by 14.5 mas ≈ 0.967 ms in J2000
+  ;; growing to 21.7 mas ≈ 1.45 ms in J2050
+  ;; Hence, no particular reason to change our EO(epoch) function.
+  ;; Using it makes our GMST agree with USNO.
+  (list
+   :EO   (to-arcsec EO)
+   :EO-e (to-arcsec EO-e)
+   :ΔEO  (- (to-mas EO-e)
+            (to-mas EO))))
+ |#
