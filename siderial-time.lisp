@@ -24,15 +24,17 @@
 (defconstant +TAI-OFFSET+  32.184) ;; secs, TT = TAI + +TAI-OFFSET+, never changes
 
 (defun JD_UTC-to-UT1 (JD_UTC)
-  (+ JD_UTC (/ *DUT1* +sec/day+)))
+  (+ JD_UTC (secs *DUT1*)))
 
 (defun JD_UT1-to-TT (JD_UT1)
-  (+ JD_UT1 (/ (+ +TAI-OFFSET+ *ΔAT*) +sec/day+)))
+  (let ((ΔT  (secs (+ +TAI-OFFSET+ *ΔAT*))))
+    (+ JD_UT1 ΔT)
+    ))
 
 (defun JD_TT-to-UT1 (JD_TT)
   ;; Compute UT1 from TT (which itself came from UTC)
-  (let ((ΔT  (+ +TAI-OFFSET+ *ΔAT*))) ;; secs
-    (- JD_TT (/ ΔT +sec/day+))
+  (let ((ΔT  (secs (+ +TAI-OFFSET+ *ΔAT*))))
+    (- JD_TT ΔT)
     ))
 
 ;; ----------------------------------------
@@ -59,6 +61,7 @@
 
 (defun EO (epoch_TT)
   ;; Equation of Mean Equinox
+  ;; Using epoch_UT1 instead of epoch_TT makes only 0.1 mas difference ≈ 7 μs.
   (let* ((Tc  (c2k epoch_TT))
          (prec (poly-eval Tc '(   -0.014506d0
                                -4612.156534d0
