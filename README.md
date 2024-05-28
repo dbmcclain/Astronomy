@@ -32,16 +32,26 @@ Convenient angle entry in a variety of measures. Here, _ang_ represents a real n
 
 **deg** _degs => ang_ 
 - 360 deg = 1 turn.
-- `(to-turns (deg 90)) => 0.25`	
+- `(to-turns (deg 90)) => 0.25`
+- 1 deg ≈ the angular size of an American quarter dollar coin, or 1 Euro coin, viewed from a distance of 4.5 feet. About the same size as the width of your thumb on an outstretched arm. Also about twice the size of the Moon and the Sun.
 
 **arcmin** _arcmins => ang_
 - 60 arcmin = 1 deg.
+- 1 arcmin ≈ the approximate limit of human visual acuity.
+  - That same quarter dollar viewed from a distance of 286 feet. Almost the length of a football field.
+  - Mizar and Alcor, next to each other at the middle of the handle of the Big Dipper, are separated by 11 arcmin. They were an ancient test of visual acuity. I can see them separated in the night sky, but my eyes are dark-adapted. And that means I'm seeing with the rod cells of my eyes, not the cone cells. Our rod cells do have higher angular resolution, but they are relegated to the periphery of the fovea. And so it seems a lower quality of visual acuity despite their finer resolution. (And no color sensation!) You often have to view with averted vision.
 
 **arcsec** _arcsecs => ang_
 - 60 arcsec = 1 arcmin.
+- 1 arcsec ≈ the angular size of an American quarter dollar coin, viewed from a distance of 3.25 miles.
+- Our MMT Telescope could point and track to an accuracy of 0.1 arcsec. (ca. 1980) I.e., the coin at 32 miles. It had to, because our field of view was often only 15 arcsec wide. Oh, the challenges of bringing 6 large telescopes to a common focus, and maintaining it.
+- Many consumer camera sensors have pixels that subtend a few arcsec at the focus of lenses and telescopes with 250-500 mm focal length.
 
 **mas** _mas => ang_
-- 1000 mas = 1 arcsec.
+- 1,000 mas = 1 arcsec.
+- 1 mas ≈ the angular size of an American quarter dollar coin, stationed in NYC, and viewed from Los Angeles.
+  - That same quarter, stationed on the Moon, would have an angular extent of about 14μas.
+  - VLBI Astronomy can discern 0.1μas.
 
 **dms** _ddd &optional mm ss => ang_
 - An easy way to specify an angle in deg, arcmin, arcsec.
@@ -147,6 +157,8 @@ There is nothing better than integer arithmetic and integer fractions of a Turn.
 I did carefully consider my options when I wrote this code. I wrote a 24-bit integer version of this code, but I finally decided that double-precision FP would be okay to use here. Single precision? Definitely not! Simply becuase FP arithmetic seeks to preserve range at the cost of LSB precision. And single precision FP has barely enough bits in the range from 0.0 to 1.0. Anything larger erodes the LSB.
 
 _[To think about it... are there any practical uses for radian measure? Since π is irrational, you can never get to a full circle angular sweep without overshooting. And what do you use to directly measure radians? So why not stop at the intermediate measure you do use to determine them? 😁]_
+
+_[To answer the question... there is at least 1 important use for radian measure. By expressing your angles in radians, small angle approximations for (Sin x) ≈ x and (Cos x) ≈ 1 - x^2/2. Just like using Natural Logs vs Log10, where, for small x, (exp x) ≈ 1+x, and (log (1+ x)) ≈ x.]_
 
 ---
 ## Redefined Trig Functions
@@ -290,9 +302,11 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 - `(to-hms (gmst +j2000+)) => (HMS 18 41 50.549)`
 - Validated to within a few μsec of USNO for 50 years, beginning epoch 2000-05-24T00:00:00Z, incrementing by 365d.
   - mean ≈ 0.47μs, sigma ≈ 28μs
-  - validation used UTC instead of the proper UT1 and TT    
+  - validation used UTC instead of the proper UT1 and TT
+    - This is somewhat puzzling... I expect that USNO uses only the very best calculations for their web service page. Yet when I provide UT1 and TT to the **GMST** function, as theoretically required, then I get the same sigma scatter, but my calculation error rises against theirs to a mean difference of 7 μsec. So doing things wrong produces better results. But both results are more than adequate for our purposes.     
 ![GMST Validation](https://github.com/dbmcclain/Astronomy/assets/3160577/2b84d301-b82c-4469-abd2-185679211598)
 
+Since the 2000-2006 IAU Resolutions for the ICRS position framework, GMST has been relegated to a secondary status. Research doesn't even need to know the siderial time corresponding to observations. I do still use GMST for my own observing, and I'm sure that I'm not alone. But see the section below on _Accurate Precession_.
 
 **LMST** _&key lon epoch => ang_
 - Compute siderial time.
@@ -329,14 +343,14 @@ Your observatory location and time zone should be set in Observatory.lisp. These
 ```
 ---
 ## Accurate Precession
-Accurate Precession between any two epochs - uses IAU Long-Term Ecliptic and Equatorial polar precession models. Adopted from the IAU/SOFA C routines in the 2023 release.
+Accurate Precession between any two epochs - uses IAU Long-Term Ecliptic and Equatorial polar precession models. Adopted from the IAU/SOFA C routines from their 2023 release.
 
 ---
 So, what exactly is "accurate" precession? 
 
 In general, most of us don't care about an accuracy more precise than about 10-60 arcsec on the sky. We don't care at all what it tells us to set for the RA, since that gets multiplied by (Cos δ) on the way to the sky. What we care about is getting the telescope pointed so that the target is roughly centered in the field of view.
 
-In the years 2000-2006, the IAU established a new standard, called GCRS (Geocentric Celestial Reference System), for position reckoning. We saw huge progress in the decades from 1980-2000, where VLBI was able to discern sub-mas errors and inconsistencies with our old way of working against the sky, the old FK4 and FK5 system. The IAU came up with a system that divorced our dependence on Earth, and its rotation, from the way we account for star and galaxy positions.
+In the years 2000-2006, the IAU established a new standard, called ICRS (International Celestial Reference System), for position reckoning. We saw huge progress in the decades from 1980-2000, where VLBI was able to discern sub-mas errors and inconsistencies with our old way of working against the sky, the old FK4 and FK5 system. The IAU came up with a system that divorced our dependence on Earth, and its rotation, from the way we account for star and galaxy positions.
 
 So consequently they suggest a more rigorous way to perform precession and nutation all at once in every transformation of star positions from their catalogued positions, matching the Equinox of J2000.0. Time is reckoned differently now too, based primarily on TAI (atomic clocks), instead of relying on Earth's rotation period.
 
@@ -344,7 +358,7 @@ The IAU methods of today can transform catalog positions to your current epoch t
 
 That's really great! But you probably won't care about that kind of accuracy from your backyard observatory.
 
-The new way to do precession on your star catalog positions is quite unlike the way we once did it. Traditionally we cared about the location of the North Celestial Pole *and* the North Ecliptic Pole. Knowing those two things we could then derive where the 0h of RA was (The First Point of Aries), where the Equatorial plane and Ecliptic plane intersect on the ascending node. And we could know the current obliquity, or tilt of the Earth's Equatorial plane relative to the Ecliptic plane. Hence knowing what those features were when the star was catalogued, and what those features are today, allows us to compute the shifted apparent position of the star in todays coordinate frame.
+The new way to do precession on your star catalog positions is quite unlike the way we once did it. Traditionally we cared about the location of the North Celestial Pole *and* the North Ecliptic Pole. Knowing those two things we could then derive where the 0h of RA was (The First Point of Aries), where the Equatorial plane and Ecliptic plane intersect on the ascending node. And we could know the current obliquity, or tilt of the Earth's Equatorial plane relative to the Ecliptic plane. Hence knowing what those features were when the star was catalogued, and what those features are today, allows us to compute the shifted apparent position of the star in today's coordinate frame.
 
 Today, the IAU just has us transform from one fixed system, forever unchanging, to your local equinox, and there is no need to know anything at all about the Ecliptic system. The two approaches are completely equivalent, but the GCRS to CIRS transform is the modern way, based on a fixed, non-rotating, reference frame. In the past we always had to know which Equinox was used to report star position. Now those positions are firmly fixed, except for visible proper motion and parallax. Distant Quasars are so far away that they will never change their positions from our viewpoint. This is the system that our orbiting observatories can utilize - they aren't on the ground and aren't subject to the erratic rotation of the Earth. We on Earth can also use the system.
 
@@ -355,13 +369,13 @@ Which method is the quickest to use? Probably the one that we always used in our
 ---
 
 **prec** _RA-ang Dec-ang &optional to-epoch from-epoch => RA_ang, Dec_ang_
-- Implements the IAU Long-Term Precession models for Ecliptic and Equatorial polar precession.
+- Implements the IAU Long-Term Precession+Nutation models for Ecliptic and Equatorial polar precession.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
 - As good as it gets, in this library of code - incorporates the most complete, long-term, precession and nutation.
 - Claims to be within 100 arcsec for 200,000 years on either side of J2000.0. (Who would know? if it isn't.)
 ```
 (map-mult (#'to-ra #'to-dec)
-  (prec (ra 9 20) (dec 80 15) +j2000+ (d.t 2024_01_01)))
+  (prec (ra 9 20) (dec 80 15) (d.t 2024_01_01) +j2000+))
 =>
 (RA 9 23 12.106)
 (DEC 80 8 49.398)
@@ -388,21 +402,44 @@ So here I provide the grubby version too. It allows you to precess approximately
 
 **precN** _RA-ang Dec-ang &optional nyrs => RA-ang, Dec-ang_
 - Does the grubby precession for you.
+- Ignores Nutation. Nutation is generally ≈ 10 arcsec or less.
 - _nyrs_ defaults to the number of years from J2000.0 to your current epoch.
   - It is likely, going forward, that most of your catalogued positions will refer to J2000.0.
-
+```
+(map-mult (#'to-ra #'to-dec)
+  (precn (ra 9 20) (dec 80 15) 24))
+=>
+(RA 9 23 13.763)
+(DEC 80 8 51.506)
+```
 ---
 **preca** and **prec-aa** both use the modern IAU GCRS to CIRS transforms. (GCRS = Geocentric Celestial Reference System, CIRS = Celestial Intermediate Reference System). GCRS corresponds to a catalog of star positions reported as J2000.0. CIRS refers to any other epoch, like the one you are using during an observing run.
 
 **preca** _RA-ang Dec-ang &optional to-epoch from-epoch => Ra-ang, Dec-ang
-- Does the precession using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
+- Does the precession+nutation using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
 - Claims better than 1 arcsec accuracy for the next century.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
+```
+(map-mult (#'to-ra #'to-dec)
+  (preca (ra 9 20) (dec 80 15) (d.t 2024_01_01) +j2000+))
+=>
+(RA 9 23 17.021)
+(DEC 80 8 55.794000000000004)
+```
 
 **prec-aa** _RA-ang Dec-ang &optional to-epoch from-epoch => Ra-ang, Dec-ang_
-- Does the precession using another cheap approximation, coming out of the Explanatory Supplement to the American Almanac.
+- Does the precession+nutation using another cheap approximation, coming out of the "3rd Ed. Explanatory Supplement to the Astronomical Almanac", sec. 7.4.5.1, pp. 298-299. 
 - Claims better than 1 arcsec accurcy for the next century.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
+```
+(map-mult (#'to-ra #'to-dec)
+  (prec-aa (ra 9 20) (dec 80 15) (d.t 2024_01_01) +j2000+))
+=>
+(RA 9 23 16.997)
+(DEC 80 8 55.785000000000004)
+```
+
+_[So... which one was correct? (They all were, unless you need sub-arcsec accuracy.)]_
 
 ---
 ## Az/El and Equatorial Coordinates
@@ -437,6 +474,7 @@ Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward Eas
 68.78774440308138   ;; el - Yes!
 ```
 
+---
 **airmass** _El-ang => airmass_ -- (= 1/(Sin El))
 ```
 ;; What have I been accepting?
@@ -452,4 +490,4 @@ Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward Eas
 - Defaults to now, and observatory location.
                   
 ---
-Eventual plans to accumulate addional featurs: Galactic coords, Nutation, Aberration, Refraction, more...
+Eventual plans to accumulate addional featurs: Galactic coords, Aberration, Refraction, more...
