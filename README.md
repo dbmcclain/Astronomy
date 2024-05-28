@@ -369,7 +369,7 @@ Which method is the quickest to use? Probably the one that we always used in our
 ---
 
 **prec** _RA-ang Dec-ang &optional to-epoch from-epoch => RA_ang, Dec_ang_
-- Implements the IAU Long-Term Precession+Nutation models for Ecliptic and Equatorial polar precession.
+- Implements the IAU Long-Term Precession (no Nutation) models for Ecliptic and Equatorial polar precession.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
 - As good as it gets, in this library of code - incorporates the most complete, long-term, precession and nutation.
 - Claims to be within 100 arcsec for 200,000 years on either side of J2000.0. (Who would know? if it isn't.)
@@ -416,7 +416,7 @@ So here I provide the grubby version too. It allows you to precess approximately
 **preca** and **prec-aa** both use the modern IAU GCRS to CIRS transforms. (GCRS = Geocentric Celestial Reference System, CIRS = Celestial Intermediate Reference System). GCRS corresponds to a catalog of star positions reported as J2000.0. CIRS refers to any other epoch, like the one you are using during an observing run.
 
 **preca** _RA-ang Dec-ang &optional to-epoch from-epoch => Ra-ang, Dec-ang
-- Does the precession+nutation using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
+- Does precession + 18.6 yr 11.5 arcsec nutation, using a cheap approximation to the most rigorous GCRS-CIRS transform. This one comes from the authors who guided the new IAU system we use today.
 - Claims better than 1 arcsec accuracy for the next century.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
 ```
@@ -428,7 +428,7 @@ So here I provide the grubby version too. It allows you to precess approximately
 ```
 
 **prec-aa** _RA-ang Dec-ang &optional to-epoch from-epoch => Ra-ang, Dec-ang_
-- Does the precession+nutation using another cheap approximation, coming out of the "3rd Ed. Explanatory Supplement to the Astronomical Almanac", sec. 7.4.5.1, pp. 298-299. 
+- Does precession + 18.6 yr 11.5 arcsec nutation + 1/2 yr 0.77 arcsec nutation, using another cheap approximation, coming out of the "3rd Ed. Explanatory Supplement to the Astronomical Almanac", sec. 7.4.5.1, pp. 298-299. 
 - Claims better than 1 arcsec accurcy for the next century.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
 ```
