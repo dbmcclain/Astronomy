@@ -222,8 +222,8 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     ))
   
 (defun M_CIO (epoch)
-  ;; Simplified precession, good to 0.12 arcsec in 21st cy,
-  ;; good to 0.85 arcsec over ±2 cy
+  ;; Simplified precession, good to 0.08 arcsec in 21st cy,
+  ;; good to 0.38 arcsec over ±2 cy
   ;;
   ;;  v_TIRS = R(TT,UT) . v_GCRS
   ;;  v_CIRS = M_CIO(TT) . v_GCRS
@@ -232,10 +232,11 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;;
   (db (X Y _) (GCRS-XYZ epoch)
     (declare (ignore _))
-    `((  1  0  ,(- X))
-      (  0  1  ,(- Y))
-      ( ,X ,Y  1    ))
-    ))
+    (let ((cX  (- 1 (* 1/2 X X))))
+      `(( ,cX  0  ,(- X))
+        (  0   1  ,(- Y))
+        ( ,X  ,Y  ,cX  ))
+      )))
 
 (defun cio-to-eqx (ra dec epoch)
   ;; Convert CIO-based RA,Dec to EQX-based values.
@@ -394,6 +395,136 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 ;; -------------------------------------------------------------
 ;; -------------------------------------------------------------
 
+(defun fuku (epoch_TT)
+  ;; PB angles from Fukushima-Williams wrt GCRS.
+  ;; For IAU 2006 Precession
+  (let* ((τ   (c2k epoch_TT))
+         
+         (γ_  (arcsec
+               (poly-eval τ '(   -0.052928d0
+                                 10.556378d0
+                                  0.4932044d0
+                                 -0.00031238d0
+                                 -0.000002788d0
+                                  0.0000000260d0)) ))
+         (φ_  (arcsec
+               (poly-eval τ '( 84381.412819d0
+                                 -46.811016d0
+                                   0.0511268d0
+                                   0.00053289d0
+                                  -0.000000440d0
+                                  -0.0000000176d0)) ))
+         (ψ_  (arcsec
+               (poly-eval τ '(     -0.041775d0
+                                 5038.481484d0
+                                    1.5584175d0
+                                   -0.00018522d0
+                                   -0.000026452d0
+                                   -0.0000000148d0)) ))
+         (ε_A (arcsec
+               (poly-eval τ '(84381.406d0
+                                -46.836769d0
+                                 -0.0001831d0
+                                  0.00200340d0
+                                 -0.000000576d0
+                                 -0.0000000434d0)) )) )
+    (values γ_ φ_ ψ_ ε_A)
+    ))
+
+(defun nut2000A (epoch_TT)
+  (values 0 0)) ;; can't we do better here?
+
+(defun nut2006 (epoch_TT)
+  ;; 2000A Nutation corrected to be consistent with IAU 2006 Precesssion
+  (mvb (Δψ_2000A Δε_2000A)
+      (nut2000A epoch_TT)
+    (let* ((τ  (c2k epoch_TT))
+           (f  (* -2.774d-6 τ)))
+      
+      (values (* Δψ_2000A (+ 1 0.4697d-6 f))
+              (* Δε_2000A (+ 1 f)))
+      )))
+
+(defun M_class (epoch_TT)
+  ;; Equinox-based NPB matrix
+  (mvb (γ_ φ_ ψ_ ε_A)
+      (fuku epoch_TT)
+    (mvb (Δψ Δε)
+        (nut2006 epoch_TT)
+      (let* ((ψ    (+ ψ_  Δψ))
+             (ε    (+ ε_A Δε))
+             (R3γ_ (R3 γ_))
+             (R1φ_ (R1 φ_))
+             (R3mψ (R3 (- ψ)))
+             (R1mε (R1 (- ε))))
+        ;; Bottom row will be the GCRS unit vector to CIP (X, Y, Z)
+        (mat-mulm R1mε
+                  (mat-mulm R3mψ
+                            (mat-mulm R1φ_ R3γ_)))
+        ))))
+                            
+#|
+(let* ((epoch +j2000+))
+  (list
+   (pmat    epoch)
+   (m_class epoch)))
+
+(plt:paramplot 'plt '(-50 50)
+               (lambda (dt)
+                 (let* ((epoch (ymd (+ 2000 dt)))
+                        (m_class (m_class epoch))
+                        (pmat    (pmat epoch)))
+                   (- (first (third m_class))
+                      (first (third pmat)))
+                   ))
+               (lambda (dt)
+                 (let* ((epoch (ymd (+ 2000 dt)))
+                        (m_class (m_class epoch))
+                        (pmat    (pmat epoch)))
+                   (- (second (third m_class))
+                      (second (third pmat)))
+                   ))
+                :clear t
+                :aspect 1
+                :thick 2
+                ;; :xrange '(-1 1)
+                ;; :yrange '(-1 1)
+                )
+(plt:paramplot 'plt '(-50 50)
+               (lambda (dt)
+                 (let* ((epoch (ymd (+ 2000 dt)))
+                        (pmat    (pmat epoch)))
+                   (first (third pmat))
+                   ))
+               (lambda (dt)
+                 (let* ((epoch (ymd (+ 2000 dt)))
+                        (pmat    (pmat epoch)))
+                   (second (third pmat))
+                   ))
+                :clear t
+                ;; :aspect 1
+                :thick 2
+                ;; :xrange '(-1 1)
+                ;; :yrange '(-1 1)
+                )
+(plt:paramplot 'plt '(-50 50)
+               (lambda (dt)
+                 (let* ((epoch (ymd (+ 2000 dt)))
+                        (m_class (m_class epoch)))
+                   (first (third m_class))
+                   ))
+               (lambda (dt)
+                 (let* ((epoch (ymd (+ 2000 dt)))
+                        (m_class (m_class epoch)))
+                   (second (third m_class))
+                   ))
+                :color :red
+                ;; :aspect 1
+                :thick 2
+                )
+|#
+
+#|
 (defun chk-prec (epoch_TT)
   ;; Check our system
   ;; Needs values for: s, Δψ_2000A, Δε_2000A
@@ -543,7 +674,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
         :ΔEO_q   (to-arcsec (- EOq  EO))
         :ΔEO_qlt (to-arcsec (- EOqlt EO)) ))
       (values))))
-
+|#
 ;; -------------------------------------------------------------
 ;; ---------------------------------------------------
 ;;
@@ -574,7 +705,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     (let ((cX  (- 1 (* 1/2 X X)) )) ;; ≈ (Cos X)
       `(( ,cX  0   ,(- X) )
         (  0   1   ,(- Y) )
-        ( ,X  ,Y    ,cX   ))
+        ( ,X  ,Y   ,cX    ))
     )))
 
 (defun GCRS-to-CIRS-aa (ra dec &optional (epoch (current-epoch)))
@@ -613,10 +744,11 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   (let* ((Tc     (c2k epoch))
          (CIP    (pequ Tc))
          (X      (first CIP))
-         (Y      (second CIP)))
-    `((1   0   ,(- X))
-      (0   1   ,(- Y))
-      (,X  ,Y  1))
+         (Y      (second CIP))
+         (cX     (- 1 (* 1/2 X X))))
+    `((,cX   0   ,(- X))
+      (  0   1   ,(- Y))
+      ( ,X  ,Y   ,cX  ))
     ))
   
 (defun GCRS-to-CIRS-e (ra dec epoch)
@@ -665,9 +797,10 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
          (CIP      (third M_class))
          (X        (first CIP))
          (Y        (second CIP))
-         (trnM_CIO `((1      0      ,X)
-                     (0      1      ,Y)
-                     (,(- X) ,(- Y) 1))))
+         (cX       (- 1 (* 1/2 X X)))
+         (trnM_CIO `((,cX     0      ,X)
+                     ( 0      1      ,Y)
+                     (,(- X) ,(- Y)  ,cX)) ))
     (mat-mulm M_class trnM_CIO)
     ))
 
@@ -679,7 +812,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     (atan sEO cEO)))
 
 #|
-(plt:fplot 'plt '(0 50)
+(plt:fplot 'plt '(-50 50)
            (lambda (dyr)
              (let* ((epoch (ymd (+ 2000 dyr)))
                     (EO    (EO epoch))
@@ -692,12 +825,12 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
            :thick 2)
 
 (let* ((epoch (ymd 2024))
-       (epoch +j2000+)
+       ;; (epoch +j2000+)
        (epoch (ymd 2050))
        (EO    (EO epoch))
        (EO-e  (EO-e epoch)))
   ;; EO-e and EO differ by 14.5 mas ≈ 0.967 ms in J2000
-  ;; growing to 21.7 mas ≈ 1.45 ms in J2050
+  ;; dropping to -5.5 mas ≈ -0.367 ms in J2050
   ;; Hence, no particular reason to change our EO(epoch) function.
   ;; Using it makes our GMST agree with USNO.
   (list
