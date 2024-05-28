@@ -438,6 +438,12 @@ So here I provide the grubby version too. It allows you to precess approximately
 (RA 9 23 16.997)
 (DEC 80 8 55.785000000000004)
 ```
+The following graph illustrates the Nutation atop Precession over a 30 year period, starting from J2000.0. CIP = Celestial Intermediate Pole, aka, North Celestial Pole. 
+
+The CIP is usually designated by a unit vector, with Cartesian components X, Y, and Z. The Z axis points toward the GCRS Equatorial Pole for epoch J2000.0. This circular dance occurs atop an even larger, long term circle in X and Y, not shown here, with period around 25,800 years.
+
+![Nutation](https://github.com/dbmcclain/Astronomy/assets/3160577/126294b8-a914-4f8b-bbd8-877a439a9de6)
+
 
 _[So... which one was correct? (They all were, unless you need sub-arcsec accuracy.)]_
 
