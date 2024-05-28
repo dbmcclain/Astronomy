@@ -237,19 +237,28 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
       ( ,X ,Y  1    ))
     ))
 
+(defun cio-to-eqx (ra dec epoch)
+  (values (- ra (EO epoch))
+          dec))
+
+(defun eqx-to-cio (ra dec epoch)
+  (values (+ ra (EO epoch))
+          dec))
+
 (defun GCRS-to-CIRS (ra dec &optional (epoch (current-epoch)))
-  (let* ((EO      (EO epoch))
-         (v_GCRS  (to-xyz ra dec))
+  ;; Apply precesssion+nutation to a GCRS J2000.0 position.  RA and
+  ;; Dec should refer to a CIO-based position, not an EQX-position.
+  (let* ((v_GCRS  (to-xyz ra dec))
          (M_CIO   (M_CIO epoch))
          (v_CIRS  (mat-mulv M_CIO v_GCRS)))
-    (mvb (rap decp)
-        (to-thphi v_CIRS)
-      (values (- rap EO) decp)
-      )))
+    (to-thphi v_CIRS)
+    ))
 
 (defun CIRS-to-GCRS (ra dec &optional (epoch (current-epoch)))
-  (let* ((EO      (EO epoch))
-         (v_CIRS  (to-xyz (+ ra EO) dec))
+  ;; Undo the precession+nutation from a CIO-based position at epoch,
+  ;; to produce the equivalent J2000.0 GCRS position.  RA and Dec
+  ;; should refer to a CIO-based position, not an EQX-position.
+  (let* ((v_CIRS  (to-xyz ra dec))
          (M_CIO   (trn (M_CIO epoch)))
          (v_GCRS  (mat-mulv M_CIO v_CIRS)))
     (to-thphi v_GCRS)))
@@ -258,10 +267,15 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 (defun preca (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
   ;; CIRS-based precession
-  (mvb (ra2k dec2k)
-      (CIRS-to-GCRS ra dec from-epoch)
-    (GCRS-to-CIRS ra2k dec2k to-epoch)
-    ))
+  ;; On entry, RA and Dec should refer to an EQX-based position.
+  (mvb (rac decc) ;; convert to CIO-based position
+      (eqx-to-cio ra dec from-epoch)
+    (mvb (ra2k dec2k)  ;; unwind precession+nutation to reach J2000.0
+        (CIRS-to-GCRS rac decc from-epoch)
+      (mvb (rap decp) ;; apply precession+nutation for to-epoch
+          (GCRS-to-CIRS ra2k dec2k to-epoch)
+        (cio-to-eqx rap decp to-epoch) ;; convert to EQX-base position
+        ))))
 
 ;; ------------------------------------------------------------
 #|
@@ -342,18 +356,31 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;;
   ;; This function is R(TT,UT).
   ;;
+  ;; A positive rotation, R3, subtracts the ERA(epoch) from the RA.
+  ;;
   (let* ((M_CIO (M_CIO epoch))
          (ERA   (ERA epoch))
          (R3    (R3 ERA)))
     (mat-mulm R3 M_CIO)))
 
 (defun GCRS-to-TIRS (ra dec &optional (epoch (current-epoch)))
+  ;; On entry, RA and Dec should refer to a CIO-based J2000.0
+  ;; position.  Computes:
+  ;;
+  ;;      (RA,Dec) -> Prec(RA,Dec,epoch) - ERA(epoch) = -HA(epoch).
+  ;;
+  ;; This is the -HA of the position at Greenwich on epoch. Done
+  ;; entirely without needing knowledge of GMST.
   (let* ((v_GCRS  (to-xyz ra dec))
          (R_TIRS  (R_TIRS epoch))
          (v_TIRS  (mat-mulv R_TIRS v_GCRS)))
-    (to-thphi v_TIRS)))
+    (to-thphi v_TIRS)
+    ))
 
 (defun TIRS-to-GCRS (ra dec &optional (epoch (current-epoch)))
+  ;; On entry, RA and Dec should refer to a CIO-based position. This
+  ;; computes RA, Dec (CIO-based) at J2000.0, given the RA = -HA at
+  ;; Greenwich on epoch.
   (let* ((v_TIRS  (to-xyz ra dec))
          (R_TIRS  (trn (R_TIRS epoch)))
          (v_GCRS  (mat-mulv R_TIRS v_TIRS)))
@@ -547,28 +574,32 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
     )))
 
 (defun GCRS-to-CIRS-aa (ra dec &optional (epoch (current-epoch)))
-  (let* ((EO      (EO epoch))
-         (mat     (mcio-aa epoch))
+  (let* ((mat     (mcio-aa epoch))
          (v_GCRS  (to-xyz ra dec))
          (v_CIRS  (mat-mulv mat v_GCRS)))
-    (mvb (rap decp)
-        (to-thphi v_CIRS)
-      (values (- rap EO) decp)
-      )))
+    (to-thphi v_CIRS)
+    ))
 
 (defun CIRS-to-GCRS-aa (ra dec &optional (epoch (current-epoch)))
-  (let* ((EO      (EO epoch))
-         (mat     (trn (mcio-aa epoch)))
-         (v_CIRS  (to-xyz (+ ra EO) dec))
+  (let* ((mat     (trn (mcio-aa epoch)))
+         (v_CIRS  (to-xyz ra dec))
          (v_GCRS  (mat-mulv mat v_CIRS)))
-    (to-thphi v_GCRS)))
+    (to-thphi v_GCRS)
+    ))
 
 ;; ------------------------------------------------------
 
 (defun prec-aa (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
-  (mvb (ra2k dec2k)
-      (cirs-to-gcrs-aa ra dec from-epoch)
-    (gcrs-to-cirs-aa ra2k dec2k to-epoch)))
+  ;; CIRS-based precession
+  ;; On entry, RA and Dec should refer to an EQX-based position.
+  (mvb (rac decc) ;; convert to CIO-based position
+      (eqx-to-cio ra dec from-epoch)
+    (mvb (ra2k dec2k)  ;; unwind precession+nutation to reach J2000.0
+        (CIRS-to-GCRS-aa rac decc from-epoch)
+      (mvb (rap decp) ;; apply precession+nutation for to-epoch
+          (GCRS-to-CIRS-aa ra2k dec2k to-epoch)
+        (cio-to-eqx rap decp to-epoch) ;; convert to EQX-base position
+        ))))
 
 ;; ------------------------------------------------------
 
