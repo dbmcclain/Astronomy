@@ -42,6 +42,8 @@
 ;; years, starting with 2000-05-24T00:00:00Z, and incrementing by 365 days.
 ;; Results (GMST - USNO): mean = +0.47 μs, sigma = 28 μs
 ;;
+;; Algorithm adapted from G.Kaplsn, USNO 2005.
+;;
 ;; - DM/RAL 2024/05/25 12:53:56 UTC
 
 (defun ERA (epoch_UT1)

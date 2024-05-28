@@ -374,7 +374,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;;      (RA,Dec) -> Prec(RA,Dec,epoch) - ERA(epoch) = -HA(epoch).
   ;;
   ;; This is the -HA of the position at Greenwich on epoch. Done
-  ;; entirely without needing knowledge of GMST, nor the Equinox.
+  ;; entirely without needing knowledge of GST, nor the Equinox.
   (let* ((v_GCRS  (to-xyz ra dec))
          (R_TIRS  (R_TIRS epoch))
          (v_TIRS  (mat-mulv R_TIRS v_GCRS)))
@@ -686,6 +686,9 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                     (EO-e  (EO-e epoch)))
                (to-mas (- EO-e EO))))
            :clear t
+           :title "EO-e - EO"
+           :xtitle "Epoch - J2000.0 [yrs]"
+           :ytitle "Diff (EO-e - EO) [mas]"
            :thick 2)
 
 (let* ((epoch (ymd 2024))
