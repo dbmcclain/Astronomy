@@ -21,28 +21,13 @@
     `(,X ,Y)
     ))
   
-(defun M_CIO (epoch)
-  ;; Simplified precession, good to 0.08 arcsec in 21st cy,
-  ;; good to 0.38 arcsec over ±2 cy
-  ;;
-  ;;  v_TIRS = R(TT,UT) . v_GCRS
-  ;;  v_CIRS = M_CIO(TT) . v_GCRS
-  ;;
-  ;; This function is M_CIO(TT).
-  ;;
-  (db (X Y) (GCRS-XY epoch)
-    (let ((cX  (- 1 (* 1/2 X X))))
-      `(( ,cX  0  ,(- X))
-        (  0   1  ,(- Y))
-        ( ,X  ,Y  ,cX  ))
-      )))
-
 (defun GCRS-to-CIRS (ra dec &optional (epoch (current-epoch)))
   ;; Apply precesssion + nutation to a GCRS J2000.0 position.  On
   ;; entry, RA and Dec should refer to a CIO-based position, not an
   ;; EQX-position.
   (let* ((v_GCRS  (to-xyz ra dec))
-         (M_CIO   (M_CIO epoch))
+         (CIP     (GCRS-XY epoch))
+         (M_CIO   (M_CIO CIP))
          (v_CIRS  (mat-mulv M_CIO v_GCRS)))
     (to-thphi v_CIRS)
     ))
@@ -53,7 +38,8 @@
   ;; entry, RA and Dec should refer to a CIO-based position, not an
   ;; EQX-position.
   (let* ((v_CIRS  (to-xyz ra dec))
-         (M_CIO   (trn (M_CIO epoch)))
+         (CIP     (GCRS-XY epoch))
+         (M_CIO   (trn (M_CIO CIP)))
          (v_GCRS  (mat-mulv M_CIO v_CIRS)))
     (to-thphi v_GCRS)))
 
@@ -90,7 +76,8 @@
         (to-secs (- jd tt))
         (to-hms (frac (+ 1/2 tt)))
         (to-hms (frac (+ 1/2 jd)))
-        (M_CIO tt)))
+        (GCRS-XY tt)
+        (M_CIO  (GCRS-XY tt))))
 =>
 (53750.89285513898  ;; tt
  53750.892901435495 ;; JD_TT
@@ -126,7 +113,8 @@
   ;;
   ;; A positive rotation, R3, subtracts the ERA(epoch) from the RA.
   ;;
-  (let* ((M_CIO (M_CIO epoch))
+  (let* ((CIP   (GCRS-XY epoch))
+         (M_CIO (M_CIO CIP))
          (ERA   (ERA epoch))
          (R3    (R3 ERA)))
     (mat-mulm R3 M_CIO)))

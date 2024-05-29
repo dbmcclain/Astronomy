@@ -20,4 +20,19 @@
   (values (+ ra (EO epoch))
           dec))
 
+;; -----------------------------------------
 
+(defun M_CIO (xy)
+  ;; Produce 2nd order M_CIO, given CIP (X,Y).
+  ;; Simplified precession, good to 0.08 arcsec in 21st cy,
+  ;; good to 0.38 arcsec over ±2 cy
+  ;;
+  ;;  v_TIRS = R(TT,UT) . v_GCRS
+  ;;  v_CIRS = M_CIO(TT) . v_GCRS
+  ;;
+  (db (X Y) xy
+    (let ((cX  (- 1 (* 1/2 X X)) )) ;; ≈ (Cos X)
+      `(( ,cX  0   ,(- X) )
+        (  0   1   ,(- Y) )
+        ( ,X  ,Y   ,cX    ))
+      )))

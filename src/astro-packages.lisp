@@ -25,6 +25,7 @@
    #:pecl
    #:cio-to-equ
    #:eqx-to-cio
+   #:M_CIO
    ))
 (define-astro-package #:com.ral.astro.precession.ecl
   (:use #:com.ral.astro.precession))

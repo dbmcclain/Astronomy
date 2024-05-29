@@ -37,41 +37,21 @@
     ))
   
 (defun GCRS-XY-aa (epoch)
-  (let* ((Tc  (c2k epoch))
-         (L   (deg (+ 280.5d0 (* Tc 36_000.8))))  ;; 1 yr period, Ecliptic lon of Sun
-         (Ω   (deg (+ 125.0d0 (* Tc -1934.1d0)))) ;; 18.6 yr period
-         (X   (arcsec (+ (* Tc 2004.19d0)
-                         (* Tc Tc -0.43d0)
-                         (* -6.84d0 (sin Ω))
-                         (* -0.52d0 (sin (+ L L))) ;; 1/2 yr period
-                         )))
-         (Y   (arcsec (+ (* Tc -0.03d0)
-                         (* Tc Tc -22.41d0)
-                         (* 9.21d0 (cos Ω))
-                         (* 0.57d0 (cos (+ L L))) 
-                         ))))
-    `(,(to-rad X)  ;; ≈ (Sin X)
-      ,(to-rad Y)) ;; ≈ (Sin Y)
-    ))
-  
-(defun mcio-aa (epoch)
-  (db (X Y)
-      (GCRS-XY-aa epoch)
-    (let ((cX  (- 1 (* 1/2 X X)) )) ;; ≈ (Cos X)
-      `(( ,cX  0   ,(- X) )
-        (  0   1   ,(- Y) )
-        ( ,X  ,Y   ,cX    ))
-    )))
+  (mapcar #'+
+          (GCRS-XY-aa-prec epoch)
+          (GCRS-XY-aa-nut epoch)))
 
 (defun GCRS-to-CIRS-aa (ra dec &optional (epoch (current-epoch)))
-  (let* ((mat     (mcio-aa epoch))
+  (let* ((CIP     (GCRS-XY-aa epoch))
+         (mat     (M_CIO CIP))
          (v_GCRS  (to-xyz ra dec))
          (v_CIRS  (mat-mulv mat v_GCRS)))
     (to-thphi v_CIRS)
     ))
 
 (defun CIRS-to-GCRS-aa (ra dec &optional (epoch (current-epoch)))
-  (let* ((mat     (trn (mcio-aa epoch)))
+  (let* ((CIP     (GCRS-XY-aa epoch))
+         (mat     (trn (M_CIO CIP)))
          (v_CIRS  (to-xyz ra dec))
          (v_GCRS  (mat-mulv mat v_CIRS)))
     (to-thphi v_GCRS)
