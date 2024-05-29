@@ -96,7 +96,7 @@
    ;; Matrix Operations
    #:trn
    #:mat-mulv
-   #:mat-milm
+   #:mat-mulm
 
    #:r1
    #:r2

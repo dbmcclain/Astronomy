@@ -23,7 +23,7 @@
    #:pmat
    #:pequ
    #:pecl
-   #:cio-to-equ
+   #:cio-to-eqx
    #:eqx-to-cio
    #:M_CIO
    #:GCRS-XY-aa-nut
