@@ -6,7 +6,8 @@
 (in-package #:com.ral.astro.precession)
 
 ;; ----------------------------------
-;; Precession
+;; Precession - here we define items that are used by all the various
+;; precession packages
 ;;
 
 (defun cio-to-eqx (ra dec epoch)
