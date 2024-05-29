@@ -121,6 +121,16 @@
    #:date.time
    #:d.t
 
+   #:jyrs
+   #:jcs
+   
+   #:d2k
+   #:y2k
+   #:c2k
+   #:+sec/day+
+   #:+days/year+
+   #:+days/cent+
+   
    ;; Astronomical Precession + Nutation
    #:era
    #:prec
