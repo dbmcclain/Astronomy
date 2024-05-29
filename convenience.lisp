@@ -31,8 +31,11 @@
 #+:LISPWORKS
 (editor:setup-indent "map-mult" 1)
 
+;; -----------------------------------------------
 
 (defmacro define-astro-package (name)
+  ;; Astro-packages all inherit from parent ASTRO package
+  ;; Also inherit redefined Trig functions
   `(defpackage ,name
      (:use #:common-lisp #:com.ral.astro)
      (:shadowing-import-from #:com.ral.astro
