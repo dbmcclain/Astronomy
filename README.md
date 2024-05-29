@@ -442,6 +442,8 @@ The following graph illustrates the Nutation atop Precession over a 30 year peri
 
 The CIP is usually designated by a unit vector, with Cartesian components X, Y, and Z. The Z axis points toward the GCRS Equatorial Pole for epoch J2000.0. This circular dance occurs atop an even larger, long term, circle in X and Y, not shown here, with period around 25,800 years. (Drawn to an aspect ratio of 1:1 so that X and Y show true relative deviations.)
 
+The small loops have a period of 1/2 year, while the larger oval has period 18.6 years.
+
 ![Nutation](https://github.com/dbmcclain/Astronomy/assets/3160577/126294b8-a914-4f8b-bbd8-877a439a9de6)
 
 The following graph shows also the long term Precession in both axes. The graph covers a timespan of -50 to +50 years from J2000.0, with the 30 year span highlighted in red. In this graph the X and Y axes are not drawn to the same scale. Doing so would swamp the little Y nutation. There is a steady underlying drift in X of 20 arcsec/year, but only 3 arcsec/year in Y.
