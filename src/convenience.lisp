@@ -33,7 +33,7 @@
 
 ;; -----------------------------------------------
 
-(defmacro define-astro-package (name)
+(defmacro define-astro-package (name &body body)
   ;; Astro-packages all inherit from parent ASTRO package
   ;; Also inherit redefined Trig functions
   `(defpackage ,name
@@ -47,4 +47,6 @@
       #:atan
       #:cis
       #:phase
-      )))
+      )
+     ,@body
+     ))

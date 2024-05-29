@@ -8,6 +8,7 @@
 (define-astro-package #:com.ral.astro.angle.input)
 (define-astro-package #:com.ral.astro.angle.output)
 (define-astro-package #:com.ral.astro.angle.rotation)
+(define-astro-package #:com.ral.astro.matrices)
 
 (define-astro-package #:com.ral.astro.observatory)
 (define-astro-package #:com.ral.astro.radec)
@@ -15,7 +16,30 @@
 (define-astro-package #:com.ral.astro.ha)
 (define-astro-package #:com.ral.astro.epoch)
 (define-astro-package #:com.ral.astro.siderial)
-(define-astro-package #:com.ral.astro.precession)
+(define-astro-package #:com.ral.astro.precession
+  (:export
+   #:pmat
+   #:pequ
+   #:pecl
+   #:cio-to-equ
+   #:eqx-to-cio
+   ))
+(define-astro-package #:com.ral.astro.precession.ecl
+  (:use #:com.ral.astro.precession))
+(define-astro-package #:com.ral.astro.precession.grubby
+  (:use #:com.ral.astro.precession))
+(define-astro-package #:com.ral.astro.precession.cio
+  (:use #:com.ral.astro.precession))
+(define-astro-package #:com.ral.astro.precession.cio-aa
+  (:use #:com.ral.astro.precession))
+
+(define-astro-package #:com.ral.astro.precession.class
+  (:use #:com.ral.astro.precession))
+
+(define-astro-package #:com.ral.astro.precession.expt
+  (:use #:com.ral.astro.precession))
+
+
 
 
 

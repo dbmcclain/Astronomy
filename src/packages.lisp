@@ -99,6 +99,10 @@
    #:mat-mulv
    #:mat-milm
 
+   #:r1
+   #:r2
+   #:r3
+   
    ;; Astronomical Angles
    #:ra
    #:dec
@@ -134,6 +138,7 @@
    
    ;; Astronomical Precession + Nutation
    #:era
+   #:eo
    #:prec
    #:precn
    #:preca
