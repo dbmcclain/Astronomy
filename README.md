@@ -352,7 +352,7 @@ In general, most of us don't care about an accuracy more precise than about 10-6
 
 In the years 2000-2006, the IAU established a new standard, called ICRS (International Celestial Reference System), for position reckoning. We saw huge progress in the decades from 1980-2000, where VLBI was able to discern sub-mas errors and inconsistencies with our old way of working against the sky, the old FK4 and FK5 system. The IAU came up with a system that divorced our dependence on Earth, and its rotation, from the way we account for star and galaxy positions.
 
-So consequently they suggest a more rigorous way to perform precession and nutation all at once in every transformation of star positions from their catalogued positions, matching the Equinox of J2000.0. Time is reckoned differently now too, based primarily on TAI (atomic clocks), instead of relying on Earth's rotation period.
+So consequently they suggest a more rigorous way to perform precession and nutation all at once in every transformation of star positions from their catalogued positions now permanently matching the Equinox of J2000.0. Time is reckoned differently now too, based primarily on TAI (atomic clocks), instead of relying on Earth's rotation period.
 
 The IAU methods of today can transform catalog positions to your current epoch to an astonishing sub-mas precision. (1 mas = 0.001 arcsec). This enables researchers to look for miniscule deviations caused by gravity bending light as it traverses the universe and passes near massive objects.
 
