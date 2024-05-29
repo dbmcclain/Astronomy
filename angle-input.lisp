@@ -3,7 +3,7 @@
 ;; DM/RAL  2024/05/20 06:05:10 UTC
 ;; ----------------------------------
 
-(in-package #:astro.angle)
+(in-package #:com.ral.astro.angle.input)
 
 ;; ----------------------------------
 ;; Degrees, minutes, and seconds

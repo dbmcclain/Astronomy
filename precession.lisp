@@ -3,7 +3,7 @@
 ;; DM/RAL  2024/05/20 06:15:21 UTC
 ;; ----------------------------------
 
-(in-package #:astro)
+(in-package #:com.ral.astro.precession)
 
 ;; ----------------------------------
 ;; Precession
@@ -776,7 +776,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 ;; Plot long-term precession of AA model vs SOFA PEQU precession
 (progn
-  (plt:fplot 'plt '(-50 50)
+  (plt:fplot 'plt '(-50 100)
              (lambda (dt)
                (let* ((epoch (ymd (+ 2000 dt)))
                       (xyz   (pequ (c2k epoch)))
@@ -786,7 +786,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                  ))
              :clear t
              :thick 2
-             :title  "AA Prec - Long Term Model"
+             :title  "(Prec_AA - Prec_LT)"
              :xtitle "Epoch - J2000.0 [yrs]"
              :ytitle "Diff [arcsec]"
              :legend "X"
@@ -801,7 +801,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                  ))
              :thick 2
              :color :red
-             :title  "AA Prec - Long Term Model"
+             :title  "(Prec_AA - Prec_LT)"
              :xtitle "Epoch - J2000.0 [yrs]"
              :ytitle "Diff [mas]"
              :legend "Y"
@@ -852,20 +852,23 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                 :xtitle "CIP X - Long Term X [arcsec]"
                 :ytitle "CIP Y - Long Term Y [arcsec]"
                 ;; :thick 2
-                ;; :xrange '(-1 1)
-                ;; :yrange '(-1 1)
+                :xrange '(-10 10)
+                :yrange '(-10 10)
                 )
 |#
 
 ;; ------------------------------------------------------
-;; Approx CIRS precession + nutation, with XY obtained from
-;; more accurate long-term CIP model.
+;; Approx CIRS precession + nutation, with XY precession obtained from
+;; more accurate long-term CIP model, and nutation obtained from AA
+;; model.
 
 (defun M_CIO-e (epoch)
   (let* ((Tc     (c2k epoch))
          (CIP    (pequ Tc))
-         (X      (first CIP))
-         (Y      (second CIP))
+         (Nut    (gcrs-xy-aa-nut epoch))
+         (npv    (mapcar #'+ Nut CIP))
+         (X      (first npv))
+         (Y      (second npv))
          (cX     (- 1 (* 1/2 X X))))
     `((,cX   0   ,(- X))
       (  0   1   ,(- Y))

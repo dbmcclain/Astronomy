@@ -3,7 +3,7 @@
 ;; DM/RAL  2024/05/20 06:07:25 UTC
 ;; ----------------------------------
 
-(in-package #:astro.angle)
+(in-package #:com.ral.astro.angle.output)
 
 ;; -----------------------------------------------
 ;; used mainly for output prep

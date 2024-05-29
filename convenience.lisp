@@ -3,7 +3,7 @@
 ;; DM/RAL  2024/05/24 22:51:05 UTC
 ;; ----------------------------------
 
-(in-package #:astro.convenience)
+(in-package #:com.ral.astro.convenience)
 
 ;; ----------------------------------
 
@@ -31,3 +31,17 @@
 #+:LISPWORKS
 (editor:setup-indent "map-mult" 1)
 
+
+(defmacro define-astro-package (name)
+  `(defpackage ,name
+     (:use #:common-lisp #:com.ral.astro)
+     (:shadowing-import-from #:com.ral.astro
+      #:sin
+      #:cos
+      #:tan
+      #:asin
+      #:acos
+      #:atan
+      #:cis
+      #:phase
+      )))

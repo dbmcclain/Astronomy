@@ -3,17 +3,8 @@
 
 (in-package :cl-user)
 
-(defpackage #:astro.convenience
+(defpackage #:com.ral.astro
   (:use #:common-lisp)
-  (:export
-   #:db
-   #:mvb
-   #:mvl
-   #:map-mult
-   ))
-
-(defpackage #:astro.angle
-  (:use #:common-lisp #:astro.convenience)
   (:shadow
    #:sin
    #:cos
@@ -23,7 +14,17 @@
    #:atan
    #:cis
    #:phase)
+  
   (:export
+ 
+   ;; Convenience Macros
+   #:db
+   #:mvb
+   #:mvl
+   #:map-mult
+   #:define-astro-package
+
+   ;; Angle Measure
    #:set-ang-mode
    
    #:turns
@@ -60,6 +61,7 @@
    #:to-hms
    #:to-h.ms
 
+   ;; Redefined Trig Functions
    #:sin
    #:cos
    #:tan
@@ -69,6 +71,7 @@
    #:cis
    #:phase
 
+   ;; Generalized Rotations
    #:rtop
    #:ptor
    #:to-xyz
@@ -76,10 +79,12 @@
    #:rotx
    #:rotx-ang
 
+   ;; Modulo Functions
    #:frac
    #:unipolar
    #:bipolar
 
+   ;; Vector Operations
    #:vdot
    #:cmttr
    #:vcross
@@ -88,27 +93,13 @@
    #:vadd
    #:vscale
    #:rot
-   ))
 
+   ;; Matrix Operations
+   #:trn
+   #:mat-mulv
+   #:mat-milm
 
-(defpackage #:astro
-  (:use #:common-lisp #:astro.convenience #:astro.angle)
-  (:shadowing-import-from #:astro.angle
-   #:sin
-   #:cos
-   #:tan
-   #:asin
-   #:acos
-   #:atan
-   #:cis
-   #:phase)
-  #.`(:export
-      ,@(loop for sym being the external-symbols of '#:astro.angle
-              collect sym))
-  #.`(:export
-      ,@(loop for sym being the external-symbols of '#:astro.convenience
-              collect sym))
-  (:export
+   ;; Astronomical Angles
    #:ra
    #:dec
 
@@ -122,34 +113,33 @@
    #:ra-to-ha
    #:ha-to-ra
 
+   ;; Astronomical Epochs
+   #:+J2000+
    #:ymd
    #:jdn
    #:current-epoch
    #:date.time
    #:d.t
 
+   ;; Astronomical Precession + Nutation
    #:era
    #:prec
    #:precn
    #:preca
    #:prec-aa
 
+   ;; Siderial Time
    #:gmst
    #:lmst
    #:ha
 
+   ;; Observatory Location
    #:*qth-lon*
    #:*qth-lat*
    #:*qth-elev*
    #:*qth-tz*
 
-   #:*j2000*
-   #:*precession*
-   #:*mean-obliquity*
-   #:to-ecliptic
-   #:from-ecliptic
-   #:obliquity-for-epoch
-
+   ;; Observing Parameters
    #:parallactic-angle
    #:hadec-to-azel
    #:azel-to-hadec
@@ -158,6 +148,17 @@
    #:airmass
    #:radec-airmass
    #:hadec-airmass
-))
+   ))
 
-
+(defpackage #:com.ral.astro.convenience
+  (:use #:common-lisp #:com.ral.astro)
+  (:shadowing-import-from #:com.ral.astro
+      #:sin
+      #:cos
+      #:tan
+      #:asin
+      #:acos
+      #:atan
+      #:cis
+      #:phase
+      ))

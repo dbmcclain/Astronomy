@@ -1,12 +1,13 @@
 (in-package #:user)
 
-(asdf:defsystem "astro"
+(asdf:defsystem "com.ral.astro"
   :description "astro: Useful routines for Astronomy"
   :version     "1.0"
   :author      "D.McClain <dbm@refined-audiometrics.com>"
   :license     "Copyright (c) 2012 by Refined Audiometrics Laboratory, LLC. All rights reserved."
   :components  ((:file "packages")
                 (:file "convenience")
+                (:file "astro-packages")
                 (:file "angle-measure")
                 (:file "angle-input")
                 (:file "angle-output")

@@ -3,7 +3,7 @@
 ;; DM/RAL  2024/05/20 06:16:57 UTC
 ;; ----------------------------------
 
-(in-package #:astro)
+(in-package #:com.ral.astro.siderial)
 
 ;; ----------------------------------------
 
@@ -63,7 +63,7 @@
   ;; Equation of Mean Equinox
   ;; Using epoch_UT1 instead of epoch_TT makes only 0.1 mas difference ≈ 7 μs.
   (let* ((Tc  (c2k epoch_TT))
-         (prec (poly-eval Tc '(   -0.014506d0
+         (prec (poly-eval Tc '(   -0.014506d0  ;; Bias offset Δα -14.5 mas
                                -4612.156534d0
                                  -1.3915817d0
                                   0.00000044d0

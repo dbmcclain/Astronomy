@@ -3,7 +3,7 @@
 ;; DM/RAL  2024/05/20 06:18:44 UTC
 ;; ----------------------------------
 
-(in-package #:astro)
+(in-package #:com.ral.astro.ha)
 
 ;; -------------------------------------------------
 ;; Hour Angle (HA) +W/-E of Meridian

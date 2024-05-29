@@ -3,7 +3,7 @@
 ;; DM/RAL  2024/05/20 06:04:16 UTC
 ;; ----------------------------------
 
-(in-package #:astro.angle)
+(in-package #:com.ral.astro.angle.measure)
 
 ;; ----------------------------------
 ;;
