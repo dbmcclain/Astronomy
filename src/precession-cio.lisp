@@ -10,7 +10,7 @@
 ;; ICRS Procedures - International Celestial Reference System
 ;; Ref, P.T.Wallace and N.Capitaine: "IAU 2006 precession-nutation procedures"
 
-(defun GCRS-XY (epoch)
+(defun CIP (epoch)
   ;; Compute CIP of epoch.
   ;; Approx, assumes small angle s=0
   (let* ((D  (d2k epoch))
@@ -26,7 +26,7 @@
   ;; entry, RA and Dec should refer to a CIO-based position, not an
   ;; EQX-position.
   (let* ((v_GCRS  (to-xyz ra dec))
-         (CIP     (GCRS-XY epoch))
+         (CIP     (CIP epoch))
          (M_CIO   (M_CIO CIP))
          (v_CIRS  (mat-mulv M_CIO v_GCRS)))
     (to-thphi v_CIRS)
@@ -38,7 +38,7 @@
   ;; entry, RA and Dec should refer to a CIO-based position, not an
   ;; EQX-position.
   (let* ((v_CIRS  (to-xyz ra dec))
-         (CIP     (GCRS-XY epoch))
+         (CIP     (CIP epoch))
          (M_CIO   (trn (M_CIO CIP)))
          (v_GCRS  (mat-mulv M_CIO v_CIRS)))
     (to-thphi v_GCRS)))
@@ -76,8 +76,8 @@
         (to-secs (- jd tt))
         (to-hms (frac (+ 1/2 tt)))
         (to-hms (frac (+ 1/2 jd)))
-        (GCRS-XY tt)
-        (M_CIO  (GCRS-XY tt))))
+        (CIP tt)
+        (M_CIO  (CIP tt))))
 =>
 (53750.89285513898  ;; tt
  53750.892901435495 ;; JD_TT
@@ -113,7 +113,7 @@
   ;;
   ;; A positive rotation, R3, subtracts the ERA(epoch) from the RA.
   ;;
-  (let* ((CIP   (GCRS-XY epoch))
+  (let* ((CIP   (CIP epoch))
          (M_CIO (M_CIO CIP))
          (ERA   (ERA epoch))
          (R3    (R3 ERA)))

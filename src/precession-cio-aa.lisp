@@ -36,13 +36,13 @@
       ,(to-rad ΔY)) ;; ≈ (Sin Y)
     ))
   
-(defun GCRS-XY-aa (epoch)
+(defun CIP (epoch)
   (mapcar #'+
           (GCRS-XY-aa-prec epoch)
           (GCRS-XY-aa-nut epoch)))
 
 (defun GCRS-to-CIRS-aa (ra dec &optional (epoch (current-epoch)))
-  (let* ((CIP     (GCRS-XY-aa epoch))
+  (let* ((CIP     (CIP epoch))
          (mat     (M_CIO CIP))
          (v_GCRS  (to-xyz ra dec))
          (v_CIRS  (mat-mulv mat v_GCRS)))
@@ -50,7 +50,7 @@
     ))
 
 (defun CIRS-to-GCRS-aa (ra dec &optional (epoch (current-epoch)))
-  (let* ((CIP     (GCRS-XY-aa epoch))
+  (let* ((CIP     (CIP epoch))
          (mat     (trn (M_CIO CIP)))
          (v_CIRS  (to-xyz ra dec))
          (v_GCRS  (mat-mulv mat v_CIRS)))

@@ -10,28 +10,23 @@
 ;; more accurate long-term CIP model, and nutation obtained from AA
 ;; model.
 
-(defun M_CIO-e (epoch)
+(defun CIP (epoch)
   (let* ((Tc     (c2k epoch))
-         (CIP    (pequ Tc))
-         (Nut    (gcrs-xy-aa-nut epoch))
-         (npv    (mapcar #'+ Nut CIP))
-         (X      (first npv))
-         (Y      (second npv))
-         (cX     (- 1 (* 1/2 X X))))
-    `((,cX   0   ,(- X))
-      (  0   1   ,(- Y))
-      ( ,X  ,Y   ,cX  ))
-    ))
+         (CIP    (pequ Tc))               ;; Long-Term EQU model
+         (Nut    (gcrs-xy-aa-nut epoch))) ;; AA nutation
+    (mapcar #'+ Nut CIP)))
   
 (defun GCRS-to-CIRS-e (ra dec epoch)
-  (let* ((m_cio  (M_CIO-e epoch))
+  (let* ((CIP    (CIP epoch))
+         (m_cio  (M_CIO CIP))
          (v_gcrs (to-xyz ra dec))
          (v_cirs (mat-mulv m_cio v_gcrs)))
     (to-thphi v_cirs)
     ))
 
 (defun CIRS-to-GCRS-e (ra dec epoch)
-  (let* ((m_cio  (M_CIO-e epoch))
+  (let* ((CIP    (CIP epoch))
+         (m_cio  (M_CIO CIP))
          (v_cirs (to-xyz ra dec))
          (v_gcrs (mat-mulv (trn m_cio) v_cirs)))
     (to-thphi v_gcrs)
