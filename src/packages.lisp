@@ -86,7 +86,6 @@
 
    ;; Vector Operations
    #:vdot
-   #:cmttr
    #:vcross
    #:vnorm
    #:vnormalize
@@ -102,6 +101,9 @@
    #:r1
    #:r2
    #:r3
+
+   ;; Polynomial Evaluation
+   #:poly-eval
    
    ;; Astronomical Angles
    #:ra
@@ -137,17 +139,26 @@
    #:c2k
    
    ;; Astronomical Precession + Nutation
-   #:era
-   #:eo
    #:prec
    #:precn
    #:preca
    #:prec-aa
 
    ;; Siderial Time
+   #:*ΔAT*
+   #:*DUT1*
+   #:+TAI-OFFSET+
+
+   #:JD_UTC-to-UT1
+   #:JD_UT1-to-TT
+   #:JD_TT-to-UT1
+   
    #:gmst
    #:lmst
    #:ha
+
+   #:era
+   #:eo
 
    ;; Observatory Location
    #:*qth-lon*
