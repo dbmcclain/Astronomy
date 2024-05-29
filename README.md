@@ -450,7 +450,7 @@ The following graph shows also the long term Precession in both axes. The graph 
 
 ![Precession + Nutation 100yr](https://github.com/dbmcclain/Astronomy/assets/3160577/e4dc5dd0-335f-4aa7-a673-d246d0faf24e)
 
-Only the AA model has both nutation terms. The very precise Long Term model has none at all. The next graph shows the difference between the underlying AA Precession model and the Long Term Precession. At J2100 the AA Precession shows a deviation of 1.2 arcsec in X. At that time, maybe you'll want to use an improved model. But, from J1950 through J2050, the error is no greater than 0.15 arcsec. So for now, it probably isn't worthwhile to mix the Long Term Precession with the AA Nutation.
+Only the AA model has both nutation terms. The very precise Long Term model has none at all. The next graph shows the difference between the underlying AA Precession model and the Long Term Precession. By J2100 the AA Precession deviation grows to 1.2 arcsec in X. At that time, maybe you'll want to use an improved model. But, from J1950 through J2050, the error is no greater than 0.15 arcsec. So, for now, it probably isn't worthwhile to mix the Long Term Precession with the AA Nutation.
 
 ![PrecAA-PrecLT](https://github.com/dbmcclain/Astronomy/assets/3160577/eada2f96-f66c-4daa-b25c-a86ce6835b08)
 
