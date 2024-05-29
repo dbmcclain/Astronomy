@@ -451,7 +451,7 @@ The following graph shows also the long term Precession in both axes. The graph 
 ![Precession + Nutation 100yr](https://github.com/dbmcclain/Astronomy/assets/3160577/e4dc5dd0-335f-4aa7-a673-d246d0faf24e)
 
 
-_[So... which one was correct? (They all were, unless you need sub-arcsec accuracy.)]_
+_[So... which prec was correct? (They all were, unless you need sub-arcsec accuracy.)]_
 
 ---
 ## Az/El and Equatorial Coordinates
