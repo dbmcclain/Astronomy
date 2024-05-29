@@ -455,7 +455,9 @@ _[So... which prec was correct? (They all were, unless you need better than 10 a
 
 ---
 ## Az/El and Equatorial Coordinates
-Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. And, by now, you should realize that we eschew Euler angles arithmetic.
+Az/El and Equatorial coords, and Airmass: Azimuth measured from North toward East. No singularities at NCP or Zenith. 
+
+For now, these transforms are still using the old-fashioned method based on knowing the siderial time. Using the new ICRS system, we could go directly to HA, Dec, from catalogued J2000.0 positions to any other epoch, without ever needing to know the siderial time. I may eventually adopt the new IAU conventions for these transforms.
 
 **azel-to-hadec** _Az-ang El-ang &key lat = HA-ang, Dec-ang_
 - Compute HA & Dec from Az/El.
