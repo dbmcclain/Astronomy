@@ -12,6 +12,7 @@
 (define-astro-package #:com.ral.astro.poly)
 
 (define-astro-package #:com.ral.astro.observatory)
+(define-astro-package #:com.ral.astro.utc)
 (define-astro-package #:com.ral.astro.radec)
 (define-astro-package #:com.ral.astro.azel)
 (define-astro-package #:com.ral.astro.ha)
