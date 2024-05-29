@@ -446,7 +446,7 @@ The small loops have a period of 1/2 year, while the larger ellipse has period 1
 
 ![Nutation](https://github.com/dbmcclain/Astronomy/assets/3160577/126294b8-a914-4f8b-bbd8-877a439a9de6)
 
-The following graph shows also the long term Precession in both axes. The graph covers a timespan of -50 to +50 years from J2000.0, with the 30 year span highlighted in red. In this graph the X and Y axes are not drawn to the same scale. Doing so would swamp the little Y nutation. There is a steady underlying drift in X of 20 arcsec/year, but only a quadratic drift in Y of -22 arcsec/cent^2.
+The following graph shows also the long term Precession in both axes. The graph covers a timespan of -50 to +50 years from J2000.0, with the 30 year span highlighted in red. In this graph the X and Y axes are not drawn to the same scale. Doing so would swamp the little Y motion. There is a steady underlying drift in X of 20 arcsec/year, but only a quadratic drift in Y of -22 arcsec/cent^2.
 
 ![Precession + Nutation 100yr](https://github.com/dbmcclain/Astronomy/assets/3160577/e4dc5dd0-335f-4aa7-a673-d246d0faf24e)
 
