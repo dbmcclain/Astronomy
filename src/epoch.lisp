@@ -6,7 +6,6 @@
 (in-package #:com.ral.astro.epoch)
 
 ;; ----------------------------------
-;;
 ;; We Earthlings usually reckon with time reported as UTC, available
 ;; from any number of time services. Atomic Time, TAI = UTC + ΔAT, is
 ;; as kept by an Atomic Clock. ΔAT is the accumulated number of leap
@@ -19,9 +18,21 @@
 ;;
 ;; So in this body of code, whenever you enter a UTC time for an
 ;; epoch, we need to first add 37s to get TAI, and then add 32.184s,
-;; to reach TT. That is the reason for the two offsets being added in
-;; the code below.
+;; to reach TT.
 ;;
+;; That's what you *should* do. But in practice, it really makes
+;; little difference (a few mas) if you just use UTC all the way for
+;; everything.
+;;
+;; In fact, when you query the USNO website for Mean Siderial Time,
+;; they ask you for UT1, not UTC. And it is clear that they are
+;; ignoring all of this too. We agree to 0.5 μsec, over the entire 50
+;; year span from J2000 to J2050, when we just use UTC. It is probably
+;; too much to ask of their website predicting well into the future to
+;; do much better. Who knows how many leap seconds for ΔAT will be at
+;; the epoch of your query?
+;;
+;; Reported JD should be based on UTC.
 ;; ----------------------------------
 
 (defconstant +J2000+       2_451_545.0)  ;; Standard Epoch for Jan 1, 2000 at 12:00
