@@ -444,7 +444,7 @@ The CIP is usually designated by a unit vector, with Cartesian components X, Y, 
 
 The small loops have a period of 1/2 year, while the larger ellipse has period 18.6 years. The motion proceeds in a clockwise direction, starting in J2000.0 at ΔX = -5.4, ΔY = -5.8 arcsec. The small loops exhibit a tiny retrograde (counter-clockwise) drift.
 
-![Nutation](https://github.com/dbmcclain/Astronomy/assets/3160577/126294b8-a914-4f8b-bbd8-877a439a9de6)
+![Nutation](https://github.com/dbmcclain/Astronomy/assets/3160577/64ccf3d2-194a-4415-85fa-02a04b8435cb)
 
 The following graph shows also the long term Precession in both axes. The graph covers a timespan of -50 to +50 years from J2000.0, with the 30 year span highlighted in red. In this graph the X and Y axes are not drawn to the same scale. Doing so would swamp the little Y motion. There is a steady underlying drift in X of 20 arcsec/year, but only a quadratic drift in Y of -22 arcsec/cent^2. Movement proceeds from left to right.
 
