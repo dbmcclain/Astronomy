@@ -61,13 +61,6 @@ The Julian date for the current Universal Time is:
    (- lcl-ut)
    ))
 |#
-#|
-(defun lmst (&key (lon *qth-lon*) (epoch (current-epoch)))
-  ;; Local Mean Sidereal Time at longitude long, expressed in degs.
-  ;; = RA on Meridian
-  (unipolar (+ (lmst0 epoch) lon)))
-|#
-
 
 ;; ------------------------------------------------------------------------
 ;; Julian Day Numbers

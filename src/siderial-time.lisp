@@ -49,6 +49,7 @@
 
 (defun LMST (&key (epoch (current-epoch))
                   (lon   *qth-lon*))
+  ;; = RA on local Meridian
   (unipolar
    (+ (GMST epoch) lon)))
 
