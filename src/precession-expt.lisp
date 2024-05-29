@@ -16,34 +16,19 @@
          (Nut    (gcrs-xy-aa-nut epoch))) ;; AA nutation
     (mapcar #'+ Nut CIP)))
   
-(defun GCRS-to-CIRS-e (ra dec epoch)
-  (let* ((CIP    (CIP epoch))
-         (m_cio  (M_CIO CIP))
-         (v_gcrs (to-xyz ra dec))
-         (v_cirs (mat-mulv m_cio v_gcrs)))
-    (to-thphi v_cirs)
-    ))
-
-(defun CIRS-to-GCRS-e (ra dec epoch)
-  (let* ((CIP    (CIP epoch))
-         (m_cio  (M_CIO CIP))
-         (v_cirs (to-xyz ra dec))
-         (v_gcrs (mat-mulv (trn m_cio) v_cirs)))
-    (to-thphi v_gcrs)
-    ))
-
 (defun prece (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
   ;; CIRS-based precession
   ;; On entry, RA and Dec should refer to an EQX-based position.
   ;; Results seem identical with PREC based on Long Term Equator and Equinox.
-  (mvb (rac decc) ;; convert to CIO-based position
-      (eqx-to-cio ra dec from-epoch)
-    (mvb (ra2k dec2k)  ;; unwind precession+nutation to reach J2000.0
-        (CIRS-to-GCRS-e rac decc from-epoch)
-      (mvb (rap decp) ;; apply precession+nutation for to-epoch
-          (GCRS-to-CIRS-e ra2k dec2k to-epoch)
-        (cio-to-eqx rap decp to-epoch) ;; convert to EQX-base position
-        ))))
+  (let ((*CIP-fn*  #'CIP))
+    (mvb (rac decc) ;; convert to CIO-based position
+        (eqx-to-cio ra dec from-epoch)
+      (mvb (ra2k dec2k)  ;; unwind precession+nutation to reach J2000.0
+          (CIRS-to-GCRS rac decc from-epoch)
+        (mvb (rap decp) ;; apply precession+nutation for to-epoch
+            (GCRS-to-CIRS ra2k dec2k to-epoch)
+          (cio-to-eqx rap decp to-epoch) ;; convert to EQX-base position
+          )))))
 
 (defun R3EO-e (epoch)
   ;; From M_CIO = R3(-EO) . M_class => R3(-EO) = M_CIO . Trn(M_class)
@@ -60,15 +45,10 @@
   ;;                   (  0       0       1))
   ;;
   (let* ((M_class  (pmat epoch))
-         ;; Bottom row of M_class is unit vector (X,Y,Z) to GCRS CIP
+         ;; CIP is 3rd row of M_class
          (CIP      (third M_class))
-         (X        (first CIP))
-         (Y        (second CIP))
-         (cX       (- 1 (* 1/2 X X)))
-         (trnM_CIO `((,cX     0      ,X)
-                     ( 0      1      ,Y)
-                     (,(- X) ,(- Y)  ,cX)) ))
-    (mat-mulm M_class trnM_CIO)
+         (M_CIO    (M_CIO CIP)))
+    (mat-mulm M_class (trn M_CIO))
     ))
 
 (defun EO-e (epoch)

@@ -41,36 +41,21 @@
           (GCRS-XY-aa-prec epoch)
           (GCRS-XY-aa-nut epoch)))
 
-(defun GCRS-to-CIRS-aa (ra dec &optional (epoch (current-epoch)))
-  (let* ((CIP     (CIP epoch))
-         (mat     (M_CIO CIP))
-         (v_GCRS  (to-xyz ra dec))
-         (v_CIRS  (mat-mulv mat v_GCRS)))
-    (to-thphi v_CIRS)
-    ))
-
-(defun CIRS-to-GCRS-aa (ra dec &optional (epoch (current-epoch)))
-  (let* ((CIP     (CIP epoch))
-         (mat     (trn (M_CIO CIP)))
-         (v_CIRS  (to-xyz ra dec))
-         (v_GCRS  (mat-mulv mat v_CIRS)))
-    (to-thphi v_GCRS)
-    ))
-
 ;; ------------------------------------------------------
 
 (defun prec-aa (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
   ;; CIRS-based precession
   ;; On entry, RA and Dec should refer to an EQX-based position.
   ;; precession + 18 yr nutation + 0.5 yr nutation
-  (mvb (rac decc) ;; convert to CIO-based position
-      (eqx-to-cio ra dec from-epoch)
-    (mvb (ra2k dec2k)  ;; unwind precession+nutation to reach J2000.0
-        (CIRS-to-GCRS-aa rac decc from-epoch)
-      (mvb (rap decp) ;; apply precession+nutation for to-epoch
-          (GCRS-to-CIRS-aa ra2k dec2k to-epoch)
-        (cio-to-eqx rap decp to-epoch) ;; convert to EQX-base position
-        ))))
+  (let ((*CIP-fn* #'CIP))
+    (mvb (rac decc) ;; convert to CIO-based position
+        (eqx-to-cio ra dec from-epoch)
+      (mvb (ra2k dec2k)  ;; unwind precession+nutation to reach J2000.0
+          (CIRS-to-GCRS rac decc from-epoch)
+        (mvb (rap decp) ;; apply precession+nutation for to-epoch
+            (GCRS-to-CIRS ra2k dec2k to-epoch)
+          (cio-to-eqx rap decp to-epoch) ;; convert to EQX-base position
+          )))))
 
 
 

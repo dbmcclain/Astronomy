@@ -27,6 +27,9 @@
    #:eqx-to-cio
    #:M_CIO
    #:GCRS-XY-aa-nut
+   #:*CIP-fn*
+   #:GCRS-to-CIRS
+   #:CIRS-to-GCRS
    ))
 (define-astro-package #:com.ral.astro.precession.ecl
   (:use #:com.ral.astro.precession))

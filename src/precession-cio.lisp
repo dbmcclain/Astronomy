@@ -21,42 +21,21 @@
     `(,X ,Y)
     ))
   
-(defun GCRS-to-CIRS (ra dec &optional (epoch (current-epoch)))
-  ;; Apply precesssion + nutation to a GCRS J2000.0 position.  On
-  ;; entry, RA and Dec should refer to a CIO-based position, not an
-  ;; EQX-position.
-  (let* ((v_GCRS  (to-xyz ra dec))
-         (CIP     (CIP epoch))
-         (M_CIO   (M_CIO CIP))
-         (v_CIRS  (mat-mulv M_CIO v_GCRS)))
-    (to-thphi v_CIRS)
-    ))
-
-(defun CIRS-to-GCRS (ra dec &optional (epoch (current-epoch)))
-  ;; Undo the precession + nutation from a CIO-based position at
-  ;; epoch, to produce the equivalent J2000.0 GCRS position.  On
-  ;; entry, RA and Dec should refer to a CIO-based position, not an
-  ;; EQX-position.
-  (let* ((v_CIRS  (to-xyz ra dec))
-         (CIP     (CIP epoch))
-         (M_CIO   (trn (M_CIO CIP)))
-         (v_GCRS  (mat-mulv M_CIO v_CIRS)))
-    (to-thphi v_GCRS)))
-
 ;; ------------------------------------------------------------
 
 (defun preca (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
   ;; CIRS-based precession
   ;; 18 yr nutation + precession
   ;; On entry, RA and Dec should refer to an EQX-based position.
-  (mvb (rac decc) ;; convert to CIO-based position
-      (eqx-to-cio ra dec from-epoch)
-    (mvb (ra2k dec2k)  ;; unwind precession+nutation to reach J2000.0
-        (CIRS-to-GCRS rac decc from-epoch)
-      (mvb (rap decp) ;; apply precession+nutation for to-epoch
-          (GCRS-to-CIRS ra2k dec2k to-epoch)
-        (cio-to-eqx rap decp to-epoch) ;; convert to EQX-base position
-        ))))
+  (let ((*CIP-fn*  #'CIP))
+    (mvb (rac decc) ;; convert to CIO-based position
+        (eqx-to-cio ra dec from-epoch)
+      (mvb (ra2k dec2k)  ;; unwind precession+nutation to reach J2000.0
+          (CIRS-to-GCRS rac decc from-epoch)
+        (mvb (rap decp) ;; apply precession+nutation for to-epoch
+            (GCRS-to-CIRS ra2k dec2k to-epoch)
+          (cio-to-eqx rap decp to-epoch) ;; convert to EQX-base position
+          )))))
 
 ;; ------------------------------------------------------------
 #|
