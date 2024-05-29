@@ -442,13 +442,17 @@ The following graph illustrates the Nutation atop Precession over a 30 year peri
 
 The CIP is usually designated by a unit vector, with Cartesian components X, Y, and Z. The Z axis points toward the GCRS Equatorial Pole for epoch J2000.0. This circular dance occurs atop an even larger, long term, circle in X and Y, not shown here, with period around 25,800 years. (Drawn to an aspect ratio of 1:1 so that X and Y show true relative deviations.)
 
-The small loops have a period of 1/2 year, while the larger ellipse has period 18.6 years. The motion proceeds in a clockwise direction, starting in J2000.0 at ΔX = -5.4, ΔY = -5.8 arcsec. The small loops exhibit a tiny retrograde (counter-clockwise) drift.
+The small loops have a period of 1/2 year, while the larger ellipse has period 18.6 years. The motion proceeds in a clockwise direction, starting in J2000.0 from ΔX = -5.4, ΔY = -5.8 arcsec. The small loops exhibit a tiny retrograde (counter-clockwise) drift.
 
-![Nutation](https://github.com/dbmcclain/Astronomy/assets/3160577/126294b8-a914-4f8b-bbd8-877a439a9de6)
+![Nutation](https://github.com/dbmcclain/Astronomy/assets/3160577/64ccf3d2-194a-4415-85fa-02a04b8435cb)
 
 The following graph shows also the long term Precession in both axes. The graph covers a timespan of -50 to +50 years from J2000.0, with the 30 year span highlighted in red. In this graph the X and Y axes are not drawn to the same scale. Doing so would swamp the little Y motion. There is a steady underlying drift in X of 20 arcsec/year, but only a quadratic drift in Y of -22 arcsec/cent^2. Movement proceeds from left to right.
 
 ![Precession + Nutation 100yr](https://github.com/dbmcclain/Astronomy/assets/3160577/e4dc5dd0-335f-4aa7-a673-d246d0faf24e)
+
+Only the AA model has both nutation terms. The very precise Long Term model has none at all. The next graph shows the difference between the underlying AA Precession model and the Long Term Precession. By J2100 the AA Precession deviation grows to 1.2 arcsec in X. At that time, maybe you'll want to use an improved model. But, from J1950 through J2050, the error is no greater than 0.15 arcsec. So, for now, it probably isn't worthwhile to mix the Long Term Precession with the AA Nutation.
+
+![PrecAA-PrecLT](https://github.com/dbmcclain/Astronomy/assets/3160577/eada2f96-f66c-4daa-b25c-a86ce6835b08)
 
 
 _[So... which prec was correct? (They all were, unless you need better than 10 arcsec accuracy. I guess I would have to recommend **prec-aa** for apparent positions on the sky, and **prec** for mean positions.)]_
