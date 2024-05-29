@@ -9,6 +9,7 @@
 (define-astro-package #:com.ral.astro.angle.output)
 (define-astro-package #:com.ral.astro.angle.rotation)
 (define-astro-package #:com.ral.astro.matrices)
+(define-astro-package #:com.ral.astro.poly)
 
 (define-astro-package #:com.ral.astro.observatory)
 (define-astro-package #:com.ral.astro.radec)

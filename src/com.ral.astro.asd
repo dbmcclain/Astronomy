@@ -13,6 +13,7 @@
                 (:file "angle-output")
                 (:file "angle-rotations")
                 (:file "matrices")
+                (:file "poly")
                 (:file "observatory")
                 (:file "radec")
                 (:file "epoch")
