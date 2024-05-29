@@ -451,7 +451,7 @@ The following graph shows also the long term Precession in both axes. The graph 
 ![Precession + Nutation 100yr](https://github.com/dbmcclain/Astronomy/assets/3160577/e4dc5dd0-335f-4aa7-a673-d246d0faf24e)
 
 
-_[So... which prec was correct? (They all were, unless you need sub-arcsec accuracy.)]_
+_[So... which prec was correct? (They all were, unless you need better than 10 arcsec accuracy. I guess I would have to recommend **prec-aa** for apparent positions on the sky, and **prec** for mean positions.)]_
 
 ---
 ## Az/El and Equatorial Coordinates
