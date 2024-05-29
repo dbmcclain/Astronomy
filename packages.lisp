@@ -115,6 +115,10 @@
 
    ;; Astronomical Epochs
    #:+J2000+
+   #:+sec/day+
+   #:+days/year+
+   #:+days/cent+
+   
    #:ymd
    #:jdn
    #:current-epoch
@@ -127,9 +131,6 @@
    #:d2k
    #:y2k
    #:c2k
-   #:+sec/day+
-   #:+days/year+
-   #:+days/cent+
    
    ;; Astronomical Precession + Nutation
    #:era
