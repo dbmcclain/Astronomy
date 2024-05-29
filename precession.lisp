@@ -184,6 +184,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 (defun prec (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
   ;; Precess using IAU long-term models for Ecliptic and Equatorial precession.
+  ;; Good long-term precession, but no nutation
   (let* ((xyz1  (to-xyz ra dec))
          (xyz2k (mat-mulv (trn (pmat from-epoch)) xyz1))
          (xyz2  (mat-mulv (pmat to-epoch) xyz2k)))
@@ -206,19 +207,15 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 ;; ICRS Procedures - International Celestial Reference System
 ;; Ref, P.T.Wallace and N.Capitaine: "IAU 2006 precession-nutation procedures"
 
-(defun GCRS-XYZ (epoch)
+(defun GCRS-XY (epoch)
   ;; Compute CIP of epoch.
   ;; Approx, assumes small angle s=0
   (let* ((D  (d2k epoch))
          (Ω  (rad (+ 2.182d0 (* D -9.242d-4))))
          (cs (cis Ω))
          (X  (+ (* D 2.6603d-7)   (* -33.2d-6 (imagpart cs))))
-         (Y  (+ (* D D -8.14d-14) (*  44.6d-6 (realpart cs))))
-         (Z  (sqrt
-              (max 0
-                   (- 1 (* x x) (* y y))))
-             ))
-    `(,X ,Y ,Z)
+         (Y  (+ (* D D -8.14d-14) (*  44.6d-6 (realpart cs)))))
+    `(,X ,Y)
     ))
   
 (defun M_CIO (epoch)
@@ -230,8 +227,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;;
   ;; This function is M_CIO(TT).
   ;;
-  (db (X Y _) (GCRS-XYZ epoch)
-    (declare (ignore _))
+  (db (X Y) (GCRS-XY epoch)
     (let ((cX  (- 1 (* 1/2 X X))))
       `(( ,cX  0  ,(- X))
         (  0   1  ,(- Y))
@@ -272,6 +268,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
 (defun preca (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
   ;; CIRS-based precession
+  ;; 18 yr nutation + precession
   ;; On entry, RA and Dec should refer to an EQX-based position.
   (mvb (rac decc) ;; convert to CIO-based position
       (eqx-to-cio ra dec from-epoch)
@@ -399,7 +396,22 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
   ;; PB angles from Fukushima-Williams wrt GCRS.
   ;; For IAU 2006 Precession
   (let* ((τ   (c2k epoch_TT))
-         
+         ;;
+         ;;  Naming the following points:
+         ;;
+         ;;           e = J2000.0 ecliptic pole,
+         ;;           p = GCRS pole,
+         ;;           E = mean ecliptic pole of date,
+         ;;     and   P = mean pole of date,
+         ;;
+         ;;     the four Fukushima-Williams angles are as follows:
+         ;;
+         ;;        γ_  = epE
+         ;;        φ_  = pE
+         ;;        ψ_  = pEP
+         ;;        ε_A = EP
+         ;;
+
          (γ_  (arcsec
                (poly-eval τ '(   -0.052928d0
                                  10.556378d0
@@ -469,27 +481,16 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
    (pmat    epoch)
    (m_class epoch)))
 
-(plt:paramplot 'plt '(-50 50)
-               (lambda (dt)
-                 (let* ((epoch (ymd (+ 2000 dt)))
-                        (m_class (m_class epoch))
-                        (pmat    (pmat epoch)))
-                   (- (first (third m_class))
-                      (first (third pmat)))
-                   ))
-               (lambda (dt)
-                 (let* ((epoch (ymd (+ 2000 dt)))
-                        (m_class (m_class epoch))
-                        (pmat    (pmat epoch)))
-                   (- (second (third m_class))
-                      (second (third pmat)))
-                   ))
-                :clear t
-                :aspect 1
-                :thick 2
-                ;; :xrange '(-1 1)
-                ;; :yrange '(-1 1)
-                )
+(plt:fplot 'plt '(0 1)
+           (lambda (dt)
+             (let* ((epoch (ymd (+ 2000 dt)))
+                    (xyz   (gcrs-xy epoch))
+                    (xya   (gcrs-xy-aa epoch)))
+               (to-arcsec (rad (- (first xya) (first xyz))))
+               ))
+           :clear t
+           :thick 2)
+
 (plt:paramplot 'plt '(-50 50)
                (lambda (dt)
                  (let* ((epoch (ymd (+ 2000 dt)))
@@ -588,11 +589,12 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
                     (- 1 (* X X) (* Y Y)))))
 
          (_   (let ()
-                (db (Xq Yq Zq) (GCRS-XYZ epoch_TT) ;; get quick est
-                  ;; shows 7.7 as for J2000
-                  ;;       8.9 as for J2024
-                  (print `(:ΔCIP  ,(to-arcsec (acos (vdot `(,X ,Y ,Z) `(,Xq ,Yq ,Zq))))))
-                  )))
+                (db (Xq Yq) (GCRS-XY epoch_TT) ;; get quick est
+                  (let ((zq (sqrt (max 0 (- 1 (* xq xq) (* yq yq))))))
+                    ;; shows 7.7 as for J2000
+                    ;;       8.9 as for J2024
+                    (print `(:ΔCIP  ,(to-arcsec (acos (vdot `(,X ,Y ,Z) `(,Xq ,Yq ,Zq))))))
+                    ))))
 
          ;; top row of M_clas, Γ
          (Γ   `(,(+ (* cψ cγ) (* sψ cφ sγ))
@@ -644,9 +646,10 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 
          ;; Compae with quick XYZ. using quick XYZ to compute CIP
          ;; against true form of ecliptic, kv from above.
-         (nv_q (GCRS-XYZ epoch_TT))
-         (Σq   (db (Xq Yq Zq) nv_q
-                 (let ((aq (/ (1+ Zq))))
+         (nv_q (GCRS-XY epoch_TT))
+         (Σq   (db (Xq Yq) nv_q
+                 (let* ((Zq (sqrt (max 0 (- 1 (* Xq Xq) (* Yq Yq)))))
+                        (aq (/ (1+ Zq))))
                    `(,(- 1 (* aq Xq Xq))
                      ,(- (* aq Xq Yq))
                      ,(- Xq))
@@ -679,22 +682,48 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 ;; ---------------------------------------------------
 ;;
 ;; From Explanatory Supplement to American Almanac
-;; Is this better than M_CIO? Ought to be about the same.
+;; Is this better than M_CIO? Ans: Approx same + 1/2 yr nutation (0.5 arcsec)
 ;;
+(defun GCRS-XY-aa-prec (epoch)
+  (let* ((Tc  (c2k epoch))
+         (X   (arcsec (+ (* Tc 2004.19d0)
+                         (* Tc Tc -0.43d0)
+                         )))
+         (Y   (arcsec (+ (* Tc -0.03d0)
+                         (* Tc Tc -22.41d0)
+                         ))))
+    `(,(to-rad X)  ;; ≈ (Sin X)
+      ,(to-rad Y)) ;; ≈ (Sin Y)
+    ))
+  
+(defun GCRS-XY-aa-nut (epoch)
+  (let* ((Tc  (c2k epoch))
+         (L   (deg (+ 280.5d0 (* Tc 36_000.8))))  ;; 1 yr period, Ecliptic lon of Sun
+         (Ω   (deg (+ 125.0d0 (* Tc -1934.1d0)))) ;; 18.6 yr period
+         (ΔX  (arcsec (+ (* -6.84d0 (sin Ω))
+                         (* -0.52d0 (sin (+ L L))) ;; 1/2 yr period
+                         )))
+         (ΔY  (arcsec (+ (* 9.21d0 (cos Ω))
+                         (* 0.57d0 (cos (+ L L))) 
+                         ))))
+    `(,(to-rad ΔX)  ;; ≈ (Sin X)
+      ,(to-rad ΔY)) ;; ≈ (Sin Y)
+    ))
+  
 (defun GCRS-XY-aa (epoch)
   (let* ((Tc  (c2k epoch))
-         (L   (deg (+ 280.5d0 (* Tc 36_000.8))))
-         (Ω   (deg (+ 125.0d0 (* Tc -1934.1d0))))
+         (L   (deg (+ 280.5d0 (* Tc 36_000.8))))  ;; 1 yr period, Ecliptic lon of Sun
+         (Ω   (deg (+ 125.0d0 (* Tc -1934.1d0)))) ;; 18.6 yr period
          (X   (arcsec (+ (* Tc 2004.19d0)
                          (* Tc Tc -0.43d0)
                          (* -6.84d0 (sin Ω))
-                         (* -0.52d0 (sin (+ L L))))
-                      ))
+                         (* -0.52d0 (sin (+ L L))) ;; 1/2 yr period
+                         )))
          (Y   (arcsec (+ (* Tc -0.03d0)
                          (* Tc Tc -22.41d0)
                          (* 9.21d0 (cos Ω))
-                         (* 0.57d0 (cos (+ L L))))
-                      )))
+                         (* 0.57d0 (cos (+ L L))) 
+                         ))))
     `(,(to-rad X)  ;; ≈ (Sin X)
       ,(to-rad Y)) ;; ≈ (Sin Y)
     ))
@@ -727,6 +756,7 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
 (defun prec-aa (ra dec &optional (to-epoch (current-epoch)) (from-epoch +j2000+))
   ;; CIRS-based precession
   ;; On entry, RA and Dec should refer to an EQX-based position.
+  ;; precession + 18 yr nutation + 0.5 yr nutation
   (mvb (rac decc) ;; convert to CIO-based position
       (eqx-to-cio ra dec from-epoch)
     (mvb (ra2k dec2k)  ;; unwind precession+nutation to reach J2000.0
@@ -735,6 +765,97 @@ Rp = ((+0.68473390570729557360 +0.66647794042757610444 +0.29486714516583357655)
           (GCRS-to-CIRS-aa ra2k dec2k to-epoch)
         (cio-to-eqx rap decp to-epoch) ;; convert to EQX-base position
         ))))
+
+#|
+(let* ((epoch (ymd 2000))
+       (pmat  (pmat epoch))
+       (xy    (gcrs-xy-aa epoch)))
+  (mapcar (lambda (p x)
+            (to-arcsec (rad (- x p))))
+          (third pmat) xy))
+
+;; Plot long-term precession of AA model vs SOFA PEQU precession
+(progn
+  (plt:fplot 'plt '(-50 50)
+             (lambda (dt)
+               (let* ((epoch (ymd (+ 2000 dt)))
+                      (xyz   (pequ (c2k epoch)))
+                      (xy    (gcrs-xy-aa-prec epoch)))
+                 (to-arcsec (- (first xy)
+                            (first xyz)))
+                 ))
+             :clear t
+             :thick 2
+             :title  "AA Prec - Long Term Model"
+             :xtitle "Epoch - J2000.0 [yrs]"
+             :ytitle "Diff [arcsec]"
+             :legend "X"
+             )
+  (plt:fplot 'plt '(-50 50)
+             (lambda (dt)
+               (let* ((epoch (ymd (+ 2000 dt)))
+                      (xyz   (pequ (c2k epoch)))
+                      (xy    (gcrs-xy-aa-prec epoch)))
+                 (to-arcsec (- (second xy)
+                            (second xyz)))
+                 ))
+             :thick 2
+             :color :red
+             :title  "AA Prec - Long Term Model"
+             :xtitle "Epoch - J2000.0 [yrs]"
+             :ytitle "Diff [mas]"
+             :legend "Y"
+             ))
+
+;; Show combined Precession + Nutation
+(let* ((cip (loop for dt from -50 to 50 by 0.25 collect
+                    (let* ((epoch (ymd (+ 2000 dt))))
+                      (mapcar (lambda (x)
+                                (to-arcsec (rad x)))
+                              (gcrs-xy-aa epoch)))))
+       (cip30 (loop for dt from 0 to 30 by 0.25 collect
+                    (let* ((epoch (ymd (+ 2000 dt))))
+                      (mapcar (lambda (x)
+                                (to-arcsec (rad x)))
+                              (gcrs-xy-aa epoch))))))
+  (plt:plot 'plt
+           (mapcar #'first cip)
+           (mapcar #'second cip)
+           :clear t
+           :title "CIP Preceession + Nutation"
+           :xtitle "CIP X [arcsec]"
+           :ytitle "CIP Y [arcsec]"
+           )
+  (plt:plot 'plt
+           (mapcar #'first cip30)
+           (mapcar #'second cip30)
+           :color :red))
+
+
+;; Show 30 years of Nutation atop Precession
+(plt:paramplot 'plt '(0 30)
+               (lambda (dt)
+                 (let* ((epoch (ymd (+ 2000 dt)))
+                        (xyza  (gcrs-xy-aa-nut epoch)))
+                   (to-arcsec
+                    (rad (first xyza)))
+                   ))
+               (lambda (dt)
+                 (let* ((epoch (ymd (+ 2000 dt)))
+                        (xyza  (gcrs-xy-aa-nut epoch)))
+                   (to-arcsec
+                    (rad (second xyza)))
+                   ))
+                :clear t
+                :aspect 1
+                :title "CIP Nutation atop Precession"
+                :xtitle "CIP X - Long Term X [arcsec]"
+                :ytitle "CIP Y - Long Term Y [arcsec]"
+                ;; :thick 2
+                ;; :xrange '(-1 1)
+                ;; :yrange '(-1 1)
+                )
+|#
 
 ;; ------------------------------------------------------
 ;; Approx CIRS precession + nutation, with XY obtained from
