@@ -368,7 +368,7 @@ Which method is the quickest to use? Probably the one that we always used in our
 
 ---
 
-### New, Improved - DM 05/30/24
+### New, Improved - Simplified Precession + Nutation + Annual Aberration - DM 05/30/24
 
 Much like we do for angle measure, entering coordinates with **RADEC** will convert them to canonical GCRS vector form. You can ask to see them with either **TO-RADEC**, which returns the apparent place at your specified epoch, or else with **TO-MN-RADEC** which will show it as a mean position at your epoch. The positions are shown as _(RA ...)_ and _(Dec ...)_. The process is very much like doing angle conversions, `(to-deg (turns 0.25))`.
 
@@ -377,6 +377,8 @@ Internally, we make use of GCRS/CIRS transforms, so on entry with **RADEC** the 
 For **TO-RADEC** we make use of the SOFA Long Term Precession model + the Astronomical Almanac Nutation model + Annual Aberration, and report positions referred to the apparent Equinox of date. Apparent Equinox excludes Aberration, but includes Equatorial Nutation mixed with the SOFA PECL Long-Term Ecliptic model to derive the apparent EO at epoch. 
 
 For **TO-MN-RADEC** mean positions, we elide nutation and aberration, and refer positions to the mean Equinox of date. 
+
+![Apparent EO - Mean EO](https://github.com/dbmcclain/Astronomy/assets/3160577/7020d854-d7c2-43c5-8972-087cd6082f82)
 
 So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) (DEC dd mm ss)) => vec`. The entry _from-epoch_ defaults to J2000. To see the apparent place at your present epoch, as for commanding a telescope, you would do `(TO-RADEC vec) => RA, Dec`, where the _to-epoch_ defaults to your current epoch.
 
