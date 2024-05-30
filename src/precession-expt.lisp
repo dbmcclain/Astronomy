@@ -85,7 +85,7 @@
     (CIRS-xyz-to-EQX vp epoch)))
 
 (defun to-mn-radec (vxyz &optional (epoch (current-epoch)))
-  ;; Precess to apparent position at epoch
+  ;; Precess to mean position at epoch
   (let ((vp (prec-gcrs-2k-to-cirs-mn vxyz epoch)))
     (CIRS-xyz-to-EQX vp epoch)))
 
