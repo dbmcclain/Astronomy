@@ -377,23 +377,22 @@ Internally, we make use of GCRS/CIRS transforms, so on entry with **RADEC** the 
 So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) (DEC dd mm ss)) => vec`. The entry _from-epoch_ defaults to J2000. To see the apparent place at your present epoch, as for commanding a telescope, you would do `(TO-RADEC vec) => RA, Dec`, where the _to-epoch_ defaults to your current epoch.
 
 **radec** _ra-ang dec-ang &optional from-epoch => GCRS-vec_
-- _epoch_ defaults to J2000.0, which will probably be the most common case.
-- Converts entered RA and Dec to a canonical GCRS vector.
-- RA and Dec should refer to classical mean positions at the equinox of the _from-epoch_.
-- Input conversion, from position at _from-epoch_ to GCRS form, precesses the mean position from _from-epoch_ to J2000.0.
+- _from-epoch_ defaults to J2000.0, which will probably be the most common case.
+- Converts entered RA and Dec to a CIRS vector, then transforms it to a GCRS vector, precessing it from _from-epoch_ to J2000.0.
+- RA and Dec should refer to classical _mean_ positions at the equinox of the _from-epoch_, as opposed to RA being CIO based.
 
 **to-radec** _GCRS-vec &optional to-epoch => RA, Dec_
 - Converts a GCRS vector to apparent position at epoch.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`.
 - Output conversion, from GCRS J2000.0 to your _to-epoch_, uses Long Term Precession + AA Nutation + Aberration corrections.
-- Reported RA and Dec refer to classical positions at the equinox of the _to-epoch_.
+- Reported RA and Dec refer to a classical, equinox based, position using the equinox of _to-epoch_.
 - You would use the reported position to slew a telescope to the target.
 
 **to-mn-radec** _GCRS-vec &optional to-epoch => RA, Dec_
 - Converts a GCRS vector to mean position at epoch.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`.
-- Reported RA and Dec refer to classical positions at the equinox of the _to-epoch_.
-- Output conversion, from GCRS J2000.0 to your _to-epoch_ uses Long Term Precession.
+- Output conversion, from GCRS J2000.0 to your _to-epoch_, uses Long Term Precession.
+- Reported RA and Dec refer to a classical, equinox based, position using the equinox of _to-epoch_.
 - This command would be useful for session planning, where your catalog should contain mean places at your chosen epoch.
 
 ```
