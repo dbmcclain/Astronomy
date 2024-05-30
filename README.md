@@ -385,7 +385,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 - Converts a GCRS vector to apparent position at epoch.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`.
 - Output conversion, from GCRS J2000.0 to your _to-epoch_, uses Long Term Precession + AA Nutation + Aberration corrections.
-- Reported RA and Dec refer to a classical, equinox based, position using the equinox of _to-epoch_.
+- Reported RA and Dec refer to a classical, equinox based, position using the apparent Equinox of _to-epoch_.
 - You would use the reported position to slew a telescope to the target.
 
 ```
@@ -400,7 +400,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 - Converts a GCRS vector to mean position at epoch.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`.
 - Output conversion, from GCRS J2000.0 to your _to-epoch_, uses Long Term Precession.
-- Reported RA and Dec refer to a classical, equinox based, position using the equinox of _to-epoch_.
+- Reported RA and Dec refer to a classical, equinox based, position using the mean Equinox of _to-epoch_.
 - This command would be useful for session planning, where your catalog should contain mean places at your chosen epoch.
 
 While the following functions for precession still exist in the code body, the use of **RADEC** and **TO-RADEC** is enormously more natural. This new method incorporates good long-term Precession, decent Nutation to better than 1 arcsec, and Aberration (which can be up to ±20 arcsec annual variation). Initial tests show agreement to within 1 arcsec in apparent position against various other sources.
