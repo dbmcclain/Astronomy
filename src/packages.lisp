@@ -144,6 +144,10 @@
    #:preca
    #:prec-aa
 
+   #:radec
+   #:to-radec
+   #:to-mn-radec
+   
    ;; Siderial Time
    #:*ΔAT*
    #:*DUT1*

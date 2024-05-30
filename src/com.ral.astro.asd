@@ -24,6 +24,7 @@
                 (:file "precession-grubby")
                 (:file "precession-cio")
                 (:file "precession-cio-aa")
+                (:file "precession-expt")
                 (:file "hour-angle")
                 (:file "azel"))
   :serial       t
