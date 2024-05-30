@@ -368,7 +368,34 @@ Which method is the quickest to use? Probably the one that we always used in our
 
 ---
 
-New, Improved
+###New, Improved
+
+Much like we do for angle measure, entering coordinates with **RADEC** will convert them to caonical GCRS vector form. You can ask to see them with either **TO-RADEC**, which returns the apparent place at your specified epoch, or else with **TO-MN-RADEC** which will show it as a mean position at your epoch. We make use of the SOFA Long Term Precession model + the Astronomical Almanac Nutation model + Annual Aberration. For mean positions, we elide nutation and aberration.
+
+So to enter a J2000 catalog position you would simply do: `(radec (ra _hh mm ss_) (dec _dd mm ss_)) => _vec_`. The entry epoch defaults to J2000. To see the apparent place at your present epoch, as for commanding a telescope, you would do `(to-radec _vec_) => _RA, Dec+`, where the to-epoch defaults to your current epoch.
+
+**radec** _ra-ang dec-ang &optional epoch => GCRS-vec_
+- _epoch_ defaults to J2000.0, which will probably be the most common case.
+- Converts entered RA and Dec to a canonical GCRS vector.
+
+**to-radec** _GCRS-vec &optional epoch => RA, Dec_
+- Converts a GCRS vector to apparent position at epoch.
+- _epoch_ defaults to `(CURRENT-EPOCH)`.
+- You would use the reported position to slew a telescope to the target.
+
+**to-mn-radec** _GCRS-vec &optional epoch => RA, Dec_
+- Converts a GCRS vector to mean position at epoch.
+- _epoch_ defaults to `(CURRENT-EPOCH)`.
+- This command would be useful for session planning, where your catalog should contain mean places at your chosen epoch.
+
+```
+(let ((v  (radec (RA 11 14 14.4052) (Dec 15 25 46.453)))) ;; θ Leo from J2000.0 Catalog
+  (to-radec v))
+=>
+(RA 11 15 31.576)
+(DEC 15 17 52.648)
+```
+
 ___
 
 **prec** _RA-ang Dec-ang &optional to-epoch from-epoch => RA_ang, Dec_ang_
