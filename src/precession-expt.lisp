@@ -236,6 +236,9 @@
                (to-arcsec (ΔEO M_CIO epoch))
                ))
            :clear t
+           :title "Apparent EO - Mean EO"
+           :xtitle "Epoch - J2000 [yrs]"
+           :ytitle "Apparent EO - Mean EO [arcsec]"
            :thick 2)
 |#
 
