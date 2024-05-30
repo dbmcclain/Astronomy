@@ -380,6 +380,8 @@ For **TO-MN-RADEC** mean positions, we elide nutation and aberration, and refer 
 
 ![Apparent EO - Mean EO](https://github.com/dbmcclain/Astronomy/assets/3160577/7020d854-d7c2-43c5-8972-087cd6082f82)
 
+![WC Aberration](https://github.com/dbmcclain/Astronomy/assets/3160577/50e97938-5f92-42fd-83a3-8ade340373f4)
+
 So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) (DEC dd mm ss)) => vec`. The entry _from-epoch_ defaults to J2000. To see the apparent place at your present epoch, as for commanding a telescope, you would do `(TO-RADEC vec) => RA, Dec`, where the _to-epoch_ defaults to your current epoch.
 
 **radec** _ra-ang dec-ang &optional from-epoch => GCRS-vec_
@@ -441,8 +443,6 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 ;; motion. (Or else, we have severely butchered the precession
 ;; calculations...)
 ```
-![WC Aberration](https://github.com/dbmcclain/Astronomy/assets/3160577/50e97938-5f92-42fd-83a3-8ade340373f4)
-
 While the following functions for precession still exist in the code body, the use of **RADEC** and **TO-RADEC** is enormously more natural. This new method incorporates good long-term Precession, decent Nutation to better than 1 arcsec, and Aberration (which can be up to ±20 arcsec annual variation). Initial tests show agreement to within 1 arcsec in apparent position against various other sources.
 ___
 
