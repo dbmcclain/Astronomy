@@ -368,7 +368,7 @@ Which method is the quickest to use? Probably the one that we always used in our
 
 ---
 
-###New, Improved
+### New, Improved
 
 Much like we do for angle measure, entering coordinates with **RADEC** will convert them to caonical GCRS vector form. You can ask to see them with either **TO-RADEC**, which returns the apparent place at your specified epoch, or else with **TO-MN-RADEC** which will show it as a mean position at your epoch. We make use of the SOFA Long Term Precession model + the Astronomical Almanac Nutation model + Annual Aberration. For mean positions, we elide nutation and aberration.
 
