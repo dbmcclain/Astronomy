@@ -411,7 +411,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 ;;    RA   11h 15m 28.3s, and
 ;;    Dec +15° 18' 03"
 ;; for Epoch 2023.5 = JD 244_0128.375.
-(let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from J2000.0 Catalog
+(let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from Aladin J2000.0 Catalog
                  (Dec 15 25 46.453) ))) 
   (to-mn-radec v 246_0128.375))
 =>
