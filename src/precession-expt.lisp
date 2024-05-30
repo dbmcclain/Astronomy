@@ -63,7 +63,7 @@
     (atan sEO cEO)))
 
 ;; -------------------------------------------------
-;; The final distortion for apparent positions (up to 20 arcsec).
+;; The final distortion for apparent positions (up to ±20 arcsec).
 ;; Annual aberration due to Earth's motion around the Sun.
 ;;
 ;; Adapted from 3rd Ed. Suppl to Astronomical Almanac.
@@ -79,6 +79,20 @@
             ,(* -0.0068 cL) ))
   ))
 
+#|
+(map-mult (#'to-ra #'to-dec) (to-thphi (aberration +j2000+)))
+
+(let ((v*  (vnormalize (aberration +j2000+))))
+  (plt:fplot 'plt '(0 5)
+             (lambda (dt)
+               (let* ((epoch (ymd (+ 2000 dt)))
+                      (ab    (aberration epoch)))
+                 (to-arcsec (rad (vdot ab v*)))
+                 ))
+           :clear t
+           :yrange '(-30 30)
+           :thick 2))
+ |#
 ;; -----------------------------------------------
 ;; 3 basic scenarios -
 ;;    1. Precess mean J2000 position to mean position at some epoch.
