@@ -15,7 +15,7 @@
   
 (defun CIP-ap (epoch)
   (mapcar #'+
-          (CIP-mean epoch)
+          (CIP-mn epoch)
           (GCRS-XY-aa-Nut epoch))) ;; AA nutation
 
 ;; -------------------------------------------------
