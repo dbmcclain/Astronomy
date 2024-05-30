@@ -261,29 +261,32 @@
 ;; But Θ Leo is reported to have a high proper motion of
 ;; -59.01"/cent in RA, and -79.37"/cent in Dec.
 ;; So making corrections to the catalog position before precessing:
-(let* ((epoch 244_0128.375)
+(let* ((epoch 246_0128.375)
        (Tc    (c2k epoch))
        (ra    (+ (RA 11 14 14.4052)  ;; θ Leo from Aladin J2000.0 Catalog
-                 (* (arcsec -59.01) Tc)))
+                 (/ (* (arcsec -59.01) Tc)
+                    (cos (Dec 15 18))) ))
        (dec   (+ (Dec 15 25 46.453)
                  (* (arcsec -79.37) Tc)))
        (v     (radec ra dec)))
   (to-mn-radec v epoch))
 =>
-(RA 11 12 37.196)                ;; !! -2475.6 arcsec on sky
-(DEC 15 36 24.871000000000002)   ;; !! 1101.9 arcsec
+(RA 11 15 27.397000000000002) ;; !! -13.1 arcsec on sky
+(DEC 15 17 45.952)            ;; !! -17.0 arcsec
 
-;; That's a miss by more than 45', more than a Moon diameter!
-;; So it would appear that the Almanac has not corrected the catalog
-;; position for proper motion.
+;; That's a miss by more than 21" on the sky!  So it would appear that
+;; the Almanac has not corrected the catalog position for proper
+;; motion. (Or else, we have severely butchered the precession
+;; calculations...)
 
 (to-hms (- (RA 11 15 28.356)
            (RA 11 15 28.3)))
 (to-dms (- (DEC 15 18 4.598)
            (Dec 15 18 03)))
 
-(to-arcsec (- (RA 11 12 37.196) 
-           (RA 11 15 28.3)))
-(to-arcsec (- (DEC 15 36 24.871000000000002) 
+(* (cos (Dec 15 25 46.453))
+   (to-arcsec (- (RA 11 15 27.397000000000002)
+                 (RA 11 15 28.3))))
+(to-arcsec (- (DEC 15 17 45.952)
            (Dec 15 18 03)))
 |#
