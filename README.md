@@ -378,6 +378,8 @@ For **TO-RADEC** we make use of the SOFA Long Term Precession model + the Astron
 
 For **TO-MN-RADEC** mean positions, we elide nutation and aberration, and refer positions to the mean Equinox of date. 
 
+![Apparent EO - Mean EO](https://github.com/dbmcclain/Astronomy/assets/3160577/7020d854-d7c2-43c5-8972-087cd6082f82)
+
 So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) (DEC dd mm ss)) => vec`. The entry _from-epoch_ defaults to J2000. To see the apparent place at your present epoch, as for commanding a telescope, you would do `(TO-RADEC vec) => RA, Dec`, where the _to-epoch_ defaults to your current epoch.
 
 **radec** _ra-ang dec-ang &optional from-epoch => GCRS-vec_
