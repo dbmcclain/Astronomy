@@ -136,17 +136,14 @@
 (defun to-radec (vxyz &optional (epoch (current-epoch)))
   ;; Precess to apparent position at epoch
   ;; Report as classical Equinox-based RA & Dec.
-  (mvb (vp EO)
-      (prec-gcrs-2k-to-cirs-ap vxyz epoch)
-    (CIRS-xyz-to-EQX vp EO)
-    ))
+  (multiple-value-call #'CIRS-xyz-to-EQX
+    (prec-gcrs-2k-to-cirs-ap vxyz epoch) ))
 
 (defun to-mn-radec (vxyz &optional (epoch (current-epoch)))
   ;; Precess to mean position at epoch.
   ;; Report as classical Equinox-based RA & Dec.
-  (mvb (vp EO)
-      (prec-gcrs-2k-to-cirs-mn vxyz epoch)
-    (CIRS-xyz-to-EQX vp EO)
+  (multiple-value-call #'CIRS-xyz-to-EQX
+    (prec-gcrs-2k-to-cirs-mn vxyz epoch) ))
     ))
 
 #|
@@ -211,11 +208,12 @@
 ;; M_CIO = R3(-EO) . M_class = R3(-EO) . R3(EO-s) . M_Σ = R3(-s) . M_Σ
 ;; M_Σ = R3(s) . M_CIO ≈ M_CIO
 
-(defun  ΔEO (M_CIO epoch)
+(defun ΔEO (M_CIO epoch)
   (let* ((EO     (EO epoch))
          (EOa    (EO-ap M_CIO epoch)))
     (- EOa EO)))
 
+;; Looks like EO swings ±15 as ≈ ±1 sec
 (plt:fplot 'plt '(0 30)
            (lambda (dt)
              (let* ((epoch (ymd (+ 2000 dt)))
