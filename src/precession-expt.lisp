@@ -17,7 +17,56 @@
   (vadd (CIP-mn epoch)
         (GCRS-XY-aa-Nut epoch))) ;; AA nutation
 
+;; ------------------------------
+;; Compute apparent EO for epoch, given an already known M_CIO.
+;;
+;; Assumes EO variation from mean is due solely to nutation of the
+;; Equatorial pole, and that Ecliptic pole is unaffected by nutation
+;; terms.  So, uses Long Term model for Ecliptic pole.
+
+(defun R3EO-ap (M_CIO epoch)
+  ;; From M_CIO = R3(-EO) . M_class => R3(-EO) = M_CIO . Trn(M_class)
+  ;;
+  ;; - or -
+  ;;
+  ;;  R3(EO) = M_class . (Trn M_CIO)
+  ;;
+  ;; To get M_class, we take nv = CIP unit vector (3rd row of M_CIO),
+  ;; and unit vector kv = pole of Ecliptic (computed from PECL). Then
+  ;; M_class = [(nv x kv), nv x (nv x kv), nv].
+  ;;
+  ;; Our PECL routine computes kv based on long-term models for Ecliptic Pole.
+  ;;
+  ;; R3(ang) applied to CIO vectors subtracts ang from CIO RA.
+  ;; So we can subtract EO from RA, to convert from CIO α to EQX α, by applying:
+  ;;
+  ;;    R3(EO) = Trn(R3(-EO)) = Trn(M_CIO . Trn(M_class)) = M_class . Trn(M_CIO)
+  ;;
+  ;; Returns R3(EO) = ((  cos EO  sin EO  0)
+  ;;                   ( -sin EO  cos EO  0)
+  ;;                   (  0       0       1))
+  ;;
+  (let* ((Tc      (c2k epoch))
+         (kv      (pecl Tc))       ;; unit vector to pole of Ecliptic
+         (Zv      (third M_CIO))
+         (Xv      (vcross Zv kv))
+         (Yv      (vcross Zv Xv))
+         (M_class `(,Xv ,Yv ,Zv)))
+    (mat-mulm M_class (trn M_CIO))
+    ))
+
+(defun EO-ap (M_CIO epoch)
+  (let* ((R3EO  (R3EO-ap M_CIO epoch))
+         (Row1  (first R3EO))
+         (cEO   (first Row1))
+         (sEO   (second Row1)))
+    (atan sEO cEO)))
+
 ;; -------------------------------------------------
+;; The final distortion for apparent positions (up to 20 arcsec).
+;; Annual aberration due to Earth's motion around the Sun.
+;;
+;; Adapted from 3rd Ed. Suppl to Astronomical Almanac.
 
 (defun aberration (epoch)
   ;; Annual aberration
@@ -47,27 +96,32 @@
   ;; Precess mean J2000 GCRS(x,y,z) to mean CIRS(x,y,z) at to-epoch.
   (let* ((CIP   (CIP-mn to-epoch))
          (M_CIO (M_CIO CIP)))
-    (mat-mulv M_CIO v2k)))
+    (values (mat-mulv M_CIO v2k)
+            (EO to-epoch))))
 
 (defun prec-GCRS-2k-to-CIRS-ap (v2k &optional (to-epoch (current-epoch)))
   ;; Precess mean J2000 GCRS(x,y,z) to apparent CIRS(x,y,z) at to-epoch.
   (let* ((CIP   (CIP-ap to-epoch))
          (M_CIO (M_CIO CIP))
          (ab    (aberration to-epoch)))
-    (vadd ab (mat-mulv M_CIO v2k))))
+    (values (vadd ab (mat-mulv M_CIO v2k))
+            (EO-ap M_CIO to-epoch))))
 
 ;; ----------------------------------------------
-;; Presuming that J2000 catalogs are all GCRS coord (ie. not Equinox based).
-;; Presuming that all other epochs of interest are Equinox based.
+;; Presuming that Catalog positions report Equinox based classical RA & Dec.
 ;; 
 
 (defun EQX-to-CIRS-xyz (ra dec epoch)
+  ;; On entry rotate to CIRS based position before forming the CIO 3-vector.
+  ;; Only ever applied to mean positions.
   (to-xyz (+ ra (EO epoch)) dec))
 
-(defun CIRS-xyz-to-EQX (vxyz epoch)
+(defun CIRS-xyz-to-EQX (vxyz EO)
+  ;; Given a CIO-based 3-vector, and the EO to use,
+  ;; Convert 3-vector to classical Equinox-based RA & Dec.
   (mvb (ra dec)
       (to-thphi vxyz)
-    (values (to-ra (- ra (EO epoch)))
+    (values (to-ra (- ra EO))
             (to-dec dec))))
 
 ;; -------------------------------------------------
@@ -75,19 +129,25 @@
 ;; measure, on entry RADEC converts to J2000 GCRS 3-vector.
 
 (defun radec (ra dec &optional (epoch +j2000+))
-  ;; RA & Dec assumed mean catalog position
+  ;; RA & Dec assumed to be mean Catalog Equinox-based classical position.
   (let ((vxyz (eqx-to-cirs-xyz ra dec epoch)))
     (prec-CIRS-mn-to-GCRS-2k vxyz epoch)))
 
 (defun to-radec (vxyz &optional (epoch (current-epoch)))
   ;; Precess to apparent position at epoch
-  (let ((vp (prec-gcrs-2k-to-cirs-ap vxyz epoch)))
-    (CIRS-xyz-to-EQX vp epoch)))
+  ;; Report as classical Equinox-based RA & Dec.
+  (mvb (vp EO)
+      (prec-gcrs-2k-to-cirs-ap vxyz epoch)
+    (CIRS-xyz-to-EQX vp EO)
+    ))
 
 (defun to-mn-radec (vxyz &optional (epoch (current-epoch)))
-  ;; Precess to mean position at epoch
-  (let ((vp (prec-gcrs-2k-to-cirs-mn vxyz epoch)))
-    (CIRS-xyz-to-EQX vp epoch)))
+  ;; Precess to mean position at epoch.
+  ;; Report as classical Equinox-based RA & Dec.
+  (mvb (vp EO)
+      (prec-gcrs-2k-to-cirs-mn vxyz epoch)
+    (CIRS-xyz-to-EQX vp EO)
+    ))
 
 #|
 (radec (deg 0) (deg 0))
@@ -107,67 +167,64 @@
 (let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from J2000.0 Catalog
                  (Dec 15 25 46.453) ))) 
   (to-radec v))
-       
- |#
-;; --------------------------------------------
-(defun R3EO-e (epoch)
-  ;; From M_CIO = R3(-EO) . M_class => R3(-EO) = M_CIO . Trn(M_class)
-  ;;
-  ;; Our PMAT routine computes M_class based on long-term models for CIP and Ecliptic Pole.
-  ;;
-  ;; R3(ang) applied to CIO vectors subtracts ang from CIO RA.
-  ;; So we can subtract EO from RA, to convert from CIO α to EQX α, by applying:
-  ;;
-  ;;    R3(EO) = Trn(R3(-EO)) = Trn(M_CIO . Trn(M_class)) = M_class . Trn(M_CIO)
-  ;;
-  ;; Returns R3(EO) = ((  cos EO  sin EO  0)
-  ;;                   ( -sin EO  cos EO  0)
-  ;;                   (  0       0       1))
-  ;;
-  (let* ((M_class  (pmat epoch))
-         ;; CIP is 3rd row of M_class
-         (CIP      (third M_class))
-         (M_CIO    (M_CIO CIP)))
-    (mat-mulm M_class (trn M_CIO))
-    ))
 
-(defun EO-e (epoch)
-  (let* ((R3EO  (R3EO-e epoch))
-         (Row1  (first R3EO))
-         (cEO   (first Row1))
-         (sEO   (second Row1)))
-    (atan sEO cEO)))
-
+;; -----------------------------------------------------------
 #|
+;; Compare our computed Mean EO versus the EO we use for GMST
 (plt:fplot 'plt '(-50 50)
            (lambda (dyr)
              (let* ((epoch (ymd (+ 2000 dyr)))
                     (EO    (EO epoch))
-                    (EO-e  (EO-e epoch)))
-               (to-mas (- EO-e EO))))
+                    (CIP   (CIP-mn epoch))
+                    (M_CIO (M_CIO CIP))
+                    (EO-mn (EO-ap M_CIO epoch)))
+               (to-mas (- EO-mn EO))))
            :clear t
-           :title "EO-e - EO"
+           :title "EO-mn - EO"
            :xtitle "Epoch - J2000.0 [yrs]"
-           :ytitle "Diff (EO-e - EO) [mas]"
+           :ytitle "Diff (EO-mn - EO) [mas]"
            :thick 2)
 
 (let* ((epoch (ymd 2024))
        ;; (epoch +j2000+)
        (epoch (ymd 2050))
        (EO    (EO epoch))
-       (EO-e  (EO-e epoch)))
-  ;; EO-e and EO differ by 14.5 mas ≈ 0.967 ms in J2000 (= Frame Bias)
+       (CIP   (CIP-mn epoch))
+       (M_CIO (M_CIO CIP))
+       (EO-mn  (EO-ap M_CIO epoch)))
+  ;; EO-mn and EO differ by 14.5 mas ≈ 0.967 ms in J2000 (= Frame Bias)
   ;; dropping to -5.5 mas ≈ -0.367 ms in J2050
   ;; Hence, no particular reason to change our EO(epoch) function.
   ;; Using it makes our GMST agree with USNO.
   (list
-   :EO   (to-arcsec EO)
-   :EO-e (to-arcsec EO-e)
-   :ΔEO  (- (to-mas EO-e)
-            (to-mas EO))))
+   :EO    (to-arcsec EO)
+   :EO-mn (to-arcsec EO-mn)
+   :ΔEO   (- (to-mas EO-mn)
+             (to-mas EO))))
 
+;; Check - should be the same... (within roundoff errors)
 (let* ((epoch +j2000+)
-       (CIPe  (CIP epoch))
+       (CIPe  (CIP-ap epoch))
        (CIPa  (com.ral.astro.precession.cio-aa::CIP epoch)))
   (mapcar #'to-mas (mapcar #'- CIPe CIPa)))
- |#
+
+;; M_CIO = R3(-EO) . M_class = R3(-EO) . R3(EO-s) . M_Σ = R3(-s) . M_Σ
+;; M_Σ = R3(s) . M_CIO ≈ M_CIO
+
+(defun  ΔEO (M_CIO epoch)
+  (let* ((EO     (EO epoch))
+         (EOa    (EO-ap M_CIO epoch)))
+    (- EOa EO)))
+
+(plt:fplot 'plt '(0 30)
+           (lambda (dt)
+             (let* ((epoch (ymd (+ 2000 dt)))
+                    (CIP   (CIP-ap epoch))
+                    (M_CIO (M_CIO CIP)))
+               (to-arcsec (ΔEO M_CIO epoch))
+               ))
+           :clear t
+           :thick 2)
+|#
+
+         
