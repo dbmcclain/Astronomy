@@ -379,7 +379,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 **radec** _ra-ang dec-ang &optional from-epoch => GCRS-vec_
 - _from-epoch_ defaults to J2000.0, which will probably be the most common case.
 - Converts entered RA and Dec to a CIRS vector, then transforms it to a GCRS vector, precessing it from _from-epoch_ to J2000.0.
-- RA and Dec should refer to classical _mean_ positions at the equinox of the _from-epoch_, as opposed to RA being CIO based.
+- RA and Dec should refer to a classical, equinox based, _mean_ position at _from-epoch_, as opposed to RA being CIO based.
 
 **to-radec** _GCRS-vec &optional to-epoch => RA, Dec_
 - Converts a GCRS vector to apparent position at epoch.
