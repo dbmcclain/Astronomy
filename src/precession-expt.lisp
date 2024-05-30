@@ -14,19 +14,18 @@
   (pequ (c2k epoch)))  ;; Long-term precession model
   
 (defun CIP-ap (epoch)
-  (mapcar #'+
-          (CIP-mn epoch)
-          (GCRS-XY-aa-Nut epoch))) ;; AA nutation
+  (vadd (CIP-mn epoch)
+        (GCRS-XY-aa-Nut epoch))) ;; AA nutation
 
 ;; -------------------------------------------------
 
 (defun aberration (epoch)
+  ;; Annual aberration
   (let* ((Tc  (c2k epoch))
          (L   (deg (+ 280.5d0 (* Tc 36_000.8))))  ;; 1 yr period, Ecliptic lon of Sun
-         (cL  (cos L))
-         (sL  (sin L)))
+         (cL  (cos L)))
   (vscale #.(/ 173.24)
-          `(,(*  0.0172 sL)
+          `(,(*  0.0172 (sin L))
             ,(* -0.0158 cL)
             ,(* -0.0068 cL) ))
   ))
@@ -99,9 +98,15 @@
        (ra    (ra 11 14 14.4052)) ;; θ Leo
        (dec   (dec 15 25 46.453)) 
        (epoch (+ (ymd 2024 05 30) 0.060257670))
-       (eppch 246_0128.375)
+       (epoch 246_0128.375)
        (v*    (radec ra dec)))
-  (to-mn-radec v* epoch))
+  (list (mvl (to-mn-radec v* epoch))
+        (mvl (map-mult (#'to-ra #'to-dec) (prec ra dec epoch)))
+        ))
+
+(let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from J2000.0 Catalog
+                 (Dec 15 25 46.453) ))) 
+  (to-radec v))
        
  |#
 ;; --------------------------------------------
