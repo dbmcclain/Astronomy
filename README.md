@@ -370,7 +370,7 @@ Which method is the quickest to use? Probably the one that we always used in our
 
 ### New, Improved
 
-Much like we do for angle measure, entering coordinates with **RADEC** will convert them to canonical GCRS vector form. You can ask to see them with either **TO-RADEC**, which returns the apparent place at your specified epoch, or else with **TO-MN-RADEC** which will show it as a mean position at your epoch. The positions are shown as _(RA ...)_ and _(Dec ...)_.
+Much like we do for angle measure, entering coordinates with **RADEC** will convert them to canonical GCRS vector form. You can ask to see them with either **TO-RADEC**, which returns the apparent place at your specified epoch, or else with **TO-MN-RADEC** which will show it as a mean position at your epoch. The positions are shown as _(RA ...)_ and _(Dec ...)_. The process is very much like doing angle conversions, `(to-deg (turns 0.25))`.
 
 Internally, we make use of GCRS/CIRS transforms, so on entry with **RADEC** the classical RA is converted to CIO form. We make use of the SOFA Long Term Precession model + the Astronomical Almanac Nutation model + Annual Aberration. For mean positions, we elide nutation and aberration. On output **TO-RADEC** and **TO-MN-RADEC** convert the internal CIO RA back to classical form referring to the equinox of the output epoch.
 
