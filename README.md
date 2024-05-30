@@ -417,8 +417,8 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
                  (Dec 15 25 46.453) ))) 
   (to-mn-radec v 246_0128.375))
 =>
-(RA 11 15 28.356) ;; 0.056s diff ≈ 0.81" on sky
-(DEC 15 18 4.598) ;; 1.6" diff
+(RA 11 15 28.356)  ;; 0.056s diff ≈ 0.81" on sky
+(DEC 15 18 4.598)  ;; 1.6" diff
 
 ;; But Θ Leo is reported to have a high proper motion of
 ;; -59.01"/cent in RA, and -79.37"/cent in Dec.
@@ -435,6 +435,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 (RA 11 12 37.196)                ;; !! -2475.6 arcsec on sky
 (DEC 15 36 24.871000000000002)   ;; !! 1101.9 arcsec
 
+;; That's a miss by more than 45', more than a Moon diameter!
 ;; So it would appear that the Almanac has not corrected the catalog
 ;; position for proper motion.
 ```
