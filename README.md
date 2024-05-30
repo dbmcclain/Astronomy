@@ -374,7 +374,7 @@ Much like we do for angle measure, entering coordinates with **RADEC** will conv
 
 Internally, we make use of GCRS/CIRS transforms, so on entry with **RADEC** the classical RA is converted to CIO form. We make use of the SOFA Long Term Precession model + the Astronomical Almanac Nutation model + Annual Aberration. For mean positions, we elide nutation and aberration. On output **TO-RADEC** and **TO-MN-RADEC** convert the internal CIO RA back to classical form referring to the equinox of the output epoch.
 
-So to enter a J2000 catalog position you would simply do: `(radec (ra _hh mm ss_) (dec _dd mm ss_)) => _vec_`. The entry _from-epoch_ defaults to J2000. To see the apparent place at your present epoch, as for commanding a telescope, you would do `(to-radec _vec_) => _RA, Dec`, where the _to-epoch_ defaults to your current epoch.
+So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) (DEC dd mm ss)) => vec`. The entry _from-epoch_ defaults to J2000. To see the apparent place at your present epoch, as for commanding a telescope, you would do `(TO-RADEC vec) => RA, Dec`, where the _to-epoch_ defaults to your current epoch.
 
 **radec** _ra-ang dec-ang &optional from-epoch => GCRS-vec_
 - _epoch_ defaults to J2000.0, which will probably be the most common case.
