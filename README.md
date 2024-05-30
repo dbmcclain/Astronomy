@@ -396,7 +396,8 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 - This command would be useful for session planning, where your catalog should contain mean places at your chosen epoch.
 
 ```
-(let ((v  (radec (RA 11 14 14.4052) (Dec 15 25 46.453)))) ;; θ Leo from J2000.0 Catalog
+(let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from J2000.0 Catalog
+                 (Dec 15 25 46.453) ))) 
   (to-radec v))
 =>
 (RA 11 15 31.576)
