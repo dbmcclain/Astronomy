@@ -413,9 +413,10 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 ;;    RA   11h 15m 28.3s, and
 ;;    Dec +15° 18' 03"
 ;; for Epoch 2023.5 = JD 244_0128.375.
-(let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from Aladin J2000.0 Catalog
-                 (Dec 15 25 46.453) ))) 
-  (to-mn-radec v 246_0128.375))
+(let* ((epoch 246_0128.375)
+       (v  (radec (RA 11 14 14.4052)   ;; θ Leo from Aladin J2000.0 Catalog
+                  (Dec 15 25 46.453) ))) 
+  (to-mn-radec v epoch))
 =>
 (RA 11 15 28.356)  ;; 0.056s diff ≈ 0.81" on sky
 (DEC 15 18 4.598)  ;; 1.6" diff
@@ -424,17 +425,16 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 ;; -59.01"/cent in RA, and -79.37"/cent in Dec.
 ;; So making corrections to the catalog position before precessing:
 (let* ((epoch 246_0128.375)
-       (Tc    (c2k epoch))
+       (Tc    (c2k epoch)) ;; cents from J2000
        (ra    (+ (RA 11 14 14.4052)  ;; θ Leo from Aladin J2000.0 Catalog
-                 (/ (* (arcsec -59.01) Tc)
-                    (cos (Dec 15 18))) ))
+                 (* (arcsec -59.01) Tc)))
        (dec   (+ (Dec 15 25 46.453)
                  (* (arcsec -79.37) Tc)))
        (v     (radec ra dec)))
   (to-mn-radec v epoch))
 =>
-(RA 11 15 27.397000000000002) ;; !! -13.1 arcsec on sky
-(DEC 15 17 45.952)            ;; !! -17.0 arcsec
+(RA 11 15 27.431)   ;; !! -12.6" diff on sky
+(DEC 15 17 45.952)  ;; !! -17.0" diff
 
 ;; That's a miss by more than 21" on the sky!  So it would appear that
 ;; the Almanac has not corrected the catalog position for proper
