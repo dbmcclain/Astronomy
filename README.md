@@ -420,6 +420,8 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 (RA 11 15 28.356) ;; 0.056s diff ≈ 0.81" on sky
 (DEC 15 18 4.598) ;; 1.6" diff
 ```
+![WC Aberration](https://github.com/dbmcclain/Astronomy/assets/3160577/50e97938-5f92-42fd-83a3-8ade340373f4)
+
 While the following functions for precession still exist in the code body, the use of **RADEC** and **TO-RADEC** is enormously more natural. This new method incorporates good long-term Precession, decent Nutation to better than 1 arcsec, and Aberration (which can be up to ±20 arcsec annual variation). Initial tests show agreement to within 1 arcsec in apparent position against various other sources.
 ___
 
