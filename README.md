@@ -368,6 +368,9 @@ Which method is the quickest to use? Probably the one that we always used in our
 
 ---
 
+New, Improved
+___
+
 **prec** _RA-ang Dec-ang &optional to-epoch from-epoch => RA_ang, Dec_ang_
 - Implements the IAU Long-Term Precession (no Nutation) models for Ecliptic and Equatorial polar precession.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`, _from-epoch_ defaults to `+J2000+` 
