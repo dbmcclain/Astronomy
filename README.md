@@ -403,6 +403,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 - Reported RA and Dec refer to a classical, equinox based, position using the equinox of _to-epoch_.
 - This command would be useful for session planning, where your catalog should contain mean places at your chosen epoch.
 
+While the following functions for precession still exist in the code body, the use of **RADEC** and **TO-RADEC** is enormously more natural. This new method incorporates good long-term Precession, decent Nutation to better than 1 arcsec, and Aberration (which can be up to ±20 arcsec annual variation). Initial tests show agreement to within 1 arcsec in apparent position against various other sources.
 ___
 
 **prec** _RA-ang Dec-ang &optional to-epoch from-epoch => RA_ang, Dec_ang_
@@ -545,4 +546,4 @@ For now, these transforms are still using the old-fashioned method based on know
 - Defaults to now, and observatory location.
                   
 ---
-Eventual plans to accumulate addional featurs: Galactic coords, Aberration, Refraction, more...
+Eventual plans to accumulate addional featurs: Galactic coords, Refraction, more...
