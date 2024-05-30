@@ -368,7 +368,7 @@ Which method is the quickest to use? Probably the one that we always used in our
 
 ---
 
-### New, Improved - DM 05/30/24
+### New, Improved - Simplified Precession + Nutation + Annual Aberration - DM 05/30/24
 
 Much like we do for angle measure, entering coordinates with **RADEC** will convert them to canonical GCRS vector form. You can ask to see them with either **TO-RADEC**, which returns the apparent place at your specified epoch, or else with **TO-MN-RADEC** which will show it as a mean position at your epoch. The positions are shown as _(RA ...)_ and _(Dec ...)_. The process is very much like doing angle conversions, `(to-deg (turns 0.25))`.
 
