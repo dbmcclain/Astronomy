@@ -90,6 +90,9 @@
                  (to-arcsec (rad (vdot ab v*)))
                  ))
            :clear t
+           :title "Worst-case Annual Aberration"
+           :xtitle "Epoch - J2000 [yrs]"
+           :ytitle "Aberration [arcsec]"
            :yrange '(-30 30)
            :thick 2))
  |#
