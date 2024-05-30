@@ -388,21 +388,20 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 - Reported RA and Dec refer to a classical, equinox based, position using the equinox of _to-epoch_.
 - You would use the reported position to slew a telescope to the target.
 
+```
+(let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from J2000.0 Catalog
+                 (Dec 15 25 46.453) ))) 
+  (to-radec v))
+=>
+(RA 11 15 31.576)   ;; go get it!
+(DEC 15 17 52.648)
+```
 **to-mn-radec** _GCRS-vec &optional to-epoch => RA, Dec_
 - Converts a GCRS vector to mean position at epoch.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`.
 - Output conversion, from GCRS J2000.0 to your _to-epoch_, uses Long Term Precession.
 - Reported RA and Dec refer to a classical, equinox based, position using the equinox of _to-epoch_.
 - This command would be useful for session planning, where your catalog should contain mean places at your chosen epoch.
-
-```
-(let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from J2000.0 Catalog
-                 (Dec 15 25 46.453) ))) 
-  (to-radec v))
-=>
-(RA 11 15 31.576)
-(DEC 15 17 52.648)
-```
 
 ___
 
