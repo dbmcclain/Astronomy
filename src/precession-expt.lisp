@@ -162,11 +162,6 @@
   (multiple-value-call #'CIRS-xyz-to-EQX
     (prec-gcrs-2k-to-cirs-mn vxyz epoch) ))
 
-(defun to-radec-mneqx (vxyz &optional (epoch (current-epoch)))
-  (let ((vprec (prec-gcrs-2k-to-cirs-ap vxyz epoch))
-        (EO    (EO epoch)))
-    (CIRS-xyz-to-EQX vprec EO)))
-
 #|
 (radec (deg 0) (deg 0))
 (to-mn-radec (radec (deg 0) (deg 0)) +j2000+)
