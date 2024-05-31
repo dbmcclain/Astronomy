@@ -438,7 +438,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 ```
 While the following functions for precession still exist in the code body, the use of **RADEC** and **TO-RADEC** feels much more natural. This new method automates proper motion corrections, good long-term Precession, decent Nutation to better than 1 arcsec, and Aberration (which can be up to ±20 arcsec annual variation). Initial tests show agreement to within 1 arcsec in apparent position against various other sources.
 
-What this study has shown is that, for purposes of telescope pointing, you really can't neglect Nutation and Aberration. Without these two corrections, you could be off by as much as 1/2 arcmin on the sky, even afer correcting gross precession, depending on where you are looking. Catalogs need mean positions, but pointing needs apparent positions.
+What this study has shown is that, for purposes of telescope pointing, you really can't neglect Nutation and Aberration. Without these two corrections, you could be off by as much as 1/2 arcmin on the sky, even after correcting for gross precession, depending on where you are looking. Catalogs need mean positions, but pointing needs apparent positions.
 ___
 
 **prec** _RA-ang Dec-ang &optional to-epoch from-epoch => RA_ang, Dec_ang_
