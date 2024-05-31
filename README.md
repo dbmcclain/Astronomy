@@ -384,13 +384,14 @@ For **TO-MN-RADEC** mean positions, we elide nutation and aberration, and refer 
 
 So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) (DEC dd mm ss)) => vec`. The entry _from-epoch_ defaults to J2000. To see the apparent place at your present epoch, as for commanding a telescope, you would do `(TO-RADEC vec) => RA, Dec`, where the _to-epoch_ defaults to your current epoch.
 
-**radec** _ra-ang dec-ang &optional from-epoch => GCRS-vec_
+**radec** _ra-ang dec-ang &optional from-epoch μα μδ => GCRS-pos_
 - _from-epoch_ defaults to J2000.0, which will probably be the most common case.
-- Converts entered RA and Dec to a CIRS vector, then transforms it to a GCRS vector, precessing it from _from-epoch_ to J2000.0.
+- _μα, μδ_ default to zero.
+- Converts entered RA and Dec to a CIRS vector, after applying proper motion, then transforms it to a GCRS position, precessing it from _from-epoch_ to J2000.0.
 - RA and Dec should refer to a classical, equinox based, _mean_ position at _from-epoch_, as opposed to RA being CIO based.
 
-**to-radec** _GCRS-vec &optional to-epoch => RA, Dec_
-- Converts a GCRS vector to apparent position at epoch.
+**to-radec** _GCRS-pos &optional to-epoch => RA, Dec_
+- Converts a GCRS position to apparent position at epoch, after applying proper motion.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`.
 - Output conversion, from GCRS J2000.0 to your _to-epoch_, uses Long Term Precession + AA Nutation + Aberration corrections.
 - Reported RA and Dec refer to a classical, equinox based, position using the apparent Equinox of _to-epoch_.
@@ -404,8 +405,8 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 (RA 11 15 31.576)   ;; go get it!
 (DEC 15 17 52.648)
 ```
-**to-mn-radec** _GCRS-vec &optional to-epoch => RA, Dec_
-- Converts a GCRS vector to mean position at epoch.
+**to-mn-radec** _GCRS-pos &optional to-epoch => RA, Dec_
+- Converts a GCRS position to mean position at epoch, after applying proper motion.
 - _to-epoch_ defaults to `(CURRENT-EPOCH)`.
 - Output conversion, from GCRS J2000.0 to your _to-epoch_, uses Long Term Precession.
 - Reported RA and Dec refer to a classical, equinox based, position using the mean Equinox of _to-epoch_.
@@ -419,22 +420,18 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 ;; But the Yale BS Catalog shows that it has substantial proper motion:
 ;;   μα =  0.063 "/yr
 ;;   μδ = -0.190 "/yr
-   
 (let* ((epoch    246_0128.375)
-       (Tc       (y2k epoch))      ;; = 23.5
-       
-       (ra-cat   (RA  04 35 55.2)) ;; α Tau J2000.0, Yale BS Catalog
-       (dec-cat  (Dec 16 30 33))
-       (μα       (arcsec  0.063))  ;; arcsec/yr
-       (μδ       (arcsec -0.190))
-
-       (ra-pm    (+ ra-cat  (* Tc μα)))
-       (dec-pm   (+ dec-cat (* Tc μδ)))
-       (v-pm     (radec ra-pm dec-pm)))
-  (to-mn-radec v-pm epoch))
+       (pos2k    (radec (RA  04 35 55.2) ;; α Tau J2000.0, Yale BS Catalog
+                        (Dec 16 30 33)
+                        +J2000+
+                        (arcsec  0.063)  ;; μα
+                        (arcsec -0.190)) ;; μδ
+                 ))
+  (to-mn-radec pos2k epoch))
 =>
 (RA 4 37 16.27)     ;; round to  4:37:16.3
 (DEC 16 33 16.162)  ;; round to 16:33:16
+
 ;; So we match on RA and off by 1 arcsec in Dec.
 ```
 While the following functions for precession still exist in the code body, the use of **RADEC** and **TO-RADEC** feels much more natural. This new method incorporates good long-term Precession, decent Nutation to better than 1 arcsec, and Aberration (which can be up to ±20 arcsec annual variation). Initial tests show agreement to within 1 arcsec in apparent position against various other sources.
