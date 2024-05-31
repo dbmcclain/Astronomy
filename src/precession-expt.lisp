@@ -145,22 +145,51 @@
 ;; Just like we do for angle measures, converting on entry to a common
 ;; measure, on entry RADEC converts to J2000 GCRS 3-vector.
 
-(defun radec (ra dec &optional (epoch +j2000+))
-  ;; RA & Dec assumed to be mean Catalog Equinox-based classical position.
-  (let ((vxyz (eqx-to-cirs-xyz ra dec epoch)))
-    (prec-CIRS-mn-to-GCRS-2k vxyz epoch)))
+(defstruct pos-pm
+  α δ μα μδ)
 
-(defun to-radec (vxyz &optional (epoch (current-epoch)))
+(defun radec (ra dec &optional (epoch +j2000+) (μα 0) (μδ 0))
+  ;; RA & Dec assumed to be mean Catalog Equinox-based classical position.
+  ;;
+  ;; As for UI inconvenience... if you are going to the trouble to
+  ;; specify proper motions, then having to enter an epoch is only a
+  ;; minor inconvenience.
+  (let* ((Ty    (y2k epoch))
+         (rapm  (- ra  (* Ty μα)))
+         (decpm (- dec (* Ty μδ)))
+         (vxyz  (eqx-to-cirs-xyz rapm decpm epoch))
+         (vprec (prec-CIRS-mn-to-GCRS-2k vxyz epoch)))
+    (mvb (ra2k dec2k)
+        (CIRS-xyz-to-EQX vprec +J2000+)
+      (make-pos-pm
+       :α   (eval ra2k)
+       :δ   (eval dec2k)
+       :μα  μα
+       :μδ  μδ)
+      )))
+
+(defun pos-pm-to-vxyz (pos epoch)
+  (let* ((Ty    (y2k epoch))
+         (rapm  (+ (pos-pm-α pos) (* Ty (pos-pm-μα pos))))
+         (decpm (+ (pos-pm-δ pos) (* Ty (pos-pm-μδ pos)))))
+    (EQX-to-CIRS-xyz rapm decpm +J2000+)
+    ))
+  
+(defun to-radec (pos &optional (epoch (current-epoch)))
   ;; Precess to apparent position at epoch
   ;; Report as classical Equinox-based RA & Dec.
-  (multiple-value-call #'CIRS-xyz-to-EQX
-    (prec-gcrs-2k-to-cirs-ap vxyz epoch) ))
+  (let ((vxyz  (pos-pm-to-vxyz pos epoch)))
+    (multiple-value-call #'cirs-xyz-to-eqx
+      (prec-gcrs-2k-to-cirs-ap vxyz epoch)
+      )))
 
-(defun to-mn-radec (vxyz &optional (epoch (current-epoch)))
+(defun to-mn-radec (pos &optional (epoch (current-epoch)))
   ;; Precess to mean position at epoch.
   ;; Report as classical Equinox-based RA & Dec.
-  (multiple-value-call #'CIRS-xyz-to-EQX
-    (prec-gcrs-2k-to-cirs-mn vxyz epoch) ))
+  (let ((vxyz  (pos-pm-to-vxyz pos epoch)))
+    (multiple-value-call #'CIRS-xyz-to-EQX
+      (prec-gcrs-2k-to-cirs-mn vxyz epoch)
+      )))
 
 #|
 (radec (deg 0) (deg 0))
