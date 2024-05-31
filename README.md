@@ -425,7 +425,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
        
        (ra-cat   (RA  04 35 55.2)) ;; α Tau J2000.0, Yale BS Catalog
        (dec-cat  (Dec 16 30 33))
-       (μα       (arcsec  0.063))   ;; arcsec/yr
+       (μα       (arcsec  0.063))  ;; arcsec/yr
        (μδ       (arcsec -0.190))
 
        (ra-pm    (+ ra-cat  (* Tc μα)))
