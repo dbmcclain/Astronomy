@@ -154,6 +154,15 @@
   ;; As for UI inconvenience... if you are going to the trouble to
   ;; specify proper motions, then having to enter an epoch is only a
   ;; minor inconvenience.
+  ;;
+  ;; It is anticipated that when you develop a mean-places catalog for
+  ;; planning purposes, you will specify μα and μδ at that time.
+  ;;
+  ;; Then, during observing, you would only need to use RADEC with
+  ;; your mean places and their epoch, eliding proper motions. As long
+  ;; as your catalog is within a few years of the observing session,
+  ;; that should be good enough.
+  ;;
   (let* ((Ty    (y2k epoch))
          (rapm  (- ra  (* Ty μα)))
          (decpm (- dec (* Ty μδ)))
