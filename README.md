@@ -389,6 +389,8 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 - _μα, μδ_ default to zero.
 - Converts entered RA and Dec to a CIRS vector, after applying proper motion, then transforms it to a GCRS position, precessing it from _from-epoch_ to J2000.0.
 - RA and Dec should refer to a classical, equinox based, _mean_ position at _from-epoch_, as opposed to RA being CIO based.
+- _GCRS-pos_ is a little struct that retains the proper motions for application to other epochs.
+- With the advent of Hipparcus and Gaia missions, it seems probable that most bright stars (< 12 mag) will have measurable proper motion.
 
 **to-radec** _GCRS-pos &optional to-epoch => RA, Dec_
 - Converts a GCRS position to apparent position at epoch, after applying proper motion.
@@ -411,6 +413,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 - Output conversion, from GCRS J2000.0 to your _to-epoch_, uses Long Term Precession.
 - Reported RA and Dec refer to a classical, equinox based, position using the mean Equinox of _to-epoch_.
 - This command would be useful for session planning, where your catalog should contain mean places at your chosen epoch.
+  - If you develop your session catalog for an epoch within a few years of your planned observing, then re-entering the mean positions from your catalog, using the short form of **RADEC** without any specified proper motion, will probably be good enough. But this supposes that you provided the proper motions when developing your catalog.
 ```
 ;; The 2023 Astronomical Almanac reports α Tau at
 ;;    RA   04h 37m 16.3s
@@ -434,7 +437,9 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 
 ;; So we match on RA and off by 1 arcsec in Dec.
 ```
-While the following functions for precession still exist in the code body, the use of **RADEC** and **TO-RADEC** feels much more natural. This new method incorporates good long-term Precession, decent Nutation to better than 1 arcsec, and Aberration (which can be up to ±20 arcsec annual variation). Initial tests show agreement to within 1 arcsec in apparent position against various other sources.
+While the following functions for precession still exist in the code body, the use of **RADEC** and **TO-RADEC** feels much more natural. This new method automates proper motion corrections, good long-term Precession, decent Nutation to better than 1 arcsec, and Aberration (which can be up to ±20 arcsec annual variation). Initial tests show agreement to within 1 arcsec in apparent position against various other sources.
+
+What this study has shown is that, for purposes of telescope pointing, you really can't neglect Nutation and Aberration. Without these two corrections, you could be off by as much as 1/2 arcmin on the sky, even after correcting for gross precession, depending on where you are looking. Catalogs need mean positions, but pointing needs apparent positions.
 ___
 
 **prec** _RA-ang Dec-ang &optional to-epoch from-epoch => RA_ang, Dec_ang_
