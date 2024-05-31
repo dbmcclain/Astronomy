@@ -389,6 +389,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 - _μα, μδ_ default to zero.
 - Converts entered RA and Dec to a CIRS vector, after applying proper motion, then transforms it to a GCRS position, precessing it from _from-epoch_ to J2000.0.
 - RA and Dec should refer to a classical, equinox based, _mean_ position at _from-epoch_, as opposed to RA being CIO based.
+- _GCRS-pos_ is a little struct that retains the proper motions for application to other epochs.
 - With the advent of Hipparcus and Gaia missions, it seems probable that most bright stars (< 12 mag) will have measurable proper motion.
 
 **to-radec** _GCRS-pos &optional to-epoch => RA, Dec_
