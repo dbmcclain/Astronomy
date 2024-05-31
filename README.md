@@ -380,6 +380,8 @@ For **TO-MN-RADEC** mean positions, we elide nutation and aberration, and refer 
 
 ![Apparent EO - Mean EO](https://github.com/dbmcclain/Astronomy/assets/3160577/7020d854-d7c2-43c5-8972-087cd6082f82)
 
+![WC Aberration](https://github.com/dbmcclain/Astronomy/assets/3160577/50e97938-5f92-42fd-83a3-8ade340373f4)
+
 So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) (DEC dd mm ss)) => vec`. The entry _from-epoch_ defaults to J2000. To see the apparent place at your present epoch, as for commanding a telescope, you would do `(TO-RADEC vec) => RA, Dec`, where the _to-epoch_ defaults to your current epoch.
 
 **radec** _ra-ang dec-ang &optional from-epoch => GCRS-vec_
@@ -409,41 +411,33 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 - Reported RA and Dec refer to a classical, equinox based, position using the mean Equinox of _to-epoch_.
 - This command would be useful for session planning, where your catalog should contain mean places at your chosen epoch.
 ```
-;; The 2023 Astronomical Almanac reports Θ Leo at
-;;    RA   11h 15m 28.3s, and
-;;    Dec +15° 18' 03"
+;; The 2023 Astronomical Almanac reports α Tau at
+;;    RA   04h 37m 16.3s
+;;    Dec +16° 33' 17" 
 ;; for Epoch 2023.5 = JD 244_0128.375.
-(let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from Aladin J2000.0 Catalog
-                 (Dec 15 25 46.453) ))) 
-  (to-mn-radec v 246_0128.375))
-=>
-(RA 11 15 28.356)  ;; 0.056s diff ≈ 0.81" on sky
-(DEC 15 18 4.598)  ;; 1.6" diff
+;;
+;; But the Yale BS Catalog shows that it has substantial proper motion:
+;;   μα =  0.063 "/yr
+;;   μδ = -0.190 "/yr
+   
+(let* ((epoch    246_0128.375)
+       (Tc       (y2k epoch))      ;; = 23.5
+       
+       (ra-cat   (RA  04 35 55.2)) ;; α Tau J2000.0, Yale BS Catalog
+       (dec-cat  (Dec 16 30 33))
+       (μα       (arcsec  0.063))  ;; arcsec/yr
+       (μδ       (arcsec -0.190))
 
-;; But Θ Leo is reported to have a high proper motion of
-;; -59.01"/cent in RA, and -79.37"/cent in Dec.
-;; So making corrections to the catalog position before precessing:
-(let* ((epoch 246_0128.375)
-       (Tc    (c2k epoch))
-       (ra    (+ (RA 11 14 14.4052)  ;; θ Leo from Aladin J2000.0 Catalog
-                 (/ (* (arcsec -59.01) Tc)
-                    (cos (Dec 15 18))) ))
-       (dec   (+ (Dec 15 25 46.453)
-                 (* (arcsec -79.37) Tc)))
-       (v     (radec ra dec)))
-  (to-mn-radec v epoch))
+       (ra-pm    (+ ra-cat  (* Tc μα)))
+       (dec-pm   (+ dec-cat (* Tc μδ)))
+       (v-pm     (radec ra-pm dec-pm)))
+  (to-mn-radec v-pm epoch))
 =>
-(RA 11 15 27.397000000000002) ;; !! -13.1 arcsec on sky
-(DEC 15 17 45.952)            ;; !! -17.0 arcsec
-
-;; That's a miss by more than 21" on the sky!  So it would appear that
-;; the Almanac has not corrected the catalog position for proper
-;; motion. (Or else, we have severely butchered the precession
-;; calculations...)
+(RA 4 37 16.27)     ;; round to  4:37:16.3
+(DEC 16 33 16.162)  ;; round to 16:33:16
+;; So we match on RA and off by 1 arcsec in Dec.
 ```
-![WC Aberration](https://github.com/dbmcclain/Astronomy/assets/3160577/50e97938-5f92-42fd-83a3-8ade340373f4)
-
-While the following functions for precession still exist in the code body, the use of **RADEC** and **TO-RADEC** is enormously more natural. This new method incorporates good long-term Precession, decent Nutation to better than 1 arcsec, and Aberration (which can be up to ±20 arcsec annual variation). Initial tests show agreement to within 1 arcsec in apparent position against various other sources.
+While the following functions for precession still exist in the code body, the use of **RADEC** and **TO-RADEC** feels much more natural. This new method incorporates good long-term Precession, decent Nutation to better than 1 arcsec, and Aberration (which can be up to ±20 arcsec annual variation). Initial tests show agreement to within 1 arcsec in apparent position against various other sources.
 ___
 
 **prec** _RA-ang Dec-ang &optional to-epoch from-epoch => RA_ang, Dec_ang_
