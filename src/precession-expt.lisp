@@ -122,7 +122,7 @@
          (M_CIO (M_CIO CIP))
          (ab    (aberration to-epoch)))
     (values (vadd ab (mat-mulv M_CIO v2k))
-            (EO-ap M_CIO to-epoch))))
+            (EO-ap M_CIO to-epoch) )))
 
 ;; ----------------------------------------------
 ;; Presuming that Catalog positions report Equinox based classical RA & Dec.
@@ -161,7 +161,11 @@
   ;; Report as classical Equinox-based RA & Dec.
   (multiple-value-call #'CIRS-xyz-to-EQX
     (prec-gcrs-2k-to-cirs-mn vxyz epoch) ))
-    ))
+
+(defun to-radec-mneqx (vxyz &optional (epoch (current-epoch)))
+  (let ((vprec (prec-gcrs-2k-to-cirs-ap vxyz epoch))
+        (EO    (EO epoch)))
+    (CIRS-xyz-to-EQX vprec EO)))
 
 #|
 (radec (deg 0) (deg 0))
@@ -181,7 +185,7 @@
 (let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from J2000.0 Catalog
                  (Dec 15 25 46.453) ))) 
   (to-radec v))
-
+|#
 ;; -----------------------------------------------------------
 #|
 ;; Compare our computed Mean EO versus the EO we use for GMST
@@ -245,48 +249,3 @@
            :thick 2)
 |#
 
-
-#|
-;; The 2023 Astronomical Almanac reports Θ Leo at
-;;    RA   11h 15m 28.3s, and
-;;    Dec +15° 18' 03"
-;; for Epoch 2023.5 = JD 244_0128.375.
-(let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from Aladin J2000.0 Catalog
-                 (Dec 15 25 46.453) ))) 
-  (to-mn-radec v 246_0128.375))
-=>
-(RA 11 15 28.356)  ;; 0.056s diff ≈ 0.81" on sky
-(DEC 15 18 4.598)  ;; 1.6" diff
-
-;; But Θ Leo is reported to have a high proper motion of
-;; -59.01"/cent in RA, and -79.37"/cent in Dec.
-;; So making corrections to the catalog position before precessing:
-(let* ((epoch 246_0128.375)
-       (Tc    (c2k epoch))
-       (ra    (+ (RA 11 14 14.4052)  ;; θ Leo from Aladin J2000.0 Catalog
-                 (/ (* (arcsec -59.01) Tc)
-                    (cos (Dec 15 18))) ))
-       (dec   (+ (Dec 15 25 46.453)
-                 (* (arcsec -79.37) Tc)))
-       (v     (radec ra dec)))
-  (to-mn-radec v epoch))
-=>
-(RA 11 15 27.397000000000002) ;; !! -13.1 arcsec on sky
-(DEC 15 17 45.952)            ;; !! -17.0 arcsec
-
-;; That's a miss by more than 21" on the sky!  So it would appear that
-;; the Almanac has not corrected the catalog position for proper
-;; motion. (Or else, we have severely butchered the precession
-;; calculations...)
-
-(to-hms (- (RA 11 15 28.356)
-           (RA 11 15 28.3)))
-(to-dms (- (DEC 15 18 4.598)
-           (Dec 15 18 03)))
-
-(* (cos (Dec 15 25 46.453))
-   (to-arcsec (- (RA 11 15 27.397000000000002)
-                 (RA 11 15 28.3))))
-(to-arcsec (- (DEC 15 17 45.952)
-           (Dec 15 18 03)))
-|#
