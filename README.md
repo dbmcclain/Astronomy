@@ -413,6 +413,7 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 - Output conversion, from GCRS J2000.0 to your _to-epoch_, uses Long Term Precession.
 - Reported RA and Dec refer to a classical, equinox based, position using the mean Equinox of _to-epoch_.
 - This command would be useful for session planning, where your catalog should contain mean places at your chosen epoch.
+  - If you develop your session catalog for an epoch within a few years of your planned observing, then re-entering the mean positions from your catalog, using the short form of **RADEC** without any specified proper motion, will probably be good enough.
 ```
 ;; The 2023 Astronomical Almanac reports α Tau at
 ;;    RA   04h 37m 16.3s
