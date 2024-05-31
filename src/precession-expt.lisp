@@ -164,17 +164,15 @@
   ;; that should be good enough.
   ;;
   (let* ((Ty    (y2k epoch))
-         (rapm  (- ra  (* Ty μα)))
-         (decpm (- dec (* Ty μδ)))
-         (vxyz  (eqx-to-cirs-xyz rapm decpm epoch))
+         (vxyz  (eqx-to-cirs-xyz ra dec epoch))
          (vprec (prec-CIRS-mn-to-GCRS-2k vxyz epoch)))
     (mvb (ra2k dec2k)
         (CIRS-xyz-to-EQX vprec +J2000+)
       (make-pos-pm
-       :α   (eval ra2k)
-       :δ   (eval dec2k)
-       :μα  μα
-       :μδ  μδ)
+       :α  (- (eval ra2k)  (* Ty μα))
+       :δ  (- (eval dec2k) (* Ty μδ))
+       :μα μα
+       :μδ μδ)
       )))
 
 (defun pos-pm-to-vxyz (pos epoch)
