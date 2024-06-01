@@ -175,7 +175,8 @@
       (let* ((α1  (+ α* (/ μα* (cos δ*))))
              (δ1  (+ δ* μδ))
              (v1  (to-xyz α1 δ1))
-             (vμ  (vcross vprec v1))  ;; axis of pm rot
+             (v*  (to-xyz α* δ*))
+             (vμ  (vcross v* v1))     ;; axis of pm rot
              (μ   (asin (vnorm vμ)))) ;; magn of 1yr pm
         (mvb (αμ δμ)  ;; pos of pm rot axis pole
             (to-thphi vμ)
