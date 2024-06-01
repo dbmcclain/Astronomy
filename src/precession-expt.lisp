@@ -146,7 +146,7 @@
 ;; measure, on entry RADEC converts to J2000 GCRS 3-vector.
 
 (defstruct pos-pm
-  α δ μα μδ)
+  α2k δ2k αμ δμ μ)
 
 (defun radec (ra dec &optional (epoch +j2000+) (μα* 0) (μδ 0))
   ;; RA & Dec assumed to be mean Catalog Equinox-based classical position.
@@ -167,24 +167,46 @@
   (let* ((Ty    (y2k epoch))
          (vxyz  (eqx-to-cirs-xyz ra dec epoch))
          (vprec (prec-CIRS-mn-to-GCRS-2k vxyz epoch)))
-    (mvb (ra2k dec2k)
+    (mvb (α* δ*)
         (map-mult #'eval
           (CIRS-xyz-to-EQX vprec +J2000+))
-      (let ((μα (/ μα* (cos dec2k))))
-        (make-pos-pm
-         :α   (- ra2k  (* Ty μα))
-         :δ   (- dec2k (* Ty μδ))
-         :μα  μα
-         :μδ  μδ)
-      )))
+      ;; α*,δ* is position in J2000 with added pm, need to remove pm
+      ;; form probe pos after 1 year of pm, starting from α*,δ*
+      (let* ((α1  (+ α* (/ μα* (cos δ*))))
+             (δ1  (+ δ* μδ))
+             (v1  (to-xyz α1 δ1))
+             (vμ  (vcross vprec v1))  ;; axis of pm rot
+             (μ   (asin (vnorm vμ)))) ;; magn of 1yr pm
+        (mvb (αμ δμ)  ;; pos of pm rot axis pole
+            (to-thphi vμ)
+          ;; now remove pm since epoch
+          (mvb (α2k δ2k)
+              (rot α* δ*  αμ δμ  (- (* Ty μ)))
+            (make-pos-pm
+             :α2k  α2k   ;; pos in J2000 sans pm
+             :δ2k  δ2k
+             :αμ   αμ    ;; axis of pm
+             :δμ   δμ
+             :μ    μ)    ;; 1yr pm magn
+            ))
+        ))))
 
 (defun pos-pm-to-vxyz (pos epoch)
-  (let* ((Ty    (y2k epoch))
-         (rapm  (+ (pos-pm-α pos) (* Ty (pos-pm-μα pos))))
-         (decpm (+ (pos-pm-δ pos) (* Ty (pos-pm-μδ pos)))))
-    (EQX-to-CIRS-xyz rapm decpm +J2000+)
-    ))
-  
+  (with-accessors ((α2k pos-pm-α2k)
+                   (δ2k pos-pm-δ2k)
+                   (αμ  pos-pm-αμ)
+                   (δμ  pos-pm-δμ)
+                   (μ   pos-pm-μ)) pos
+    (let ((Ty  (y2k epoch)))
+      ;; apply pm for Ty years
+      (mvb (α* δ*)
+          (rot α2k δ2k  αμ δμ  (* Ty μ))
+        ;; then precess to epoch
+        (EQX-to-CIRS-xyz α* δ* +J2000+)
+        ))))
+
+;; ---------------------------------------------------------
+
 (defun to-radec (pos &optional (epoch (current-epoch)))
   ;; Precess to apparent position at epoch
   ;; Report as classical Equinox-based RA & Dec.
@@ -200,6 +222,8 @@
     (multiple-value-call #'CIRS-xyz-to-EQX
       (prec-gcrs-2k-to-cirs-mn vxyz epoch)
       )))
+
+;; ---------------------------------------------------------
 
 #|
 (radec (deg 0) (deg 0))
