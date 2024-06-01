@@ -109,6 +109,10 @@
    #:ra
    #:dec
 
+   #:pic-fmt
+   #:format-ra
+   #:format-dec
+   
    #:to-ra
    #:to-dec
 

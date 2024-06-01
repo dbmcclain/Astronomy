@@ -138,8 +138,8 @@
   ;; Convert 3-vector to classical Equinox-based RA & Dec.
   (mvb (ra dec)
       (to-thphi vxyz)
-    (values (to-ra (- ra EO))
-            (to-dec dec))))
+    (values (- ra EO)
+            dec)))
 
 ;; -------------------------------------------------
 ;; Just like we do for angle measures, converting on entry to a common
@@ -168,8 +168,7 @@
          (vxyz  (eqx-to-cirs-xyz ra dec epoch))
          (vprec (prec-CIRS-mn-to-GCRS-2k vxyz epoch)))
     (mvb (α* δ*)
-        (map-mult #'eval
-          (CIRS-xyz-to-EQX vprec +J2000+))
+        (CIRS-xyz-to-EQX vprec +J2000+)
       ;; α*,δ* is position in J2000 with added pm, need to remove pm
       ;; form probe pos after 1 year of pm, starting from α*,δ*
       (let* ((α1  (+ α* (/ μα* (cos δ*))))
@@ -212,17 +211,19 @@
   ;; Precess to apparent position at epoch
   ;; Report as classical Equinox-based RA & Dec.
   (let ((vxyz  (pos-pm-to-vxyz pos epoch)))
-    (multiple-value-call #'cirs-xyz-to-eqx
-      (prec-gcrs-2k-to-cirs-ap vxyz epoch)
-      )))
+    (map-mult (#'to-ra #'to-dec)
+      (multiple-value-call #'cirs-xyz-to-eqx
+        (prec-gcrs-2k-to-cirs-ap vxyz epoch)
+        ))))
 
 (defun to-mn-radec (pos &optional (epoch (current-epoch)))
   ;; Precess to mean position at epoch.
   ;; Report as classical Equinox-based RA & Dec.
   (let ((vxyz  (pos-pm-to-vxyz pos epoch)))
-    (multiple-value-call #'CIRS-xyz-to-EQX
-      (prec-gcrs-2k-to-cirs-mn vxyz epoch)
-      )))
+    (map-mult (#'to-ra #'to-dec)
+      (multiple-value-call #'CIRS-xyz-to-EQX
+        (prec-gcrs-2k-to-cirs-mn vxyz epoch)
+        ))))
 
 ;; ---------------------------------------------------------
 
