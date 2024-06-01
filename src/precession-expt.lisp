@@ -148,8 +148,9 @@
 (defstruct pos-pm
   α δ μα μδ)
 
-(defun radec (ra dec &optional (epoch +j2000+) (μα 0) (μδ 0))
+(defun radec (ra dec &optional (epoch +j2000+) (μα* 0) (μδ 0))
   ;; RA & Dec assumed to be mean Catalog Equinox-based classical position.
+  ;; μα* should be projected proper motion = μα * cos(δ)
   ;;
   ;; As for UI inconvenience... if you are going to the trouble to
   ;; specify proper motions, then having to enter an epoch is only a
@@ -167,12 +168,14 @@
          (vxyz  (eqx-to-cirs-xyz ra dec epoch))
          (vprec (prec-CIRS-mn-to-GCRS-2k vxyz epoch)))
     (mvb (ra2k dec2k)
-        (CIRS-xyz-to-EQX vprec +J2000+)
-      (make-pos-pm
-       :α  (- (eval ra2k)  (* Ty μα))
-       :δ  (- (eval dec2k) (* Ty μδ))
-       :μα μα
-       :μδ μδ)
+        (map-mult #'eval
+          (CIRS-xyz-to-EQX vprec +J2000+))
+      (let ((μα (/ μα* (cos dec2k))))
+        (make-pos-pm
+         :α   (- ra2k  (* Ty μα))
+         :δ   (- dec2k (* Ty μδ))
+         :μα  μα
+         :μδ  μδ)
       )))
 
 (defun pos-pm-to-vxyz (pos epoch)
