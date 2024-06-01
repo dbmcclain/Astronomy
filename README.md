@@ -421,8 +421,8 @@ So to enter a J2000 catalog position you would simply do: `(RADEC (RA hh mm ss) 
 ;; for Epoch 2023.5 = JD 244_0128.375.
 ;;
 ;; But the Yale BS Catalog shows that it has substantial proper motion:
-;;   μα =  0.063 "/yr
-;;   μδ = -0.190 "/yr
+;;   μα* =  0.063 "/yr
+;;   μδ  = -0.190 "/yr
 (let* ((epoch    246_0128.375)
        (pos2k    (radec (RA  04 35 55.2) ;; α Tau J2000.0, Yale BS Catalog
                         (Dec 16 30 33)
