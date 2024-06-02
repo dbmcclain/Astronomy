@@ -198,6 +198,8 @@
           ))
       )))
 
+;; ---------------------------------------------------------
+
 (defun pos-pm-to-vxyz (pos epoch)
   (with-accessors ((α2k pos-pm-α2k)
                    (δ2k pos-pm-δ2k)
@@ -211,8 +213,6 @@
         ;; then precess to epoch
         (EQX-to-CIRS-xyz α* δ* +J2000+)
         ))))
-
-;; ---------------------------------------------------------
 
 (defun do-to-radec (pos epoch prec-fn)
   (let ((vxyz  (pos-pm-to-vxyz pos epoch)))
