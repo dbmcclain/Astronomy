@@ -148,6 +148,20 @@
 (defstruct pos-pm
   α2k δ2k αμ δμ μ)
 
+(defun proper-motion-axis (α* δ* μα* μδ)
+  ;; Compute axis of rotation for PM corrections, and magnitude.
+  ;; Form probe pos after 1 year of pm, starting from α*,δ*
+  (let* ((α1  (+ α* (/ μα* (cos δ*))))
+         (δ1  (+ δ* μδ))
+         (v1  (to-xyz α1 δ1))
+         (v*  (to-xyz α* δ*))
+         (vμ  (vcross v* v1))     ;; axis of pm rot
+         (μ   (asin (vnorm vμ)))) ;; magn of 1yr pm
+    (mvb (αμ δμ)  ;; pos of pm rot axis pole
+        (to-thphi vμ)
+      (values αμ δμ μ)
+      )))
+  
 (defun radec (ra dec &optional (epoch +j2000+) (μα* 0) (μδ 0))
   ;; RA & Dec assumed to be mean Catalog Equinox-based classical position.
   ;; μα* should be projected proper motion = μα * cos(δ)
@@ -170,26 +184,19 @@
     (mvb (α* δ*)
         (CIRS-xyz-to-EQX vprec +J2000+)
       ;; α*,δ* is position in J2000 with added pm, need to remove pm
-      ;; form probe pos after 1 year of pm, starting from α*,δ*
-      (let* ((α1  (+ α* (/ μα* (cos δ*))))
-             (δ1  (+ δ* μδ))
-             (v1  (to-xyz α1 δ1))
-             (v*  (to-xyz α* δ*))
-             (vμ  (vcross v* v1))     ;; axis of pm rot
-             (μ   (asin (vnorm vμ)))) ;; magn of 1yr pm
-        (mvb (αμ δμ)  ;; pos of pm rot axis pole
-            (to-thphi vμ)
-          ;; now remove pm since epoch
-          (mvb (α2k δ2k)
-              (rot α* δ*  αμ δμ  (- (* Ty μ)))
-            (make-pos-pm
-             :α2k  α2k   ;; pos in J2000 sans pm
-             :δ2k  δ2k
-             :αμ   αμ    ;; axis of pm
-             :δμ   δμ
-             :μ    μ)    ;; 1yr pm magn
-            ))
-        ))))
+      (mvb (αμ δμ μ) ;; axis
+          (proper-motion-axis α* δ* μα* μδ)
+        ;; now remove pm since epoch
+        (mvb (α2k δ2k)
+            (rot α* δ*  αμ δμ  (- (* Ty μ)))
+          (make-pos-pm
+           :α2k  α2k   ;; pos in J2000 sans pm
+           :δ2k  δ2k
+           :αμ   αμ    ;; axis of pm
+           :δμ   δμ
+           :μ    μ)    ;; 1yr pm magn
+          ))
+      )))
 
 (defun pos-pm-to-vxyz (pos epoch)
   (with-accessors ((α2k pos-pm-α2k)
