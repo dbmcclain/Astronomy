@@ -207,23 +207,22 @@
 
 ;; ---------------------------------------------------------
 
-(defun to-radec (pos &optional (epoch (current-epoch)))
-  ;; Precess to apparent position at epoch
-  ;; Report as classical Equinox-based RA & Dec.
+(defun do-to-radec (pos epoch prec-fn)
   (let ((vxyz  (pos-pm-to-vxyz pos epoch)))
     (map-mult (#'to-ra #'to-dec)
       (multiple-value-call #'cirs-xyz-to-eqx
-        (prec-gcrs-2k-to-cirs-ap vxyz epoch)
+        (funcall prec-fn vxyz epoch)
         ))))
+  
+(defun to-radec (pos &optional (epoch (current-epoch)))
+  ;; Precess to apparent position at epoch
+  ;; Report as classical Equinox-based RA & Dec.
+  (do-to-radec pos epoch #'prec-gcrs-2k-to-cirs-ap))
 
 (defun to-mn-radec (pos &optional (epoch (current-epoch)))
   ;; Precess to mean position at epoch.
   ;; Report as classical Equinox-based RA & Dec.
-  (let ((vxyz  (pos-pm-to-vxyz pos epoch)))
-    (map-mult (#'to-ra #'to-dec)
-      (multiple-value-call #'CIRS-xyz-to-EQX
-        (prec-gcrs-2k-to-cirs-mn vxyz epoch)
-        ))))
+  (do-to-radec pos epoch #'prec-gcrs-2k-to-cirs-mn))
 
 ;; ---------------------------------------------------------
 
