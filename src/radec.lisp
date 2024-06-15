@@ -10,7 +10,7 @@
 ;; --------------------------------
 ;; Introducers for RA, Dec
 
-(defvar *ang-delims*  '(#\space #\tab #\return))
+(defvar *ang-delims*  '(#\space #\tab #\return #\:))
 
 (defun radec-string-reader (str ang-fn)
   (db (hh &optional mm ss)
