@@ -88,7 +88,7 @@
   (arcmin (/ x 60.)))
 
 (defun mas (x)
-  (arcsec (/ x 1000)))
+  (arcsec (/ x 1000.)))
 
 (defun hrs (x)
   (turns (/ x 24.)))
@@ -127,7 +127,7 @@
   (* 60. (to-arcmin x)))
 
 (defun to-mas (x)
-  (* 1000 (to-arcsec x)))
+  (* 1000. (to-arcsec x)))
 
 (defun to-hrs (x)
   (* (to-turns x) 24.))
@@ -153,6 +153,13 @@
 (to-μrad (arcsec 1)) => 4.848
 (to-deg (rad 1))     => 57.3
 (to-rad (turns 1))   => 6.28
+ |#
+
+(defmacro to (ufn val)
+  `(/ ,val (,ufn 1)))
+
+#|
+(to μrad (arcsec 1)) => 4.848
  |#
 
 ;; ---------------------------------

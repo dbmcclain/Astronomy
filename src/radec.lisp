@@ -99,7 +99,9 @@
 
 #|
 (to-dec (deg 25.92028))
+(>dms   (deg 25.92028))
 (to-ra  (deg 239.875417))
+(>hms   (deg 239.875417))
 |#
 
 (defun to-ra-h.ms (x)

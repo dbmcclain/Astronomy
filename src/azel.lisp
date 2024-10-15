@@ -45,6 +45,18 @@
               `(:HA ,(to-hms ha))
               `(:pa (deg ,(to-deg ang))))
       )))
+
+(let ((az (deg 45))
+      (el (deg 40)))
+  (multiple-value-bind (ra dec)
+      (azel-to-radec az el)
+    (let* ((ha  (ra-to-ha ra))
+           (ang (parallactic-angle ha dec)))
+      (values `(:RA ,(>hms  ra))
+              `(:dec ,(>dms dec))
+              `(:HA ,(>ha ha))
+              `(:pa (deg ,(um:dpl 1 (to-deg ang)))))
+      )))
 |#
 
 (defun airmass (el)

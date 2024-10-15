@@ -81,6 +81,7 @@
 
 #|
 (map-mult (#'to-ra #'to-dec) (to-thphi (aberration +j2000+)))
+(map-mult (#'>hms #'>dms)    (to-thphi (aberration +j2000+)))
 
 (let ((v*  (vnormalize (aberration +j2000+))))
   (plt:fplot 'plt '(0 5)

@@ -11,6 +11,7 @@
                 (:file "angle-measure")
                 (:file "angle-input")
                 (:file "angle-output")
+                (:file "angle-output-suppl")
                 (:file "angle-rotations")
                 (:file "matrices")
                 (:file "poly")

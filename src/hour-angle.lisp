@@ -20,12 +20,15 @@
 #|
 ;; What RA is on the Meridian now?
 (to-hms (lmst))
+(>hms (lmst))
 
 ;; What is rising now, about 4 hours E of Meridian?
 (to-ra (ha-to-ra (hms -4)))
+(>hms  (ha-to-ra (hms -4)))
 
 ;; What is HA of RA 22h 50m?
 (to-hms (ra-to-ha (ra 22 50)))
+(>ha    (ra-to-ha (ra 22 50)))
 |#
 
 
@@ -41,5 +44,6 @@
 
 #|
 (to-deg (parallactic-angle (hms -4) (dec 22)))
+(um:fdpl 1 (to-deg (parallactic-angle (hms -4) (dec 22))))
 |#
 

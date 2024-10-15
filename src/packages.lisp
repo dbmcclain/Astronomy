@@ -3,6 +3,9 @@
 
 (in-package :cl-user)
 
+(project:defproject
+ (#:fdpl  #:com.ral.useful-macros.fdpl))
+
 (defpackage #:com.ral.astro
   (:use #:common-lisp)
   (:shadow
@@ -61,6 +64,15 @@
    #:to-hms
    #:to-h.ms
 
+   #:to
+
+   #:>dms
+   #:>dm
+   #:>hms
+   #:>ha
+   #:>hm
+   #:angle
+   
    ;; Redefined Trig Functions
    #:sin
    #:cos
