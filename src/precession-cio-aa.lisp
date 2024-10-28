@@ -18,8 +18,8 @@
          (Y   (arcsec (+ (* Tc -0.03d0)
                          (* Tc Tc -22.41d0)
                          ))))
-    `(,(to-rad X)  ;; ≈ (Sin X)
-      ,(to-rad Y)) ;; ≈ (Sin Y)
+    `(,(to rad X)  ;; ≈ (Sin X)
+      ,(to rad Y)) ;; ≈ (Sin Y)
     ))
   
 (defun GCRS-XY-aa-nut (epoch)
@@ -32,8 +32,8 @@
          (ΔY  (arcsec (+ (* 9.21d0 (cos Ω))
                          (* 0.57d0 (cos (+ L L))) 
                          ))))
-    `(,(to-rad ΔX)  ;; ≈ (Sin X)
-      ,(to-rad ΔY)) ;; ≈ (Sin Y)
+    `(,(to rad ΔX)  ;; ≈ (Sin X)
+      ,(to rad ΔY)) ;; ≈ (Sin Y)
     ))
   
 (defun CIP (epoch)

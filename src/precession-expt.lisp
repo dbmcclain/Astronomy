@@ -88,7 +88,7 @@
              (lambda (dt)
                (let* ((epoch (ymd (+ 2000 dt)))
                       (ab    (aberration epoch)))
-                 (to-arcsec (rad (vdot ab v*)))
+                 (to arcsec (rad (vdot ab v*)))
                  ))
            :clear t
            :title "Worst-case Annual Aberration"
@@ -263,7 +263,7 @@
                     (CIP   (CIP-mn epoch))
                     (M_CIO (M_CIO CIP))
                     (EO-mn (EO-ap M_CIO epoch)))
-               (to-mas (- EO-mn EO))))
+               (to mas (- EO-mn EO))))
            :clear t
            :title "EO-mn - EO"
            :xtitle "Epoch - J2000.0 [yrs]"
@@ -282,10 +282,10 @@
   ;; Hence, no particular reason to change our EO(epoch) function.
   ;; Using it makes our GMST agree with USNO.
   (list
-   :EO    (to-arcsec EO)
-   :EO-mn (to-arcsec EO-mn)
-   :ΔEO   (- (to-mas EO-mn)
-             (to-mas EO))))
+   :EO    (to arcsec EO)
+   :EO-mn (to arcsec EO-mn)
+   :ΔEO   (- (to mas EO-mn)
+             (to mas EO))))
 
 ;; Check - should be the same... (within roundoff errors)
 (let* ((epoch +j2000+)
@@ -307,7 +307,7 @@
              (let* ((epoch (ymd (+ 2000 dt)))
                     (CIP   (CIP-ap epoch))
                     (M_CIO (M_CIO CIP)))
-               (to-arcsec (ΔEO M_CIO epoch))
+               (to arcsec (ΔEO M_CIO epoch))
                ))
            :clear t
            :title "Apparent EO - Mean EO"

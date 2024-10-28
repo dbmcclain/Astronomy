@@ -13,11 +13,11 @@
 
 (defun unipolar (x)
   ;; Normalize background angle value to Principal Values, (0 360) deg
-  (turns (frac (to-turns x))))
+  (turns (frac (to turns x))))
 
 (defun bipolar (x)
   ;; Normalize background angle value to Principal Values, (-180 180) deg
-  (turns (- (frac (+ (to-turns x) 1/2)) 1/2)))
+  (turns (- (frac (+ (to turns x) 1/2)) 1/2)))
 
 ;; ----------------------------------
 
@@ -62,10 +62,10 @@
     ))
     
 (defun to-dms (x)
-  (sexi-out (to-deg x) 'dms 360))
+  (sexi-out (to deg x) 'dms 360))
 
 (defun to-hms (x)
-  (sexi-out (to-hrs x) 'hms 24))
+  (sexi-out (to hrs x) 'hms 24))
 
 #|
 ;; E.g.,
@@ -82,10 +82,10 @@
     ))
 
 (defun to-d.ms (x)
-  (dot-conv-out (to-deg x) 360))
+  (dot-conv-out (to deg x) 360))
 
 (defun to-h.ms (x)
-  (dot-conv-out (to-hrs x) 24))
+  (dot-conv-out (to hrs x) 24))
 
 #|
 ;; E.g.,

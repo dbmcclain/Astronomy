@@ -77,7 +77,7 @@
   (print v)
   (multiple-value-bind (θ φ)
       (to-thphi v)
-    (list (to-deg θ) (to-deg φ))
+    (list (to deg θ) (to deg φ))
     ))
 |#
 ;; ---------------------------------------------
@@ -109,7 +109,7 @@
     (print vr)
     (multiple-value-bind (θ φ)
         (to-thphi vr)
-      (list (to-deg θ) (to-deg φ))
+      (list (to deg θ) (to deg φ))
       )))
 |#
 

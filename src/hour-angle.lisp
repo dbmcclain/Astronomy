@@ -43,7 +43,7 @@
            )))
 
 #|
-(to-deg (parallactic-angle (hms -4) (dec 22)))
-(um:fdpl 1 (to-deg (parallactic-angle (hms -4) (dec 22))))
+(to deg (parallactic-angle (hms -4) (dec 22)))
+(um:fdpl 1 (to deg (parallactic-angle (hms -4) (dec 22))))
 |#
 

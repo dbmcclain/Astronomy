@@ -43,7 +43,7 @@
       (values (to-ra  ra)
               (to-dec dec)
               `(:HA ,(to-hms ha))
-              `(:pa (deg ,(to-deg ang))))
+              `(:pa (deg ,(to deg ang))))
       )))
 
 (let ((az (deg 45))
@@ -55,7 +55,7 @@
       (values `(:RA ,(>hms  ra))
               `(:dec ,(>dms dec))
               `(:HA ,(>ha ha))
-              `(:pa (deg ,(um:dpl 1 (to-deg ang)))))
+              `(:pa (deg ,(um:dpl 1 (to deg ang)))))
       )))
 |#
 

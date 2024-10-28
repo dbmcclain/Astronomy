@@ -52,7 +52,7 @@
                  :lcl-ut 0))))
   (list (- tt 2400000.5)
         (- jd 2400000.5)
-        (to-secs (- jd tt))
+        (to secs (- jd tt))
         (to-hms (frac (+ 1/2 tt)))
         (to-hms (frac (+ 1/2 jd)))
         (CIP tt)
@@ -69,11 +69,11 @@
 ;; ---------------
 (let* ((ut1 (+ 2400000.5d0 53750.892855138888889d0 (/ 0.3341 +sec/day+))))
   (list
-   :era (to-deg (ERA ut1))
+   :era (to deg (ERA ut1))
    :era (to-hms (ERA ut1))
    (-
-   (to-mas (ERA ut1))
-   (to-mas
+   (to mas (ERA ut1))
+   (to mas
     (unipolar
      (turns (+ 0.7790572732640
                (* 1.00273781191135448

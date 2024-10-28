@@ -113,7 +113,7 @@
 ;; Turns, Degrees, Radians, Hours
 ;;
 ;; 1 turn = 360 deg = 2 Pi rad = 24 hrs
-
+#|
 (defun to-turns (x)
   (/ x *1turn*))
 
@@ -146,7 +146,7 @@
 
 (defun to-μrad (x)
   (* (to-mrad x) 1d3))
-
+|#
 #|
 ;; E.g.,
 (to-arcsec (deg 1))  => 3600

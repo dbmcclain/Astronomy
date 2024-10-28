@@ -101,7 +101,7 @@
              (let* ((epoch (ymd (+ 2000 dt)))
                     (xyz   (gcrs-xy epoch))
                     (xya   (gcrs-xy-aa epoch)))
-               (to-arcsec (rad (- (first xya) (first xyz))))
+               (to arcsec (rad (- (first xya) (first xyz))))
                ))
            :clear t
            :thick 2)
@@ -208,7 +208,7 @@
                   (let ((zq (sqrt (max 0 (- 1 (* xq xq) (* yq yq))))))
                     ;; shows 7.7 as for J2000
                     ;;       8.9 as for J2024
-                    (print `(:ΔCIP  ,(to-arcsec (acos (vdot `(,X ,Y ,Z) `(,Xq ,Yq ,Zq))))))
+                    (print `(:ΔCIP  ,(to arcsec (acos (vdot `(,X ,Y ,Z) `(,Xq ,Yq ,Zq))))))
                     ))))
 
          ;; top row of M_clas, Γ
@@ -286,10 +286,10 @@
       (print
        (list
         :EO      (to-hms EO)
-        :ΔEO_1   (to-mas (- EO1  EO))
-        :ΔEO_2   (to-mas (- EO2  EO))
-        :ΔEO_lt  (to-mas (- EOlt EO))
-        :ΔEO_q   (to-arcsec (- EOq  EO))
-        :ΔEO_qlt (to-arcsec (- EOqlt EO)) ))
+        :ΔEO_1   (to mas (- EO1  EO))
+        :ΔEO_2   (to mas (- EO2  EO))
+        :ΔEO_lt  (to mas (- EOlt EO))
+        :ΔEO_q   (to arcsec (- EOq  EO))
+        :ΔEO_qlt (to arcsec (- EOqlt EO)) ))
       (values))))
 |#
