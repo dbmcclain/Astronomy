@@ -7,7 +7,7 @@
 
 ;; --------------------------------------------
 
-(defclass >dms (um:fdpl)
+(defclass >dms+ (um:fdpl)
   ;; ±DDD MM SS.s
   ()
   (:default-initargs
@@ -16,41 +16,73 @@
    :fmt   '(sign+ ds ddc ddc)
    ))
 
-(defmethod um:fdpl-prepval ((x >dms))
+(defmethod um:fdpl-prepval ((x >dms+))
   (to arcsec (bipolar (um:val-of x))))
 
-(defun >dms (x &rest args)
-  (apply #'make-instance '>dms
-         :val   x
+(defun fdpl-maker (class val args)
+  (apply #'make-instance class
+         :val val
          args))
 
+(defun >dms+ (x &rest args)
+  (fdpl-maker '>dms+ x args))
+
 #|
-(>dms (turns 0.8))                      
+(>dms+ (turns 0.4))                      
 |#
 
 ;; --------------------------------------------
 
-(defclass >dm (>dms)
+(defclass >dms (>dms+)
+  ;; -DDD MM SS.s
+  ()
+  (:default-initargs
+   :fmt   '(sign ds ddc ddc)
+   ))
+
+(defun >dms (x &rest args)
+  (fdpl-maker '>dms x args))
+
+#|
+(>dms (turns 0.4))                      
+|#
+
+;; --------------------------------------------
+
+(defclass >dm+ (>dms+)
   ;; ±DDD MM.m
   ()
   (:default-initargs
    :fmt '(sign+ ds ddc)
    ))
 
-(defmethod um:fdpl-prepval ((x >dm))
+(defmethod um:fdpl-prepval ((x >dm+))
   (to arcmin (bipolar (um:val-of x))))
 
-(defun >dm (x &rest args)
-  (apply #'make-instance '>dm
-         :val   x
-         args))
+(defun >dm+ (x &rest args)
+  (fdpl-maker '>dm+ x args))
 
 #|
-(>dm (turns 0.8))                      
+(>dm+ (turns 0.4))                      
 |#
 ;; --------------------------------------------
 
-(defclass >ha (>dms)
+(defclass >dm (>dm+)
+  ;; -DDD MM.m
+  ()
+  (:default-initargs
+   :fmt '(sign ds ddc)
+   ))
+
+(defun >dm (x &rest args)
+  (fdpl-maker '>dm x args))
+
+#|
+(>dm (turns 0.4))                      
+|#
+;; --------------------------------------------
+
+(defclass >ha (>dms+)
   ;; Bipolar ±HH MM SS.s
   ()
   (:default-initargs
@@ -62,12 +94,10 @@
   (to secs (bipolar (um:val-of x))))
 
 (defun >ha (x &rest args)
-  (apply #'make-instance '>ha
-         :val   x
-         args))
+  (fdpl-maker '>ha x args))
 
 #|
-(>ha (turns 0.8))                      
+(>ha (turns 0.4))                      
 |#
 ;; --------------------------------------------
 
@@ -75,7 +105,6 @@
   ;; Unipolar HH MM SS.s
   ()
   (:default-initargs
-   :ndpl  1
    :fmt   '(ds ddc ddc dp nd)
    ))
 
@@ -83,16 +112,14 @@
   (to secs (unipolar (um:val-of x))))
   
 (defun >hms (x &rest args)
-  (apply #'make-instance '>hms
-         :val   x
-         args))
+  (fdpl-maker '>hms x args))
 
 #|
-(>hms (turns 0.8))                      
+(>hms (turns 0.4))                      
 |#
 ;; --------------------------------------------
 
-(defclass >hm (>ha)
+(defclass >hm (>hms)
   ;; Unipolar HH MM.m
   ()
   (:default-initargs
@@ -104,12 +131,10 @@
   (to mins (unipolar (um:val-of x))))
 
 (defun >hm (x &rest args)
-  (apply #'make-instance '>hm
-         :val   x
-         args))
+  (fdpl-maker '>hm x args))
 
 #|
-(>hm (turns 0.8))                      
+(>hm (turns 0.4))                      
 |#
 ;; --------------------------------------------
 #|
