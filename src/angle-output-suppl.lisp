@@ -82,7 +82,7 @@
   ()
   (:default-initargs
    :ndpl 1
-   :fmt  '(sign+ ds ddc ddc dp nd)
+   :fmt  '(sign+ ds ddc ddc dp ndpl)
    ))
 
 (defmethod um:fdpl-prepval ((x >ha))
@@ -100,7 +100,7 @@
   ;; Unipolar HH MM SS.s
   ()
   (:default-initargs
-   :fmt   '(ds ddc ddc dp nd)
+   :fmt   '(ds ddc ddc dp ndpl)
    ))
 
 (defmethod um:fdpl-prepval ((x >hms))
@@ -119,7 +119,7 @@
   ()
   (:default-initargs
    :ndpl  1
-   :fmt   '(ds ddc dp nd)
+   :fmt   '(ds ddc dp ndpl)
    ))
 
 (defmethod um:fdpl-prepval ((x >hm))
