@@ -13,11 +13,11 @@
   (:default-initargs
    :ndpl       0
    :>dms+flags '(:colon-char #\space)
-   :fmt        '(sign+ ds ddc ddc)
+   :fmt        'cl-stk:dms+
    ))
 
 (defmethod um:fdpl-prepval ((x >dms+))
-  (to arcsec (bipolar (um:val-of x))))
+  (to turns (bipolar (um:val-of x))))
 
 (defun >dms+ (x &rest args)
   (apply #'um:fdpl-maker '>dms+ x args))
@@ -32,7 +32,7 @@
   ;; -DDD MM SS.s
   ()
   (:default-initargs
-   :fmt   '(sign ds ddc ddc)
+   :fmt   'cl-stk:dms
    ))
 
 (defun >dms (x &rest args)
@@ -48,11 +48,11 @@
   ;; ±DDD MM.m
   ()
   (:default-initargs
-   :fmt '(sign+ ds ddc)
+   :fmt 'cl-stk:dm+
    ))
 
 (defmethod um:fdpl-prepval ((x >dm+))
-  (to arcmin (bipolar (um:val-of x))))
+  (to turns (bipolar (um:val-of x))))
 
 (defun >dm+ (x &rest args)
   (apply #'um:fdpl-maker '>dm+ x args))
@@ -66,7 +66,7 @@
   ;; -DDD MM.m
   ()
   (:default-initargs
-   :fmt '(sign ds ddc)
+   :fmt 'cl-stk:dm
    ))
 
 (defun >dm (x &rest args)
@@ -82,17 +82,17 @@
   ()
   (:default-initargs
    :ndpl 1
-   :fmt  '(sign+ ds ddc ddc dp ndpl)
+   :fmt  'cl-stk:hms+
    ))
 
 (defmethod um:fdpl-prepval ((x >ha))
-  (to secs (bipolar (um:val-of x))))
+  (to turns (bipolar (um:val-of x))))
 
 (defun >ha (x &rest args)
   (apply #'um:fdpl-maker '>ha x args))
 
 #|
-(>ha (turns 0.4))                      
+(>ha (turns 0.6))                      
 |#
 ;; --------------------------------------------
 
@@ -100,17 +100,17 @@
   ;; Unipolar HH MM SS.s
   ()
   (:default-initargs
-   :fmt   '(ds ddc ddc dp ndpl)
+   :fmt   'cl-stk:hms
    ))
 
 (defmethod um:fdpl-prepval ((x >hms))
-  (to secs (unipolar (um:val-of x))))
+  (to turns (unipolar (um:val-of x))))
   
 (defun >hms (x &rest args)
   (apply #'um:fdpl-maker '>hms x args))
 
 #|
-(>hms (turns 0.4))                      
+(>hms (turns 0.6))                      
 |#
 ;; --------------------------------------------
 
@@ -119,41 +119,52 @@
   ()
   (:default-initargs
    :ndpl  1
-   :fmt   '(ds ddc dp ndpl)
+   :fmt   'cl-stk:hm
    ))
 
 (defmethod um:fdpl-prepval ((x >hm))
-  (to mins (unipolar (um:val-of x))))
+  (to turns (unipolar (um:val-of x))))
 
 (defun >hm (x &rest args)
   (apply #'um:fdpl-maker '>hm x args))
 
 #|
-(>hm (turns 0.4))                      
+(>hm (turns 0.6))                      
 |#
 ;; --------------------------------------------
 #|
 (to arcsec 0.123456)
 (to arcsec 0.0123456)
 
-(>dms 0.123456)
-(>dms -0.123456)
-(>dms 0.123456 :ndpl 2 :fmt '(sign+ ds ddc ddc dp nd))
+(>dms -0.423456 :width 10)
+(>dms -0.123456 :width 10)
+(>dms  0.123456 :ndpl 2 :width 13)
 
 (>dm 0.123456)
 (>dm -0.123456)
-(>dm 0.123456 :ndpl 2 :fmt '(sign+ ds ddc dp nd))
+(>dm 0.123456 :ndpl 2)
 
-(>hms 0.123456)
-(>hms -0.123456)
-(>hms 0.123456 :ndpl 0 :fmt '(ds ddc ddc))
+(>hms  0.123456 :width 10)
+(>hms -0.123456 :width 10)
+(>hms 0.123456 :ndpl 0 :width 8)
 
 (>hm 0.123456)
 (>hm -0.123456)
-(>hm 0.123456 :ndpl 0 :fmt '(ds ddc))
+(>hm 0.123456 :ndpl 0)
 
-(inspect (>ha 0.123456))
-(>ha -0.123456)
-(>ha 0.123456 :ndpl 0 :fmt '(sign+ ds ddc ddc))
+(>ha 0.123456 :width 11)
+(>ha -0.423456 :width 11)
+(>ha 0.123456 ::width 9 :ndpl 0)
+
+(let ((ha   (>ha 0.123456 :width 11))
+      (degs (>dms -0.45882 :width 10)))
+  (princ #1>.end
+ HA(+W/-E)        RA
+ hh mm ss       °  '  "
+-----------  ----------
+$ha  $degs
+.end)
+  (values))
+
 |#
 
