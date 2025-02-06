@@ -9,7 +9,7 @@
 (defun trn (m)
   ;; Compute matrix transpose.
   ;; Matrix is a list of 3 element lists representing row vectors.
-  ;; For a unitory transform matrix, the transpose is its inverse.
+  ;; For a unitary transform matrix, the transpose is its inverse.
   (apply #'mapcar #'list m))
 
 (defun mat-mulv (m v)

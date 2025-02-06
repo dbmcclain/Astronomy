@@ -167,13 +167,13 @@
 ;; between background measure and radians.
 
 (defun sin (x)
-  (cl:sin (to-rad x)))
+  (cl:sin (to rad x)))
 
 (defun cos (x)
-  (cl:cos (to-rad x)))
+  (cl:cos (to rad x)))
 
 (defun tan (x)
-  (cl:tan (to-rad x)))
+  (cl:tan (to rad x)))
 
 (defun asin (x)
   (rad (cl:asin x)))
@@ -188,7 +188,7 @@
   (rad (cl:phase x)))
 
 (defun cis (x)
-  (cl:cis (to-rad x)))
+  (cl:cis (to rad x)))
 
 #|
 ;; E.g.,
