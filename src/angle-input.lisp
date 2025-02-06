@@ -16,12 +16,14 @@
   (:method ((d real) &optional (m 0) (s 0))
    (let ((sgn  1))
      (cond
-      ((minusp d) -1)
+      ((minusp d)
+       (setf sgn -1))
       ((zerop d)
        (cond ((minusp m)
-              -1)
+              (setf sgn -1))
              ((zerop m)
-              (cond ((minusp s) -1)
+              (cond ((minusp s)
+                     (setf sgn -1))
                     ))
              )))
      (* sgn
