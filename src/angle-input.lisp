@@ -12,22 +12,27 @@
 ;; ------------------------------------------
 ;; DMS & HMS list forms
 
-(defun sexi-in (d m s)
-  (let ((sgn  (cond
-               ((minusp d) -1)
-               ((zerop d)
-                (cond ((minusp m)
-                       -1)
-                      ((zerop m)
-                       (cond ((minusp s) -1)
-                             (t           1)))
-                      (t  1)))
-               (t  1))
-              ))
-  (* sgn
-     (/ (+ (abs s) (* 60. (+ (abs m) (* 60. (abs d)))))
-        3600.))
-  ))
+(defgeneric sexi-in (d &optional m s)
+  (:method ((d real) &optional (m 0) (s 0))
+   (let ((sgn  1))
+     (cond
+      ((minusp d) -1)
+      ((zerop d)
+       (cond ((minusp m)
+              -1)
+             ((zerop m)
+              (cond ((minusp s) -1)
+                    ))
+             )))
+     (* sgn
+        (/ (+ (abs s) (* 60. (+ (abs m) (* 60. (abs d)))))
+           3600.))
+     ))
+  (:method ((d string) &optional m s)
+   ;; intended for "±DD:MM:SS.ss"
+   (declare (ignore m s))
+   (/ (com.ral.useful-macros.reader-macros::convert-sexigisimal d)
+      3600.)))
 
 (defun dms (deg &optional (min 0) (sec 0))
   (deg (sexi-in deg min sec)))
@@ -38,19 +43,24 @@
 #|
 ;; E.g.,
 (to μrad (dms 0 0 1)) => 4.848
-(to deg (hms 6 0 0)) => 90.0
+(to deg (hms 6 0 0)) => 90
+(to μrad (dms "00:00:01")) => 4.848
+(to deg (hms "06:00")) => 90
  |#
 ;; -------------------------------------------
 ;; D.MS and H.MS forms
 
 (defun dot-conv-in (x)
-  (multiple-value-bind (d dfrac)
-      (truncate x)
-    (multiple-value-bind (m mfrac)
-        (truncate (* 100. dfrac))
-      (let ((s (* 100. mfrac)))
-        (/ (+ s (* 60. (+ m (* 60. d)))) 3600.))
-      )))
+  (multiple-value-bind (w f)
+      (truncate (* 10000. (abs x)))
+    (multiple-value-bind (q s)
+        (truncate w 100.)
+      (multiple-value-bind (d m)
+          (truncate q 100.)
+        (* (signum x)
+           (/ (+ s f (* 60. (+ m (* 60. d))))
+              3600.))
+        ))))
 
 (defun d.ms (x)
   (deg (dot-conv-in x)))
