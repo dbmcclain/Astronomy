@@ -14,18 +14,9 @@
 
 (defgeneric sexi-in (d &optional m s)
   (:method ((d real) &optional (m 0) (s 0))
-   (let ((sgn  1))
-     (cond
-      ((minusp d)
-       (setf sgn -1))
-      ((zerop d)
-       (cond ((minusp m)
-              (setf sgn -1))
-             ((zerop m)
-              (cond ((minusp s)
-                     (setf sgn -1))
-                    ))
-             )))
+   (let ((sgn  (if (some #'minusp (list d m s))
+                   -1
+                 1)))
      (* sgn
         (/ (+ (abs s) (* 60. (+ (abs m) (* 60. (abs d)))))
            3600.))
