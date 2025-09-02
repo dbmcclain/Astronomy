@@ -56,55 +56,24 @@
 ;; body of code to have all the DEFVARs and reader-macros set up
 ;; correct values for internal constants in the code.
 
-#|
-(defvar *1turn*)
+(let ((mode  :turns)
+      (1turn 1))
 
-(defun set-ang-mode (mode)
-  (setf *1turn*
-        (ecase mode
-          (:deg   360.)
-          (:hrs    24.)
-          (:rad   #.(* 2. pi))
-          (:turns   1))
-        (get 'set-ang-mode :mode) mode
-        ))
+  (defun 1turn ()
+    1turn)
+  
+  (defun report-ang-mode ()
+    mode)
 
-(unless (boundp '*1turn*)
-  (set-ang-mode :turns)
-  ;; (set-ang-mode :rad)
-  )
+  (defun set-ang-mode (new-mode)
+    (setf 1turn
+          (ecase new-mode
+            (:deg   360.)
+            (:hrs    24.)
+            (:rad    #.(* 2. pi))
+            (:turns  1))
+          mode  new-mode)))
 
-(defun report-ang-mode ()
-  (get 'set-ang-mode :mode))
-|#
-
-(um:deflex* ang-mode
-  (let ((mode   :turns)
-        (1turn  1))
-    (um:dlambda
-      (:1turn ()
-       1turn)
-      (:get ()
-       mode)
-      (:set (new-mode)
-       (setf 1turn
-             (ecase new-mode
-               (:deg   360.)
-               (:hrs    24.)
-               (:rad    #.(* 2. pi))
-               (:turns  1))
-             mode  new-mode)))
-    ))
-
-(defun report-ang-mode ()
-  (funcall ang-mode :get))
-
-(defun set-ang-mode (mode)
-  (funcall ang-mode :set mode))
-
-(defun 1turn ()
-  (funcall ang-mode :1turn))
-       
 ;; ----------------------------------
 ;; Angle measure introductions
 
