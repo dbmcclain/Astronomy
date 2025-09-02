@@ -29,6 +29,8 @@
 
    ;; Angle Measure
    #:set-ang-mode
+   #:report-ang-mode
+   #:1turn
    
    #:turns
    #:deg
