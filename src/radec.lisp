@@ -10,6 +10,7 @@
 ;; --------------------------------
 ;; Introducers for RA, Dec
 
+#|
 (defvar *ang-delims*  '(#\space #\tab #\return #\:))
 
 (defun radec-string-reader (str ang-fn)
@@ -43,6 +44,13 @@
    (d.ms deg))
   (:method ((str string) &optional min sec)
    (radec-string-reader str #'dms)))
+|#
+
+(Defun ra (&rest args)
+  (apply #'hms args))
+
+(defun dec (&rest args)
+  (apply #'dms args))
 
 #|
 (ra 15 59 30.1)

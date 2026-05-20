@@ -101,14 +101,64 @@
 (defun secs (x)
   (mins (/ x 60.)))
 
+(defun s (x)
+  (secs x))
+
+(defun msec (x)
+  (secs (/ x 1000.)))
+
+(defun ms (x)
+  (msec x))
+
+(defun μsec (x)
+  (msec (/ x 1000.)))
+
+(defun μs (x)
+  (μsec x))
+
+(defun nsec (x)
+  (μsec (/ x 1000.)))
+
+(defun ns (x)
+  (nsec x))
+
+(defun psec (x)
+  (nsec (/ x 1000.)))
+
+(defun ps (x)
+  (psec x))
+
+(defun fsec (x)
+  (psec (/ x 1000.)))
+
+(defun fs (x)
+  (fsec x))
+
 (defun rad (x)
   (turns (/ x 2. pi)))
 
 (defun mrad (x)
-  (rad (* 1d-3 x)))
+  (rad (/ x 1000.)))
 
 (defun μrad (x)
-  (mrad (* 1d-3 x)))
+  (mrad (/ x 1000.)))
+
+(defun days (x)
+  (turns x))
+
+(defun yrs (x)
+  (days (* x #.(+ 365 1/4))))
+
+(defun jyrs (x)
+  ;; Julian years
+  (yrs x))
+
+(defun cents (x)
+  (yrs (* x 100.)))
+
+(defun jcs (x)
+  ;; Julian centuries
+  (cents x))
 
 ;; ----------------------------------
 ;; Conversion of the background measure into various units.

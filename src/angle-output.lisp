@@ -78,7 +78,7 @@
 (defun dot-conv-out (x turn)
   (multiple-value-bind (d m s)
       (degs-to-dms (abs x) turn)
-    (* (signum x) (/ (+ s (* 100. (+ m (* 100. d)))) 10_000.))
+    (* (signum x) (/ (+ s (* 100. (+ m (* 100. d)))) #N|10_000.|))
     ))
 
 (defun to-d.ms (x)

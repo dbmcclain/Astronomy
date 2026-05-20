@@ -40,24 +40,26 @@
    #:hrs
    #:mins
    #:secs
+   #:s
+   #:msec
+   #:ms
+   #:μsec
+   #:μs
+   #:nsec
+   #:ns
+   #:psec
+   #:ps
+   #:fsec
+   #:fs
    #:rad
    #:mrad
    #:μrad
+   #:days
+   #:yrs
+   #:cents
    #:d.ms
    #:h.ms
 
-   #:to-turns
-   #:to-deg
-   #:to-arcmin
-   #:to-arcsec
-   #:to-mas
-   #:to-hrs
-   #:to-mins
-   #:to-secs
-   #:to-rad
-   #:to-mrad
-   #:to-μrad
-   
    #:dms
    #:to-dms
    #:to-d.ms

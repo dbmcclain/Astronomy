@@ -35,7 +35,7 @@
 ;; Reported JD should be based on UTC.
 ;; ----------------------------------
 
-(defconstant +J2000+       2_451_545.0)  ;; Standard Epoch for Jan 1, 2000 at 12:00
+(defconstant +J2000+       #N|2_451_545.0|)  ;; Standard Epoch for Jan 1, 2000 at 12:00
 (defconstant +sec/day+     86400)
 (defconstant +days/year+   365.25)
 (defconstant +days/cent+   36525)
@@ -122,7 +122,7 @@ The Julian date for the current Universal Time is:
   (multiple-value-bind (date time)
       (truncate x)
     (multiple-value-bind (yyyy yrem)
-        (truncate date 10_000.)
+        (truncate date #N|10_000.|)
       (multiple-value-bind (mo dd)
           (truncate yrem 100.)
 
@@ -141,6 +141,7 @@ The Julian date for the current Universal Time is:
 
 ;; -----------------------------------------------
 
+#|
 (defun jyrs (dt)
   ;; Julian years for dt days
   (/ dt +days/year+))
@@ -148,6 +149,7 @@ The Julian date for the current Universal Time is:
 (defun jcs (dt)
   ;; Julian centuries for dt days
   (/ dt +days/cent+))
+|#
 
 (defun d2k (epoch)
   ;; days since J2000
@@ -155,9 +157,9 @@ The Julian date for the current Universal Time is:
 
 (defun y2k (epoch)
   ;; years since J2000
-  (jyrs (d2k epoch)))
+  (to jyrs (d2k epoch)))
 
 (defun c2k (epoch)
   ;; centuries since J2000
-  (/ (y2k epoch) 100))
+  (to jcs (d2k epoch)))
 

@@ -11,7 +11,7 @@
 ;; Hours, minutes, and seconds
 ;; ------------------------------------------
 ;; DMS & HMS list forms
-
+#|
 (defgeneric sexi-in (d &optional m s)
   (:method ((d real) &optional (m 0) (s 0))
    (let ((sgn  (if (some #'minusp (list d m s))
@@ -32,7 +32,7 @@
 
 (defun hms (hrs &optional (min 0) (sec 0))
   (hrs (sexi-in hrs min sec)))
-
+|#
 #|
 ;; E.g.,
 (to μrad (dms 0 0 1)) => 4.848
@@ -43,6 +43,7 @@
 ;; -------------------------------------------
 ;; D.MS and H.MS forms
 
+#|
 (defun dot-conv-in (x)
   (multiple-value-bind (w f)
       (truncate (* 10000. (abs x)))
@@ -60,10 +61,82 @@
 
 (defun h.ms (x)
   (hrs (dot-conv-in x)))
-
+|#
 #|
 ;; E.g.,
 (to μrad (d.ms 0.0001)) => 4.848
 (to deg  (h.ms 6.0000)) => 90.0
+
+(dms " 25 55 13")
  |#
+
+(defvar *ang-delims*  '(#\space #\tab #\return #\:))
+
+(defun radec-string-reader (str ang-fn)
+  (db (dd &optional mm ss)
+      (um:split-string (string-left-trim *ang-delims* str)
+                       :delims *ang-delims*)
+    (funcall ang-fn
+             (read-from-string dd)
+             (if mm
+                 (read-from-string mm)
+               0)
+             (if ss
+                 (read-from-string ss)
+               0))
+    ))
+
+(defun dms (&rest args)
+  ;; very flexible input forms
+  ;; (dms DDD)             integer DDD
+  ;; (dms DDD MM)          integer DDD, MM
+  ;; (dms DDD MM SS.sss)   integer DDD, MM, decimal fractional SS.sss
+  ;; (dms DDD.dddd 0)      decimal fractional DDD.dddd
+  ;; (dms DDD.MMSSssss)    fractional abbrev repr
+  ;; (dms "DD MM SS.ssss") string form input
+  ;; (dms "DD:MM:SS.ssss") string form input
+  (ac:match args
+    ((d m s)
+     ;; Either integers (dms DDD MM SS) or decimal fraction (dms DDD.dddd 0 0)
+     (let* ((neg (or (minusp d)
+                     (and (zerop d)
+                          (minusp m))
+                     (and (zerop d)
+                          (zerop m)
+                          (minusp s))
+                     ))
+            (aas (arcsec (+ (abs s) (* 60. (+ (abs m) (* 60. (abs d))))))))
+       (if neg
+           (- aas)
+         aas)))
+    
+    ((d m)
+     (dms d m 0))
+
+    ((str) / (stringp str)
+     (radec-string-reader str #'dms))
+
+    ((d)
+     ;; Either (dms DDD) integer form, or (dms DDD.MMSSssss) abbrev form
+     (multiple-value-bind (w f)
+         (truncate (* 10000. (abs d)))
+       (multiple-value-bind (q ss)
+           (truncate w 100.)
+         (multiple-value-bind (dd mm)
+             (truncate q 100.)
+           (arcsec (* (signum d)
+                      (+ ss f (* 60. (+ mm (* 60. dd))))))
+           ))))
+    ))
+
+(defun hms (&rest args)
+  (* 15. (apply #'dms args)))
+
+(defun d.ms (&rest args)
+  ;; alternate name for DMS
+  (apply #'dms args))
+
+(defun h.ms (&rest args)
+  ;; alternate name for HMS
+  (apply #'hms args))
 
