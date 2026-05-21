@@ -74,6 +74,7 @@
 (um:split-string "-00 00 25"
                  :delims *ang-delims*)
 (dec "-00 00 25")
+(ra  "-00 00 25")
 |#
 
 (defvar *ang-delims*  '(#\space #\tab #\return #\:))

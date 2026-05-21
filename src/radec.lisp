@@ -46,8 +46,11 @@
    (radec-string-reader str #'dms)))
 |#
 
-(Defun ra (&rest args)
+(defun ra (&rest args)
   (apply #'hms args))
+
+(defun ha (&rest args)
+  (apply #'ra args))
 
 (defun dec (&rest args)
   (apply #'dms args))
