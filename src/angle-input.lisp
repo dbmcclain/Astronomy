@@ -105,22 +105,23 @@
     ((d m)
      (dms d m 0))
 
-    ((str) / (stringp str)
+    ((str) / (or (stringp str)
+                 (symbolp str))
      (let* ((sgn  1)
             (strs (mapcan (lambda (s)
-                            (unless (equal s "")
-                              (cond ((equal s "-")
-                                     (setf sgn -1)
-                                     nil)
-                                    ((equal s "+")
-                                     nil)
-                                    ((eql #\- (char s 0))
-                                     (setf sgn -1)
-                                     (list (subseq s 1)))
-                                    (t
-                                     (list s))
-                                    )))
-                          (um:split-string str
+                            (cond ((equal s "-")
+                                   (setf sgn -1)
+                                   nil)
+                                  ((or (equal s "+")
+                                       (equal s ""))
+                                   nil)
+                                  ((eql #\- (char s 0))
+                                   (setf sgn -1)
+                                   (list (subseq s 1)))
+                                  (t
+                                   (list s))
+                                  ))
+                          (um:split-string (string str)
                                            :delims *ang-delims*))))
        (* sgn
           (apply #'dms
