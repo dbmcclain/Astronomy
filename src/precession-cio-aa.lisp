@@ -24,7 +24,7 @@
   
 (defun GCRS-XY-aa-nut (epoch)
   (let* ((Tc  (c2k epoch))
-         (L   (deg (+ 280.5d0 (* Tc #N|36_000.8|))))  ;; 1 yr period, Ecliptic lon of Sun
+         (L   (deg (+ 280.5d0 (* Tc #N|36_000.8d0|))))  ;; 1 yr period, Ecliptic lon of Sun
          (Ω   (deg (+ 125.0d0 (* Tc -1934.1d0)))) ;; 18.6 yr period
          (ΔX  (arcsec (+ (* -6.84d0 (sin Ω))
                          (* -0.52d0 (sin (+ L L))) ;; 1/2 yr period

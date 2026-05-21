@@ -71,12 +71,12 @@
 (defun aberration (epoch)
   ;; Annual aberration
   (let* ((Tc  (c2k epoch))
-         (L   (deg (+ 280.5d0 (* Tc #N|36_000.8|))))  ;; 1 yr period, Ecliptic lon of Sun
+         (L   (deg (+ 280.5d0 (* Tc #N|36_000.8d0|))))  ;; 1 yr period, Ecliptic lon of Sun
          (cL  (cos L)))
-  (vscale #.(/ 173.24)
-          `(,(*  0.0172 (sin L))
-            ,(* -0.0158 cL)
-            ,(* -0.0068 cL) ))
+  (vscale #.(/ 173.24d0)
+          `(,(*  0.0172d0 (sin L))
+            ,(* -0.0158d0 cL)
+            ,(* -0.0068d0 cL) ))
   ))
 
 #|
@@ -238,27 +238,27 @@
 (radec (deg 0) (deg 0))
 (to-mn-radec (radec (deg 0) (deg 0)) +j2000+)
 
-(let* ((ra    (ra  02 31 49.0837)) ;; Polaris
-       (dec   (dec 89 15 50.794))
-       (ra    (ra 11 14 14.4052)) ;; θ Leo
-       (dec   (dec 15 25 46.453)) 
-       (epoch (+ (ymd 2024 05 30) 0.060257670))
-       (epoch #N|246_0128.375|)
+(let* ((ra    (ra  02. 31. 49.0837d0)) ;; Polaris
+       (dec   (dec 89. 15. 50.794d0))
+       (ra    (ra 11. 14. 14.4052d0)) ;; θ Leo
+       (dec   (dec 15. 25. 46.453d0)) 
+       (epoch (+ (ymd 2024. 05. 30.) 0.060257670d0))
+       (epoch #N|246_0128.375d0|)
        (v*    (radec ra dec)))
   (list (mvl (to-mn-radec v* epoch))
         (mvl (map-mult (#'to-ra #'to-dec) (prec ra dec epoch)))
         ))
 
-(let ((v  (radec (RA 11 14 14.4052)   ;; θ Leo from J2000.0 Catalog
-                 (Dec 15 25 46.453) ))) 
+(let ((v  (radec (RA 11. 14. 14.4052d0)   ;; θ Leo from J2000.0 Catalog
+                 (Dec 15. 25. 46.453d0) ))) 
   (to-radec v))
 |#
 ;; -----------------------------------------------------------
 #|
 ;; Compare our computed Mean EO versus the EO we use for GMST
-(plt:fplot 'plt '(-50 50)
+(plt:fplot 'plt '(-50. 50.)
            (lambda (dyr)
-             (let* ((epoch (ymd (+ 2000 dyr)))
+             (let* ((epoch (ymd (+ 2000. dyr)))
                     (EO    (EO epoch))
                     (CIP   (CIP-mn epoch))
                     (M_CIO (M_CIO CIP))
@@ -270,9 +270,9 @@
            :ytitle "Diff (EO-mn - EO) [mas]"
            :thick 2)
 
-(let* ((epoch (ymd 2024))
+(let* ((epoch (ymd 2024.))
        ;; (epoch +j2000+)
-       (epoch (ymd 2050))
+       (epoch (ymd 2050.))
        (EO    (EO epoch))
        (CIP   (CIP-mn epoch))
        (M_CIO (M_CIO CIP))
@@ -302,9 +302,9 @@
     (- EOa EO)))
 
 ;; Looks like EO swings ±15 as ≈ ±1 sec
-(plt:fplot 'plt '(0 30)
+(plt:fplot 'plt '(0 30.)
            (lambda (dt)
-             (let* ((epoch (ymd (+ 2000 dt)))
+             (let* ((epoch (ymd (+ 2000. dt)))
                     (CIP   (CIP-ap epoch))
                     (M_CIO (M_CIO CIP)))
                (to arcsec (ΔEO M_CIO epoch))
