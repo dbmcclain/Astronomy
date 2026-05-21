@@ -67,31 +67,23 @@
 (to μrad (d.ms 0.0001)) => 4.848
 (to deg  (h.ms 6.0000)) => 90.0
 
-(dms " 25 55 13")
- |#
+(to-dms (dms " -25 55 13"))
+(to-dms (dms " -25 55"))
+(to-dms (dms " 0 0 -25"))
+(to-dec (dms " 0 0 -25"))
+(um:split-string "-00 00 25"
+                 :delims *ang-delims*)
+(dec "-00 00 25")
+|#
 
 (defvar *ang-delims*  '(#\space #\tab #\return #\:))
-
-(defun radec-string-reader (str ang-fn)
-  (db (dd &optional mm ss)
-      (um:split-string (string-left-trim *ang-delims* str)
-                       :delims *ang-delims*)
-    (funcall ang-fn
-             (read-from-string dd)
-             (if mm
-                 (read-from-string mm)
-               0)
-             (if ss
-                 (read-from-string ss)
-               0))
-    ))
 
 (defun dms (&rest args)
   ;; very flexible input forms
   ;; (dms DDD)             integer DDD
   ;; (dms DDD MM)          integer DDD, MM
   ;; (dms DDD MM SS.sss)   integer DDD, MM, decimal fractional SS.sss
-  ;; (dms DDD.dddd 0)      decimal fractional DDD.dddd
+  ;; (dms DDD.dddd 0)      decimal fractional DDD.dddd - use DEG instead
   ;; (dms DDD.MMSSssss)    fractional abbrev repr
   ;; (dms "DD MM SS.ssss") string form input
   ;; (dms "DD:MM:SS.ssss") string form input
@@ -114,7 +106,26 @@
      (dms d m 0))
 
     ((str) / (stringp str)
-     (radec-string-reader str #'dms))
+     (let* ((sgn  1)
+            (strs (mapcan (lambda (s)
+                            (unless (equal s "")
+                              (cond ((equal s "-")
+                                     (setf sgn -1)
+                                     nil)
+                                    ((equal s "+")
+                                     nil)
+                                    ((eql #\- (char s 0))
+                                     (setf sgn -1)
+                                     (list (subseq s 1)))
+                                    (t
+                                     (list s))
+                                    )))
+                          (um:split-string str
+                                           :delims *ang-delims*))))
+       (* sgn
+          (apply #'dms
+                 (mapcar #'read-from-string strs)))
+       ))
 
     ((d)
      ;; Either (dms DDD) integer form, or (dms DDD.MMSSssss) abbrev form
@@ -127,6 +138,9 @@
            (arcsec (* (signum d)
                       (+ ss f (* 60. (+ mm (* 60. dd))))))
            ))))
+
+    (_
+     (error "Invalid DMS syntax: ~S" args))
     ))
 
 (defun hms (&rest args)
