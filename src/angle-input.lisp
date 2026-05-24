@@ -89,6 +89,18 @@
   ;; (dms "DD MM SS.ssss") string form input
   ;; (dms "DD:MM:SS.ssss") string form input
   (ac:match args
+    (('d.ms d)
+     ;; Either (dms DDD) integer form, or (dms DDD.MMSSssss) abbrev form
+     (multiple-value-bind (w f)
+         (truncate (* 10000. (abs d)))
+       (multiple-value-bind (q ss)
+           (truncate w 100.)
+         (multiple-value-bind (dd mm)
+             (truncate q 100.)
+           (arcsec (* (signum d)
+                      (+ ss f (* 60. (+ mm (* 60. dd))))))
+           ))))
+
     ((d m s)
      ;; Either integers (dms DDD MM SS) or decimal fraction (dms DDD.dddd 0 0)
      (let* ((neg (or (minusp d)
@@ -126,17 +138,9 @@
        ))
 
     ((d)
-     ;; Either (dms DDD) integer form, or (dms DDD.MMSSssss) abbrev form
-     (multiple-value-bind (w f)
-         (truncate (* 10000. (abs d)))
-       (multiple-value-bind (q ss)
-           (truncate w 100.)
-         (multiple-value-bind (dd mm)
-             (truncate q 100.)
-           (arcsec (* (signum d)
-                      (+ ss f (* 60. (+ mm (* 60. dd))))))
-           ))))
-
+     ;; for use with in-built sexagisimal number reaader, e.g., 1:59:24.32
+     (arcsec  d))
+    
     (_
      (error "Invalid DMS syntax: ~S" args))
     ))
@@ -146,9 +150,9 @@
 
 (defun d.ms (&rest args)
   ;; alternate name for DMS
-  (apply #'dms args))
+  (apply #'dms 'd.ms args))
 
 (defun h.ms (&rest args)
   ;; alternate name for HMS
-  (apply #'hms args))
+  (apply #'hms 'd.ms args))
 
