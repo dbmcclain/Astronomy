@@ -236,8 +236,11 @@
 (defun acos (x)
   (rad (cl:acos x)))
 
-(defun atan (y &optional x)
-  (rad (cl:atan y x)))
+(defun atan (y &optional (x nil x-given-p))
+  (rad (if x-given-p
+           (cl:atan y x)
+         (cl:atan y))
+       ))
 
 (defun phase (x)
   (rad (cl:phase x)))

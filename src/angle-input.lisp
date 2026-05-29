@@ -139,7 +139,8 @@
 
     ((d)
      ;; for use with in-built sexagisimal number reaader, e.g., 1:59:24.32
-     (arcsec  d))
+     ;; which returns Turns units
+     (turns d))
     
     (_
      (error "Invalid DMS syntax: ~S" args))
